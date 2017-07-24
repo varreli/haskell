@@ -1,0 +1,10 @@
+1  (λz.z)(λz.zz)(λz.zy)
+2  (λz.zz)(λz.zy)
+3  (λz.zy)(λz.zy)
+4  (λz.zy)(y)
+5  yy
+
+On line 4, the remaining y is written in parentheses: (y). did that come from the left or right side of line 3?
+
+-- On the left, because you're substituting the value on the right into the expression on the left (application). right?
+Although, y is free, so it doesn't matter?

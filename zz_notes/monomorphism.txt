@@ -1,0 +1,18 @@
+
+Monomorphism Restriction: a binding without parameters 
+(here, x) must be given a non-polymorphic ("monomorphic") 
+type unless explciitly specified otherwise with a type signature
+
+Prelude> let x = 7
+Prelude> :t x
+Prelude> x :: Integer'
+
+Type Integer is not compatible with the use of (/),
+so we use a Double: 
+
+Prelude> let x = 7.0
+Prelude> :t x 
+Prelude> x :: Double
+
+-- note: different results on my prelude.
+

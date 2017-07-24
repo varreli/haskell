@@ -1,0 +1,11 @@
+Once we apply the function, we can replace the fully applied 
+function with its body and bound arguments.
+
+-- E*valu*ation means an expression is reducible to a value.
+
+-- triple x = x * 3
+-- triple 2
+-- [triple x = x * 3; x:= 2] -- x is bound to 2
+
+-- triple 2 is in its canonical or normal form when it returns
+-- 6 , since it is irreducible.

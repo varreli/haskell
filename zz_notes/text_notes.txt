@@ -1,0 +1,35 @@
+Definitions:
+
+1. A String is a sequence of characters. In Haskell, String is
+represented by a linked-list of Char values, aka [Char].
+
+2. A type or datatype is a classification of values or data.
+Types in Haskell determine what values are members
+of the type or that inhabit the type. Unlike in other lan-
+guages, datatypes in Haskell by default do not delimit the
+operations that can be performed on that data.
+
+3. Concatenation is the joining together of sequences of val-
+ues. Often in Haskell this is meant with respect to the []
+or “List” datatype, which also applies to String which is
+[Char]. The concatenation function in Haskell is (++) which
+has type [a] -> [a] -> [a]. For example:
+Prelude> "tacos" ++ " " ++ "rock"
+"tacos rock"
+
+4. Scope is where a variable referred to by name is valid.
+Another word used with the same meaning is visibility,
+because if a variable isn’t visible it’s not in scope.
+
+5. Local bindings are bindings local to particular expressions.
+The primary delineation here from top level bindings is
+that local bindings cannot be imported by other programs
+or modules.
+
+6. Top level bindings in Haskell are bindings that stand outside
+of any other declaration. The main feature of top-level
+bindings is that they can be made available to other mod-
+ules within your programs or to other people’s programs.
+
+7. Data structures are a way of organizing data so that the
+data can be accessed conveniently or efficiently.

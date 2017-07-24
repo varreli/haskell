@@ -1,0 +1,15 @@
+f $ a = f a
+(2^) $ 2 + 2 $ (*30)
+
+-- Given the right-associativity (infixr) of $
+-- we must begin at the right-most position.
+
+2 + 2 $ (*30)
+-- reduce ($)
+(2 + 2) (*30)
+
+-- then we must evaluate (2 + 2) before we can apply it
+
+4 (*30)
+
+-- We can't apply 4 as if it was a function to the argument (*30):

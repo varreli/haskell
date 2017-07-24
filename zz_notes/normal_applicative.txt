@@ -1,0 +1,11 @@
+Innermost evaluation:
+2
+3   (λy.y)(λx.xx)(λz.zq)
+4   (λx.xx)(λz.zq)
+5   (λz.zq)(λz.zq)
+6   (λz.zq)(q)   -- q is innermost
+7   qq
+
+-- ln #5 : (λz.zq)(λz.zq) can be reduced in either order. 
+-- One is normal order,
+-- one is applicative order.

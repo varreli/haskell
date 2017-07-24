@@ -1,0 +1,3 @@
+website brent yorgey:
+
+https://www.schoolofhaskell.com/school/starting-with-haskell/introduction-to-haskell/1-haskell-basics

@@ -1,0 +1,22 @@
+a) (λxyz.xz(yz))(λx.z)(λx.a)
+
+b) (λx.λy.λz.xz(yz))(λx.z)(λx.a)
+
+c) (λy.λz1.(λx.z)z1(yz1))(λx.a)
+
+d) (λz1.(λx.z)(z1)((λx.a)z1))
+
+e) (λz1.z((λx.a)(z1)))
+
+f) (λz1.za)
+
+
+note: λ__ .a -> a
+
+note: We can define recursive functions, even though functions in
+λ calculus are not given names and thus cannot refer explicityly
+to themselves.
+
+notation: (λx.x)y = [y/x]x = y  -- In this transformation the notation
+[y/x] is used to indicate that all occurances of x are substituted
+by y in the expression to the right.

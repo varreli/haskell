@@ -1,0 +1,4 @@
+In order to be primitive recursive, you need to be able to write the 
+function using only particular operations
+
+https://en.wikipedia.org/wiki/Primitive_recursive_function#Definition

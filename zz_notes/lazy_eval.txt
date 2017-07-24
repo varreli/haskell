@@ -1,0 +1,5 @@
+The order of evaluation in Haskell is determined by one and only one thing:
+
+Data Dependence.
+
+An expression will only be evaluated when - and if - it is needed.

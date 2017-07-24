@@ -1,0 +1,5 @@
+Functions can be described as a list of ordered pairs
+of their inputs and the resulting outputs, like a mapping.
+Given the function f x = x + 2 applied to the argument
+2, we would have the ordered pair (2, 4) of its input and
+output.

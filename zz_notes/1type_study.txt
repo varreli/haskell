@@ -1,0 +1,44 @@
+Prelude> :t (==) 
+(==) :: Eq => a -> a -> a -> Bool
+
+read this as:
+
+" a has an Eq instance in the type of (==), which 
+  takes two a's and produces a Bool "
+
+or:
+
+" (==) :: a -> a -> Bool for all a's that have 
+      an Eq instance "
+
+(2)
+
+Prelude> :t (<)
+(<) :: Ord a => a -> a -> Bool
+
+
+what goes immedlately before => is a constraint, 
+the (constrained) type is to the right of it.
+
+(3)
+
+:t map
+map :: (a -> b) -> [a] -> [b]
+
+this takes a function (a -> b) that transforms a 
+into b, then transforms it into a new function 
+that creates list [a] and returns list [b] .
+
+(4)
+
+:t id                   -- identity function
+id :: a -> a
+
+:t map id 
+map id :: [b] -> [b]
+
+b used here is arbitrary variable (see alpha equivalence)
+
+
+
+
