@@ -1,0 +1,22 @@
+For product types:
+
+if we have 
+
+  |Bool| = 2, |Ordering| = 3, 
+  |(Bool, Ordering)| = 6 (6 possible inhabitants)
+  
+  |(a,b)| = |a|*|b|, ie the product of inhabitants.
+
+  It's a type that is a product of other types. A 
+  product type. And since it's not being given 
+  a name, it is an anonymous product type.
+
+--
+
+For sum types: Either a b = Left a | Right b
+
+if we have 
+
+   Either Bool Ordering 
+   
+we have 5 inhabitants: Left False, Left True, Right LT, Right EQ and Right GT.
