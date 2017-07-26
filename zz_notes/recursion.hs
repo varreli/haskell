@@ -1,15 +1,12 @@
--- from:
--- https://mail.haskell.org/
--- pipermail/beginners/2009-February/000901.html
 
 -- let x = 1:x
 -- in ...
 
 -- What happens here is that x is bound to a closure or 
 -- 'thunk' (suspended computation) which, *when needed*, 
--- will evaluate to 1:x.This is laziness at work.  x is not 
--- 'uninitialized'; it is perfectly well initialized to 
--- this thunk.
+-- will evaluate to 1:x.This is laziness at work.  
+-- x is not 'uninitialized'; it is perfectly well 
+-- initialized to this thunk.
 
  tracePlus b = let (c,d) = (d,b:d) 
                in c

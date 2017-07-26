@@ -1,0 +1,8 @@
+id :: a -> a
+id x = x
+Polymorphic functions: In the declaration, you 
+just replace the type with a type variable. Here’s 
+the trick: names of concrete types always start 
+with a capital letter, names of type variables 
+start with a lowercase letter. So here "a" stands 
+for all types.
