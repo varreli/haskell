@@ -1,0 +1,24 @@
+-- A tuple of constraints represents a product, 
+-- or conjunction of constraints:
+
+      func :: (Num a, Num b) => a -> b -> b
+
+-- A list of multiple constraints.
+-- a and b are constrained to be instances of 
+-- Num.
+
+-- func a b can not use the a, and it can only 
+-- use the members of the Num typeclass to 
+-- interact with the b
+--
+-- Consider a function f :: a -> b -> b
+-- We know it either returns the b or it 
+-- returns nonsense. It has to ignore the a.
+
+-- g :: (Num a, Num b) => a -> b -> b adds 
+-- a few more things that can be done with 
+-- the a and the b .
+-- namely, the members of the Num typeclass
+-- But the Num typeclass doesn't allow you 
+-- to convert a Num a => a into a Num b => b .
+-- So in the end you can still only use the b .

@@ -1,1 +1,0 @@
-http://lambda.jstolarek.com/2012/03/function-composition-and-dollar-operator-in-haskell/

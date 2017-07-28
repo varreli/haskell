@@ -1,8 +1,33 @@
+Read    g . f    “g after f.”
+
+-- note unicode character : g ∘ f
+
+Composition is associative - If you have 
+three morphisms, f, g, and h :
+
+h∘(g∘f) = (h∘g)∘f = h∘g∘f
+
+------------------
+Identity:
+The identity function becomes very handy as 
+an argument to, or a return from, a higher-order 
+function. Higher order functions are what make 
+symbolic manipulation of functions possible.
+The body of a function is always an expression,
+there are no statements in functions. 
+The result of a function is this expression,
+here, just x :
+
 id :: a -> a
 id x = x
+
+
 Polymorphic functions: In the declaration, you 
 just replace the type with a type variable. Here’s 
 the trick: names of concrete types always start 
 with a capital letter, names of type variables 
 start with a lowercase letter. So here "a" stands 
-for all types.
+for all types. Identity is universally polymorphic.
+
+f . id == f
+id . f == f
