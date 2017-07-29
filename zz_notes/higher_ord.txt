@@ -1,0 +1,12 @@
+
+Functions that *seem* to accept multiple 
+arguments such as with :
+
+f :: a -> a -> a -> a 
+
+are higher-order functions:
+
+they yield more function values as each 
+argument is applied until there are no more 
+(->) type constructors and it terminates in a 
+non-function value.
