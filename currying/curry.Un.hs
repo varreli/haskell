@@ -4,21 +4,17 @@ myCurry f a b = f (a, b)
 addTuple (x,y) = x + y
 -- addTuple (1,3)
 
-add p q = p + q
--- add 1 3
+adder p q = p + q
+-- adder 1 3
 
 -- curry is the function that turns addTuple 
--- into add. Uncurry turns add into addTuple.
+-- into adder. Uncurry turns adder into addTuple.
 
 myUncurry :: (aa -> bb -> cc) -> (aa, bb) -> cc
--- ; myUncurry f (aaa,bbb) = f aaa bbb
--- the typechecker will try to use aa, bb, cc 
--- as appropriate when working with the type 
--- of a value involving myUncurry
-
+-- here the typechecker will try to use aa, 
+-- bb, cc - when appropriate. 
 myUncurry f (aa, bb) = f aa bb
 -- Prelude> :t myUncurry
--- myUncurry :: (bb -> aa ->  
 
 -- Prelude> :t myUncurry (&&)
 -- myUncurry (&&) :: (Bool, Bool) -> Bool
