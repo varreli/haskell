@@ -14,8 +14,8 @@ jackel [1,2,3,4] :: (Eq t, Num t, Ord b) => b -> [t]
 -- describe more than one feature of the argument. 
 -- Numeric literals are polymorphic so a Num 
 -- context is returned for them. What is returned 
--- may differ in a given call; but the signature 
--- is solely determined by the input types.
+-- will differ in various calls, since the 
+-- signature is determined by the input types.
 
 let kessel :: (Ord a, Num b) => a -> b -> a; kessel = undefined
 λ > :t kessel 1 2
