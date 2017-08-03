@@ -1,0 +1,22 @@
+Prelude> (-10) + 6.3
+-3.7
+
+Prelude> :t (-10) + 6.3
+(-10) + 6.3 :: Fractional a => a
+
+Prelude> :t (-10)
+(-10) :: Num a => a
+
+a is polymorphic, and the type variable in scope.
+In the type for the entire equation, we see that
+the compiler inferred that it was working with
+Fractional numbers.
+
+It had to, accommodate the fractional number 6.3.
+
+The type of (-10) is given maximum polymorphism by
+only being an instance of Num typeclass, which could
+be any type of number. We call this a polymorphic
+constant; (-10) is not a variable, of course, but
+the type that it instantiates could be any numeric 
+type, so its underlying representation is polymorphic.
