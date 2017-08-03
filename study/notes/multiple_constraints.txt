@@ -1,0 +1,38 @@
+When a typeclass constrains a type variable, 
+the variable could represent any of the 
+concrete types that have instances of that 
+typeclass. Then specific operations on 
+which the function depends are defined for 
+that type.
+
+A tuple of constraints represents a product, 
+or conjunction of constraints:
+
+     func :: (Num a, Num b) => a -> b -> b
+
+A list of multiple constraints.
+a and b are constrained to be instances of 
+Num.
+
+func a b can not use the a, and it can only 
+use the members of the Num typeclass to 
+interact with the b.
+
+Concrete types have even more flexibility in 
+terms of computation; because of the 
+additive nature of typeclasses, they can be 
+combined and provide methods from various 
+typeclasses.
+
+Consider a function f :: a -> b -> b
+We know it either returns the b or it 
+returns nonsense. It has to ignore the a.
+
+g :: (Num a, Num b) => a -> b -> b adds 
+a few more things that can be done with 
+the a and the b , namely, the members of 
+the Num typeclass.
+
+But the Num typeclass doesn't allow you 
+to convert a Num a => a into a Num b => b .
+So in the end you can still only use the b .

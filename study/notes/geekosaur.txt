@@ -1,12 +1,13 @@
 > :t map
 (a -> b) -> [a] -> [b]
-> :t map (+1)
-Num b => [b] -> [b]
+
 > :t (+1)
 Num a => a -> a
 
-I should have done those last two swapped...
-anyway, to get the signature for (map (+1)), 
-it must somehow substitute the (Num a => a -> a) 
-into the type of (map)
+> :t map (+1)
+Num b => [b] -> [b]
+
+-- To get the signature for (map (+1)), 
+-- it must substitute the (Num a => a -> a) 
+-- into the type of (map)
 

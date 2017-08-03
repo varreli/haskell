@@ -1,3 +1,9 @@
+-- Haskell is syntactic sugar over the
+-- basic system of variables, abstractions, and 
+-- applications that constitute the rules of a 
+-- typed, pure lambda calculus.
+
+
 Read    g . f    “g after f.”
 
 -- note unicode character : g ∘ f
@@ -20,7 +26,6 @@ here, just x :
 
 id :: a -> a
 id x = x
-
 
 Polymorphic functions: In the declaration, you 
 just replace the type with a type variable. Here’s 

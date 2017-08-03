@@ -1,10 +1,15 @@
-A procedure can itself be given a type: say the type of a transformer from
-a-type objects to b-type objects. The type of such a procedure
-can be declared in Haskell as a -> b.
+-- A procedure can itself be given a type: 
+-- say the type of a transformer from
+-- a-type objects to b-type objects. The 
+-- type of such a procedure
+-- can be declared in Haskell as a -> b.
 
+-- This takes two strings and returns
+-- String -> (String -> String)
 
-This takes two strings and returns
-String -> (String -> String)
+-- This type can be written as 
 
-This type can be written as String -> String -> String, because of the Haskell
-convention that -> associates to the right.
+-- String -> String -> String, 
+
+-- because of the Haskell convention that -> 
+-- associates to the right.

@@ -1,8 +1,8 @@
-While a variable represents a set of possible 
-values, a type variable represents a set of 
-possible types.
-
-Typeclass constraints limit the set of potential 
-types (and, thus, potential values) while
-also passing along the common functions that 
-can be used with those values.
+-- While a variable represents a set of possible 
+-- values, a type variable represents a set of 
+-- possible types.
+--
+-- Typeclass constraints limit the set of 
+-- potential types (and, thus, potential values) 
+-- while also passing along the common functions 
+-- that can be used with those values.

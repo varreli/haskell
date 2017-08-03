@@ -1,0 +1,19 @@
+
+-- We query types for functions, partially applied
+-- functions -- and values, which are fully 
+-- applied functions.
+
+-- Functions are values.
+-- The hallmark of a function is that it can be 
+-- applied, and the structure of the type 
+-- demonstrates this. (->) is an infix operator 
+-- that has two parameters and associates to the 
+-- right (although function application is left 
+-- associative).
+
+-- fst :: (a, b) -> a
+-- (->) is an infix type constructor that takes
+-- two arguments: the first argument is a tuple
+-- type itself, and takes two arguments a and b.
+-- The function type (->) has two parameters : 
+-- one is (a, b) and one is the result, a.

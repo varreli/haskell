@@ -1,20 +1,30 @@
-A bound variable is a variable that was previously free, but has been bound to a specific value or set of values.
-For example, the variable x becomes a bound variable when we write:
+-- A bound variable is a variable that was 
+-- previously free, but has been bound to a 
+-- specific value or set of values.
+-- For example, the variable x becomes a bound 
+-- variable when we write:
 
-For all x, (x + 1)^2 = x^2 + 2x + 1
+-- For all x, (x + 1)^2 = x^2 + 2x + 1
 
-or
+-- or
 
-There exists x such that x^2 = 2
+-- There exists x such that x^2 = 2
 
-In either of these propositions, it does not matter logically whether we use x or some other letter.
-However, it could be confusing to use the same letter again elsewhere in some compound proposition.
-That is, free variables become bound, and then in a sense retire from being available as stand-in
-values for other values in the creation of formulae.
+-- In either of these propositions, it does not 
+-- matter logically whether we use x or some 
+-- other letter.
+-- However, it could be confusing to use the 
+-- same letter again elsewhere in some compound 
+-- proposition.
+-- That is, free variables become bound, and 
+-- then in a sense retire from being available as 
+-- stand-in values for other values in the 
+-- creation of formulae.
 
 
-A free variable is one not local to the expression. E.g. in:
+-- A free variable is one not local to the 
+-- expression. E.g. in:
 
-λx.xy
+-- λx.xy
 
-y is free.
+-- y is free.
