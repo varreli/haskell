@@ -3,3 +3,7 @@ process access the same memory location concurrently,
 and at least one of the accesses is for writing. The
 threads are not using any exclusive locks to control
 their accesses to that memory.
+
+- Edward Kmett
+- Catsters (Cheng)
+- Steve Awodey, author of Category Theory *
