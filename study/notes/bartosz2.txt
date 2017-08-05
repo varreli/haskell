@@ -1,23 +1,30 @@
-At a certain level of abstraction, all 
-branches of math and their struture begin 
-looking the same. In programming, memory, 
-processes, registers, bytes, etc. are 
-low-level data structures. Type theory 
-describes various categories of data 
+At a certain level of abstraction, all
+branches of math and their structure begin
+looking the same. In programming, memory,
+processes, registers, bytes, etc. are
+low-level data structures. Type theory
+describes various categories of data
 structures.
 
-These things can be abstracted further into 
+These things can be abstracted further into
 what is more like lambda calculus.
 
 The Haskell-Curry Isomorphism theorem :
-a program is a proof in constructive logic
+a program is a proof in constructive logic.
 
-The Curry Howard Lambec isomorphism. 
-Whatever you do in logic can be translated 
+The Curry Howard Lambec isomorphism.
+Whatever you do in logic can be translated
 precisely into type theory.
 
-Computing, categories and types are the 
+Computing, categories and types are the
 same thing.
+
+A type without any value is the "bottom" type,
+a proposition with no proof.
+
+Category Theory is about how we can study things,
+(epistemology) not what things *are* (ontology).
+It describes how our brains work.
 
 
 
