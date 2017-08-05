@@ -1,2 +1,0 @@
-The Haskell-Curry Isomorphism theorem :
-a program is a proof in constructive logic
