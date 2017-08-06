@@ -1,6 +1,14 @@
 co :: (b -> c) -> (a -> b) -> a -> c
+co f g = f . g
 
-co = (.)
+-- or :
+-- co = (.)
 
--- textbook states only one version of this signature 
--- will typecheck.
+
+
+
+-- Prelude> :t (\x -> x + 1) . (\x -> x - 2)
+-- Num c => c -> c
+
+-- f . g = \x -> f (g x)
+-- here (.) is just a regular function, but infix
