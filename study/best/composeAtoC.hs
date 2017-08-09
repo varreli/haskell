@@ -1,8 +1,7 @@
 -- The function arrow contains the lambda symbol
--- here already, it takes a 'b' and returns a 'c':
+-- already, it takes a 'b' and returns a 'c':
 
 co :: (b -> c) -> (a -> b) -> a -> c
-
 co = (.)
 
 -- co f g = (f . g)
