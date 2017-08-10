@@ -13,7 +13,7 @@ This is the notion of identity.
 Because of identity, there are things that
 are identical, and things almost equal, or,
 isomorphic. Are isomorphism and equality
-the same, should we treat them the same.
+the same, should we treat them the same?
 
 Composition and Identity encompass Category
 Theory.
@@ -26,7 +26,7 @@ abstraction is actually a spatial relationship,
 like how hunter-gatherers saw the world.
 (Arrows !) Morphisms too, are spatial, they
 travel from a -> b. A category can be seen as
-graphical, a graph.
+graphical, a graph, spatial.
 
 Two composable morphisms have arrows where
 the end of one is the beginning of the other:
@@ -44,8 +44,8 @@ f = a -> b
 g = b -> c
 h = c -> d :
 
-a -> b -> c -> d   =   h . (g . h)
-a -> b -> c -> d   =   (h . g) . h
+a -> b -> c -> d   =   h . (g . f)
+a -> b -> c -> d   =   (h . g) . f
 
 These are associative. Parentheses take
 precedence.
