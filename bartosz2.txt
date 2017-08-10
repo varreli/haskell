@@ -52,4 +52,12 @@ precedence.
 
 Types are sets of values, functions
 operate on sets of values, you can define
-functions on sets. (video time 36:00 mins)
+functions on sets.
+
+Then, the set, with its elements, becomes
+just a point. We forget the structure, and
+look at only its morphisms (its interface),
+to find its nature. This is the ultimate in
+abstraction and data hiding.
+
+end video 2
