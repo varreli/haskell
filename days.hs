@@ -1,4 +1,4 @@
-data DayOfWeek = 
+data DayOfWeek =
   Mon | Tue | Weds | Thu | Fri | Sat | Sun
 
 data Date =
@@ -19,4 +19,13 @@ instance Eq Date where
        (Date weekday' dayOfMonth') =
     weekday == weekday' && dayOfMonth == dayOfMonth'
 
+    -- the real "skill" here is writing functions to
+    -- implement some logic, be it equality, or less
+    -- than, or maybe adding two days together, etc.,
+    -- using pattern matching.
 
+    --   equalDate (Date w1 s1) (Date w2 s2)
+    --   = not (w1 /= w2   ||    s1 /= s2)
+
+    --   [   (w1 =/ w2   ||    s1 /= s2) is the same as
+    --   (w1 == w2) && (s1 == s2)  ]
