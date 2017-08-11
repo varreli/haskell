@@ -1,0 +1,17 @@
+.hs:18:1: error:
+    Multiple declarations of ‘==’
+        Declared at: days.hs:8:1
+	             days.hs:18:1
+
+days.hs:20:11: error:
+    Ambiguous occurrence ‘==’
+        It could refer to either ‘Prelude.==’,
+
+days.hs:20:37: error:
+    Ambiguous occurrence ‘==’
+        It could refer to either ‘Prelude.==’,
+
+...
+
+or ‘Main.==’, defined at days.hs:8:1
+
