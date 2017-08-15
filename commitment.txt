@@ -5,12 +5,12 @@ to GitHub, this goes for full Fall 2017 Semester.
 1) Chant as much as possible, with SGI and
 the Independent Practice. Do Gongyo more.
 Chant often for Cameron and Mom, Family.
+* Namu Myoho Renge Kyo *
 
 2) Study Haskell at every possible opportunity.
 
 3) Find willing Mentors on the UC Campus for
 Haskell and Math. 5 Mentors:
-
 - Prof. Kenneth Ribet
 - Prof. Daniel Garcia (?)
 
