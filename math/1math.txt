@@ -1,0 +1,11 @@
+The class Integral provides whole-number 
+division and remainder operations. The 
+standard instances of Integral are Integer 
+(unbounded or mathematical integers, also 
+known as "bignums") and Int (bounded, 
+machine integers, with a range equivalent 
+to at least 29-bit signed binary). This 
+would allow us to use Int, Int32, and Int64. 
+
+The Integral typeclass only has functionality 
+for divMod and quotRem .. and toInteger.
