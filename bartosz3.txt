@@ -1,0 +1,9 @@
+A pure, or total function between sets is a
+function that is defined for all its arguments,
+not just some functions. This is a mathematical
+function. In programming functions can be
+partial, which fail with some arguments. The
+function is defined for some type, i.e. Integers,
+which means *all* Integers.
+
+"" video 2.1 
