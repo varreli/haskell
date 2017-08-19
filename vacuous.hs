@@ -9,7 +9,7 @@ instance Numberish Age where
   fromNumber n = Age n
   toNumber (Age n) = n
 
-data Year = Year Integer
+newtype Year = Year Integer
   deriving (Eq, Show)
 
 instance Numberish Year where
@@ -20,4 +20,4 @@ sumNumberish :: Numberish a => a -> a -> a
 sumNumberish a a' = fromNumber summed
   where integerOfA      = toNumber a
         integerOfAPrime = toNumber a'
-	summed = integerOfA + integerOfAPrime
+        summed = integerOfA + integerOfAPrime
