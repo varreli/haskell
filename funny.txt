@@ -1,0 +1,7 @@
+quip:  FP: Once you understand it, you lose the
+ability to explain it to others.
+
+monochrom: Before you understood it, you never had
+the ability to explain it in the first place.
+You did have the ability to misrepresent it, though.
+(also true for Physics and OOP).
