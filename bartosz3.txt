@@ -7,15 +7,16 @@ function is defined for some type, i.e. Integers,
 which means *all* Integers.
 
 Decomposition brings us to the blocks at the
-lowest level, the pure functions. On top of these,
-which can also be called atoms, we can build
-more complex objects, data types, procedures, IO.
+lowest level, the pure functions (atoms).
+On top of these, we can build more complex
+objects, data types, procedures, or IO.
+
 We look at functions as morphisms between sets.
 In two sets there are relations between pairs
 of elements. A set of pairs forms a cartesian
 product. A subset of a cartesian product is a
 relation. Relations have no directionality, but
-functions have directionality. Domain and Codomain.
+functions have directionality. (Domain to Codomain.)
 The subset in the Codomain, to which the entire
 Domain is mapped, is called the image of the
 function. Mapping in this way has a directionality.
@@ -24,7 +25,7 @@ are called functors. Mappings between functors are
 called natural transformations.
 
 Is the mapping invertible, ie can we go back? In
-most cases no.
+most cases no. But to illustrate inversion:
 
 f :: a -> b             a and b are sets, or types.
 the inverse is:
@@ -33,8 +34,8 @@ g :: b -> a
 When a function is invertible
 we have the definition of isomorphism :
 
-[ g . f = id.a ]
-[ f . g = id.b ]
+[ g . f = id.a ]    -- g after f, identity on a
+[ f . g = id.b ]    -- f after g. odemtotu on b
 
 This is isomorphism in any category - not just in
 sets, because its expressed in terms of composition
