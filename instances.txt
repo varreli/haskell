@@ -1,5 +1,6 @@
-Typeclasses are dispatched by type, and are 
-defined by the set of operations and
-values all instances will provide. Typeclass instances are unique pairings of the typeclass 
-and a type. They define the ways to implement 
-the typeclass methods for that type.
+Typeclasses are dispatched by type, and are
+defined by the set of operations and values
+all instances will provide. Typeclass instances
+are unique pairings of the typeclass and a
+type. They define the ways to implement the
+typeclass methods for that type.
