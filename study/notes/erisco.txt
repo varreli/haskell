@@ -1,0 +1,6 @@
+erisco: 
+If you want to begin looking 
+at numbers more simply then start with 
+Semigroup, Monoid, Group, and so on. 
+I imagine there is Ring and Field in 
+some package edwardk wrote
