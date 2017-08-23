@@ -16,7 +16,7 @@ numbers xs = [x | x <- xs , even x]
 -- from xs and x is even."  ','  corresponds to
 -- 'and' . 'and' is used to add conditions
 -- beyond mere membership in the list being
--- drawn from. Study conditions here :
+-- drawn from. Study conditions below :
 
 set = [ y * 2 | y <- [1..10], y * 2 >= 14]
 --  >> [14,16,18,20]
@@ -31,3 +31,9 @@ listTimes3' = [ x * 3 | x <- [1..10], x <= 33]
 -- >> [3,6,9,12,15,18,21,24,27,30]
 listTimes3'' = [x * 3 | x <- [1..16], x  <= 50]
 -- >> [3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48]
+
+
+-- this one takes a list of values 1..500 and returns
+-- only numbers divisible by 13 and 9 :
+
+divBy9or13 = [ x | x <- [1..500], x `mod` 13 == 0, x `mod` 9 == 0]
