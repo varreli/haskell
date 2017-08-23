@@ -17,6 +17,6 @@ example3 = chk toUpper 'a' 'A'
 -- First, apply the function to the value of 
 -- type a, resulting in a value of type b, then
 -- compare that value with the value of type b 
--- that you were given. It's a proof that, for 
--- any type "b", lets you compare two values of 
--- that type for equality.
+-- that you were given. It's a proof that will, 
+-- for any type "b", let you compare two values 
+-- of that type for equality.
