@@ -2,5 +2,7 @@ Typeclasses are dispatched by type, and are
 defined by the set of operations and values
 all instances will provide. Typeclass instances
 are unique pairings of the typeclass and a
-type. They define the ways to implement the
-typeclass methods for that type.
+type. Sometimes when an instance is defined, it
+is a derived instance that is generated based on
+how the type is defined. They define the ways to 
+implement the typeclass methods for that type.
