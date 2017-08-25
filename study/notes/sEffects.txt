@@ -1,0 +1,9 @@
+What sets Haskell apart from most other 
+functional programming languages is that 
+it introduced and refined a means of 
+writing ordinary programs that talk to the 
+outside world (producing side effects) 
+without adding anything to the pure lambda 
+calculus it is founded on.
+
+Running main only produces side effects.
