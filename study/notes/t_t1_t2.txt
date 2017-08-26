@@ -1,0 +1,16 @@
+Prelude> let myVal f g h = myNum
+Prelude> :t myVal
+myVal :: t -> t1 -> t2 -> Integer
+
+Above,
+
+t, t1 and t2, are allowed but not required to
+be different types. They’re all polymorphic 
+because we gave the type inference nothing to 
+go on with respect to what type they could be. 
+The type variables are different because nothing 
+in our code is preventing them from varying, so 
+they are potentially different types. The 
+inference infers the most polymorphic type
+that works.
+
