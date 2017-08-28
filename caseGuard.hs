@@ -4,4 +4,8 @@ addOneIfOdd n = case odd n of
   False -> n
   where f = ( \n -> n + 1 )
 
--- http://lpaste.net/358015#a2384509402573963264 geekosaur
+alwaysEven :: Integral a => a -> a
+alwaysEven x
+  | odd x = f x
+  | otherwise = x
+  where f = \x -> x + 1
