@@ -12,6 +12,3 @@ young' xs = head (sort xs)
 -- it be inferred). young has a more specific 
 -- signature.
 
-  
-numUniques :: (Eq a) => [a] -> Int  
-numUniques = length . nub 

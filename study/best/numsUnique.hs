@@ -1,0 +1,2 @@
+numUniques :: (Eq a) => [a] -> Int  
+numUniques = length . nub 
