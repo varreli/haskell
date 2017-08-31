@@ -6,10 +6,9 @@ munge f g = fst . g . f
 -- and gives one result (w) .
 -- The first argument is itself a function, one 
 -- that takes an 'x' and results in a 'y' .
--- The second argument to murge is a function 
--- that takes a 'y' and results in both a 'w' 
--- and a 'z', in a tuple. The third argument 
--- to munge is a value of type x.   
+-- The second argument takes a 'y' and results 
+-- in both a 'w' and a 'z', in a tuple. The third 
+-- argument is a value of type x.   
 
 -- The definition side of partial application 
 -- shows that if 

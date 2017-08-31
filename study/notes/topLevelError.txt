@@ -1,0 +1,7 @@
+
+We cannot have an expression at the top-level. 
+The program entry point is a main function in 
+the Main module. 
+
+
+main = print $ (+) 5 5
