@@ -1,0 +1,14 @@
+Haskell's provision of monadic operators, convenient
+currying, let and where, and full lambda expressions
+make it unique. The compiler won't let side effects
+happen. Given the same arguments, a Haskell function
+will be referentially transparent:
+
+it will always return the same value because of Data
+immutability. So we use monads that create encapsulated
+environments to control state without binding it to global
+variables.
+
+List comprehension in Haskell is sugar over a list monad:
+It's a syntactic pattern over a deeper monadic computation.
+There are broad implications to this.
