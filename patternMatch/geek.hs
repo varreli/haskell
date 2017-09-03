@@ -1,4 +1,3 @@
-
 -- xs is merely bound to bottom, its not evaluated:
 
 Prelude> let x:x':xs = [1,2,undefined] in x' 
