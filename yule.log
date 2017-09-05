@@ -1,0 +1,1932 @@
+**** BEGIN LOGGING AT Sun Aug 13 15:08:52 2017
+
+*	kadoban is now known as mud
+*	robertc (~robertchr@159.203.33.60) has joined
+<newhoggy>	I'd like to use some Haswell CPU instructions from Haskell.  Is there any way to do this?
+*	robertc has quit (Ping timeout: 240 seconds)
+<newhoggy>	The CPU instructions I'm after are TZCNT and PDEP
+<jared-w>	https://github.com/fpco/inline-c/tree/master/inline-c
+*	mengu has quit (Remote host closed the connection)
+<jared-w>	I'd check this library out. It's the only way I know of to use C inside Haskell without going through the FFI
+<jared-w>	(from there you can probably daisy chain into inline assembly inside the inline C?)
+<newhoggy>	Thanks.  I'll try that out
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+*	hiratara has quit (Quit: ZNC - http://znc.in)
+*	hiratara (~hiratara@240f:7:4708:1:8467:4270:9167:f6ac) has joined
+*	newhoggy has quit (Remote host closed the connection)
+*	texasmynsted has quit (Ping timeout: 240 seconds)
+*	newhoggy (~newhoggy@1.129.96.245) has joined
+*	ethan_ (521495a1@gateway/web/freenode/ip.82.20.149.161) has joined
+*	texasmynsted (~texasmyns@c-76-122-222-203.hsd1.tn.comcast.net) has joined
+<ethan_>	clear
+*	thc202 has quit (Ping timeout: 246 seconds)
+*	oscarvarto has quit (Quit: Leaving)
+*	peterbecich (~peterbeci@75-142-96-216.static.mtpk.ca.charter.com) has joined
+*	ethan_ has quit (Client Quit)
+*	newhoggy has quit (Ping timeout: 240 seconds)
+*	mengu (~mengu@unaffiliated/mengu) has joined
+*	chase has quit (Ping timeout: 246 seconds)
+*	mengu has quit (Ping timeout: 276 seconds)
+*	luhliarik__ (~zer0@ip-89-103-110-138.net.upcbroadband.cz) has joined
+*	seagreen (~traveller@75-137-115-134.dhcp.gnvl.sc.charter.com) has joined
+*	seagreen has quit (Client Quit)
+*	seagreen (~traveller@75-137-115-134.dhcp.gnvl.sc.charter.com) has joined
+*	newhoggy (~newhoggy@2405:9000:1400:120:cceb:2334:a95d:5113) has joined
+*	newhoggy has quit (Ping timeout: 246 seconds)
+*	Donovan (~donovan@pc018849.workstation.griffith.edu.au) has left
+*	chase (~chasote@cable201-233-196-153.epm.net.co) has joined
+*	cmurr (~calum@cpc73838-dals21-2-0-cust973.20-2.cable.virginm.net) has joined
+*	sigmundv (~sigmundv@178.62.72.87) has joined
+*	algebra (~amarpotgh@p5796739A.dip0.t-ipconnect.de) has joined
+*	haskelleksah has quit (Quit: haskelleksah)
+*	cmurr has quit (Ping timeout: 240 seconds)
+*	cmurr (~calum@81.171.97.49) has joined
+*	algebra has quit (Ping timeout: 240 seconds)
+*	newhoggy (~newhoggy@2405:9000:1400:120:cceb:2334:a95d:5113) has joined
+*	ConTeXnician (~ConTeXnic@dyndsl-095-033-188-165.ewe-ip-backbone.de) has joined
+*	lkolstad has quit (Ping timeout: 260 seconds)
+*	roachmd (~roachmd@2601:cc:4100:244e:e835:d45a:3ed3:60ec) has joined
+*	roachmd has quit (Ping timeout: 255 seconds)
+*	lkolstad (~ljk@c-24-16-12-195.hsd1.wa.comcast.net) has joined
+*	Youmu has quit (Quit: Connection closed for inactivity)
+*	newhoggy has quit (Remote host closed the connection)
+*	newhoggy (~newhoggy@2405:9000:1400:10:74b3:fbe1:7680:d657) has joined
+*	cmurr has quit (Quit: cmurr)
+*	systemfault (~rcyr@unaffiliated/rcyr) has joined
+*	newhoggy_ (~newhoggy@2405:9000:1400:120:cceb:2334:a95d:5113) has joined
+*	mengu (~mengu@unaffiliated/mengu) has joined
+*	Purplelawnchairs (~Purplelaw@westbourne.vic.edu.au) has joined
+*	newhoggy has quit (Ping timeout: 246 seconds)
+*	mac10688_ (~mac10688@c-24-21-116-24.hsd1.or.comcast.net) has joined
+*	juanpaucar (~juanpauca@190.57.158.6) has joined
+*	juanpaucar has quit (Ping timeout: 255 seconds)
+*	bydo has quit (Quit: nah.)
+*	bydo (~cdr@unaffiliated/bydo) has joined
+*	algebra (~amarpotgh@p5796739A.dip0.t-ipconnect.de) has joined
+*	eacameron has quit (Remote host closed the connection)
+*	Purplelawnchair (~Purplelaw@westbourne.vic.edu.au) has joined
+*	Purplelawnchairs has quit (Ping timeout: 246 seconds)
+*	roachmd (~roachmd@2601:cc:4100:244e:f12e:c963:a475:6e68) has joined
+*	roachmd has quit (Remote host closed the connection)
+*	roachmd (~roachmd@2601:cc:4100:244e:f12e:c963:a475:6e68) has joined
+*	algebra has quit (Ping timeout: 255 seconds)
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+*	eacameron has quit (Remote host closed the connection)
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+*	oscarvarto (~oscarvart@187.245.79.62) has joined
+*	Purplelawnchair has quit (Ping timeout: 246 seconds)
+*	Purplelawnchairs (~Purplelaw@westbourne.vic.edu.au) has joined
+*	Big_G has quit (Quit: Leaving)
+*	Big_G (~Big_G@75-165-48-101.tukw.qwest.net) has joined
+*	Purplelawnchairs has quit (Ping timeout: 255 seconds)
+*	Guest42 has quit (Quit: My MacBook has gone to sleep. ZZZzzz…)
+*	easzero has quit (Read error: Connection reset by peer)
+**** ENDING LOGGING AT Sun Aug 13 17:33:58 2017
+
+**** BEGIN LOGGING AT Mon Aug 14 18:53:34 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	andyhoang (~andyhoang@116.118.104.236) has joined
+*	algebra (~amarpotgh@p57967EEF.dip0.t-ipconnect.de) has joined
+*	harfangk (~quassel@222.110.160.66) has joined
+*	algebra has quit (Ping timeout: 240 seconds)
+*	chlong_ has quit (Ping timeout: 260 seconds)
+*	andyhoang has quit (Ping timeout: 260 seconds)
+*	newhoggy_ has quit (Remote host closed the connection)
+*	newhoggy (~newhoggy@2405:9000:1400:120:eca4:54c7:a7d5:cd67) has joined
+*	newhoggy has quit (Remote host closed the connection)
+*	newhoggy (~newhoggy@2405:9000:1400:10:1908:ab4f:f0fd:7734) has joined
+*	pfurla has quit (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)
+*	andyhoang (~andyhoang@116.118.104.236) has joined
+*	harfangk has quit (Ping timeout: 240 seconds)
+*	frankpf (~frankpf@unaffiliated/frankpf) has joined
+*	hphuoc25 (~hphuoc25@132.147.107.135) has joined
+*	algebra (~amarpotgh@p57967EEF.dip0.t-ipconnect.de) has joined
+*	hphuoc25 has quit (Remote host closed the connection)
+**** ENDING LOGGING AT Mon Aug 14 19:38:17 2017
+
+**** BEGIN LOGGING AT Tue Aug 15 11:01:37 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+<Unode>	What is the recommended way to build something small that uses code from a larger project that isn't listed?
+*	baranovxyz has quit (Client Quit)
+*	baranovxyz (~baranovxy@195.208.50.166) has joined
+*	takle has quit (Remote host closed the connection)
+<Unode>	mud: if you don't use script/runghc what do you use at the moment?
+<crucify_me>	hi in this code the EitherOr data type takes two paramenters 'a b' ... but the functionality doesn't change at all if we have one parameter 'a'. or is that incorrect? thanks   https://ptpb.pw/yUYh
+*	robertc has quit (Ping timeout: 260 seconds)
+*	takle (~takle@62.190.88.242) has joined
+<Unode>	I just want to be able to build on existing codebase. At this point I don't yet know where I'm going to anchor my code but I'd like to use some of the code from the larger project.
+<geekosaur>	crucify_me, in that definition, where b only appears in the type and not the data constructors, you have what is called a phantom type
+<geekosaur>	crucify_me, that can be used for tagging
+<crucify_me>	tagging?
+<geekosaur>	to avoid mixing values that shouldn't be mixed, even though you don't actually need a value of the tag type
+*	mud has quit (Ping timeout: 255 seconds)
+*	mud (~mud@unaffiliated/kadoban) has joined
+<mud>	not sure if this sent: You'll probably have to just make an actual .cabal project and in the stack.yaml you can refer to the local thing
+<crucify_me>	but you couldn't mix values since it ultimately only takes one argument to be compared by Eq geekosaur  thanks btw
+<mud>	Missed anything after that too, bleh.
+<geekosaur>	so, for example, a cheap (and not very useful) implementation of values with units of measure is: data Meter; data Gram; data Dim a b = D a; ... D 5 :: Dim Int Gram
+<geekosaur>	compare to: if you have Right 5 :: Either String Int and Right 5 :: Either () Int, you cannot use the former where the latter is needed
+<geekosaur>	even though they both look like "Right 5", the types are different
+<geekosaur>	because the Left type is still there even if it's not being used
+*	takle has quit (Ping timeout: 255 seconds)
+<geekosaur>	thus, in Right, the eft type is phantom
+<geekosaur>	*Left type
+*	delexi (~Thunderbi@2a02:8071:b599:1d00:15fa:7f98:a83f:dcb4) has joined
+<crucify_me>	geekosaur, what is Dim there?
+<geekosaur>	this tagging method is actually not the current style though, we use Proxy instead because it's more flexible
+*	newhoggy (~newhoggy@ppp118-211-222-35.bras1.syd2.internode.on.net) has joined
+<geekosaur>	er? it represents a value with a dimension
+<geekosaur>	so if I speak of a D 5, I have to say what units it is in. which is where the Meter and Gram at type level come in
+<geekosaur>	in a practical usage, you want something more complex than that, but as a simple example it works --- it prevents you from mixing a D 5 representing a length from one representing a mass, at type level
+<crucify_me>	ok like unit of measure
+*	uglyfigurine (~uglyfigur@131.228.197.34) has joined
+<crucify_me>	geekosaur, if you have time, I would be grateful if you fleshed that out and pasted. very hard to see it in inline text sorry
+<crucify_me>	but the concept in sort of clear
+<crucify_me>	is
+*	aphorisme has quit (Quit: My MacBook has gone to sleep. ZZZzzz…)
+*	newhoggy has quit (Ping timeout: 248 seconds)
+*	frankpf (~frankpf@unaffiliated/frankpf) has joined
+<Akii>	I've no idea what any of this means http://haskell-servant.readthedocs.io/en/stable/tutorial/Authentication.html#client-side-authentication
+*	takle (~takle@62.190.88.242) has joined
+*	newhoggy (~newhoggy@ppp118-211-222-35.bras1.syd2.internode.on.net) has joined
+*	malaclyps (~malaclyps@unaffiliated/malaclyps) has joined
+<geekosaur>	Akii, I think you're expected to have some basic understanding of http auth
+<geekosaur>	(i.e. not haskell specific, but fundamentals)
+<Akii>	I have that
+*	takle has quit (Ping timeout: 240 seconds)
+<Akii>	all I need is add a header
+*	newhoggy has quit (Ping timeout: 240 seconds)
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+*	malaclyps has quit (Ping timeout: 240 seconds)
+<Akii>	one would think this wouldn't be so hard
+*	algebra has quit (Remote host closed the connection)
+<crucify_me>	geekosaur I made an error. I was changing things before I sent that paste. the b is in the type constructor line : https://ptpb.pw/sYee
+*	malaclyps (~malaclyps@unaffiliated/malaclyps) has joined
+<geekosaur>	crucify_me, yes, everything I said started from the observationt hat b was not used
+*	newhoggy (~newhoggy@ppp118-211-222-35.bras1.syd2.internode.on.net) has joined
+<geekosaur>	this is more like the Either case I showed
+<geekosaur>	[14:07:46]  <geekosaur>	compare to: if you have Right 5 :: Either String Int and Right 5 :: Either () Int, you cannot use the former where the latter is needed
+<geekosaur>	for any such value, the contained value is either an a or a b, but the container still has *both* types
+*	eacameron has quit (Ping timeout: 248 seconds)
+<geekosaur>	(in the general case it might not be a container, but for Either and EitherOr it is)
+<geekosaur>	also note that they confuse things by using a and b in one way at type level, and a different way at value level 
+<crucify_me>	sorry yeah I'm confused. 
+<geekosaur>	that is, in the equations for (==) we have values a and b both of the same type, which for the first one is the type level a, and for the second is the type level b
+*	newhoggy has quit (Ping timeout: 255 seconds)
+<geekosaur>	it would have been clearer perhaps if they'd used x and y for the value level
+*	newhoggy (~newhoggy@ppp118-211-222-35.bras1.syd2.internode.on.net) has joined
+<geekosaur>	http://lpaste.net/357725 might help, I renamed some things and added comments about the types
+<crucify_me>	geekosaur, thanks so much. I'm just staring now!
+*	albertus1 has quit (Ping timeout: 260 seconds)
+*	Arcaelyx (~Arcaelyx@pool-98-116-59-163.nycmny.fios.verizon.net) has joined
+*	newhoggy has quit (Ping timeout: 240 seconds)
+<crucify_me>	ok so this is a case not where b could *not* be the same type as a ? geekosaur 
+<crucify_me>	sorry wait
+<crucify_me>	ok so this is a case where b could *not* be the same type as a ?
+<geekosaur>	I should probablymention that I'll be away from the keyboard a fair bit today
+*	newhoggy (~newhoggy@ppp118-211-222-35.bras1.syd2.internode.on.net) has joined
+<crucify_me>	me too thanks so much. so I corrected my last post
+<geekosaur>	hm? at value level the a and b represent values, not types;in one equation they will both be the *type* a, in the other the *type* b
+<geekosaur>	which is why I renamed them in my repaste
+<geekosaur>	newcomers are often confused by the fact that names can have different meanings at type and value level
+<geekosaur>	and here you have to keep straight the value-level a and b vs. the type-level a or b
+*	malaclyps has quit (Ping timeout: 240 seconds)
+<geekosaur>	(and I switched from "and" to "or" there deliberately to try to highlight the difference between them)
+<crucify_me>	ok so they are divided, each restricted to work with a different type.
+*	albertus1 (~seb@x4e35914b.dyn.telefonica.de) has joined
+*	newhoggy has quit (Ping timeout: 240 seconds)
+<crucify_me>	no my last post is incorrect
+*	newhoggy (~newhoggy@ppp118-211-222-35.bras1.syd2.internode.on.net) has joined
+*	aarvar (~foewfoiew@50.34.105.170) has joined
+*	iAmerikan (~dwshrewt@unaffiliated/iamerikan) has joined
+*	haskelleksah (~daderemi@i11057.upc-i.chello.nl) has joined
+<geekosaur>	the first equation for (==) handles the Hello data constructor, whose type is a. the value-level a and b (or xa and ya in mine) are both that type.
+<geekosaur>	the second equation handles the Goodbye data constrcor; here, the original's value-level a and b and my xb and yb both have type b
+*	stoner_ (~stoner@2600:8807:c244:f3f0:5c93:3f41:2fe9:de93) has joined
+*	newhoggy has quit (Ping timeout: 240 seconds)
+*	Xion_ has quit (Ping timeout: 240 seconds)
+<crucify_me>	so both Hello and Goodbye both have the exact same functionality.. both Hello and Goodbye can handle any type at this stage geekosaur 
+*	newhoggy (~newhoggy@ppp118-211-222-35.bras1.syd2.internode.on.net) has joined
+<geekosaur>	crucify_me, yes. the whole point is you have a single type which can now carry either of two types
+*	rarebreed has quit (Ping timeout: 240 seconds)
+<geekosaur>	and you distinguish by which constructor
+*	FernandoBasso has quit (Quit: Leaving)
+*	mud has quit (Ping timeout: 255 seconds)
+<geekosaur>	so, for example, you might want to use this for a function which can either succeed and produce a value, or fail and produce an error indicating what went wrong
+<geekosaur>	in this case you might use Hello for the successful result, and Goodbye to represent an error message
+*	moei (~moei@softbank221078042071.bbtec.net) has joined
+<geekosaur>	but, you can choose; it doesn't force it on you. (usually, a dedicated error type is better for this, but historically we use Either. this is almost as bad as using tuples, because it's effectvely untyped.)
+<crucify_me>	ok that is great, I will think about that. perhaps I could inquire about that at another time. really appreciate it geekosaur 
+*	newhoggy has quit (Ping timeout: 240 seconds)
+*	mud (~mud@unaffiliated/kadoban) has joined
+*	mstruebing (~mstruebin@p200300E3DBD6B6831581C6DDD3B6720F.dip0.t-ipconnect.de) has joined
+Python interface unloaded
+**** ENDING LOGGING AT Tue Aug 15 11:57:28 2017
+
+**** BEGIN LOGGING AT Tue Aug 15 18:48:48 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	Disconnected ()
+**** ENDING LOGGING AT Tue Aug 15 18:51:39 2017
+
+**** BEGIN LOGGING AT Tue Aug 15 18:52:10 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	algebra (~amarpotgh@p57967E6B.dip0.t-ipconnect.de) has joined
+*	Youmu (uid129469@gateway/web/irccloud.com/x-bpzzdiiyaoavgtfy) has joined
+*	prophile has quit (Ping timeout: 246 seconds)
+*	prophile (~alynn@oftn/oswg-member/prophile) has joined
+*	algebra has quit (Ping timeout: 240 seconds)
+*	louispan has quit (Quit: louispan)
+*	prophile has quit (Ping timeout: 248 seconds)
+*	prophile (~alynn@oftn/oswg-member/prophile) has joined
+*	frankpf (~frankpf@unaffiliated/frankpf) has joined
+*	MarcelineVQ has quit (Quit: q)
+**** ENDING LOGGING AT Tue Aug 15 19:22:48 2017
+
+**** BEGIN LOGGING AT Wed Aug 16 18:07:14 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	takle (~takle@cpc73668-dals20-2-0-cust505.20-2.cable.virginm.net) has joined
+*	robertc (~robertchr@162.243.22.32) has joined
+*	takle has quit (Ping timeout: 264 seconds)
+*	uglyfigurine (~uglyfigur@73.110.34.152) has joined
+*	robertc has quit (Ping timeout: 246 seconds)
+*	uglyfigurine has quit (Ping timeout: 240 seconds)
+*	jsph (~jjjjjj@2001:19f0:6000:4001::6e) has joined
+*	eacameron has quit (Remote host closed the connection)
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+*	uglyfigurine (~uglyfigur@73.110.34.152) has joined
+*	louispan (~textual@203.38.203.134) has joined
+*	louispan has quit (Client Quit)
+*	uglyfigurine has quit (Ping timeout: 260 seconds)
+*	louispan (~textual@203.38.203.134) has joined
+*	louispan has quit (Client Quit)
+*	Gurkenglas_ has quit (Ping timeout: 264 seconds)
+*	dennisvennink has quit (Max SendQ exceeded)
+*	malaclyps has quit (Ping timeout: 246 seconds)
+*	dennisvennink (~dv@095-096-179-040.static.chello.nl) has joined
+*	louispan (~textual@203.38.203.134) has joined
+*	louispan has quit (Client Quit)
+*	uglyfigurine (~uglyfigur@73.110.34.152) has joined
+*	uglyfigurine has quit (Ping timeout: 240 seconds)
+*	Axman6 has quit (Ping timeout: 240 seconds)
+*	Axman6 (~Axman6@pdpc/supporter/student/Axman6) has joined
+*	uglyfigurine (~uglyfigur@73.110.34.152) has joined
+*	uglyfigurine has quit (Ping timeout: 264 seconds)
+*	Disconnected ()
+**** ENDING LOGGING AT Wed Aug 16 18:53:37 2017
+
+**** BEGIN LOGGING AT Wed Aug 16 19:06:38 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	thc202 has quit (Ping timeout: 240 seconds)
+*	uglyfigurine (~uglyfigur@73.110.34.152) has joined
+*	uglyfigurine has quit (Ping timeout: 240 seconds)
+*	moei (~moei@softbank221078042071.bbtec.net) has joined
+*	marvin2 has quit (Quit: quit)
+*	algebra (~amarpotgh@p57967E10.dip0.t-ipconnect.de) has joined
+*	andyhoang1 (~andyhoang@116.118.104.236) has joined
+*	uglyfigurine (~uglyfigur@73.110.34.152) has joined
+*	andyhoang has quit (Ping timeout: 240 seconds)
+*	algebra has quit (Ping timeout: 260 seconds)
+*	erisco (~erisco@198-84-159-71.cpe.teksavvy.com) has joined
+*	uglyfigurine has quit (Ping timeout: 246 seconds)
+*	moei has quit (Quit: Leaving...)
+*	pilne has quit (Quit: Quitting!)
+*	harfangk (~quassel@222.110.160.66) has joined
+*	pfurla has quit (Quit: Textual IRC Client: www.textualapp.com)
+*	pfurla (~textual@ool-182ed51a.dyn.optonline.net) has joined
+*	jathan (~jathan@189.216.181.191) has joined
+*	louispan (~textual@203.38.203.134) has joined
+*	jathan has quit (Remote host closed the connection)
+*	jathan (~jathan@189.216.181.191) has joined
+*	hphuoc25 has quit (Remote host closed the connection)
+*	uglyfigurine (~uglyfigur@73.110.34.152) has joined
+*	jathan has quit (Client Quit)
+*	jathan (~jathan@189.216.181.191) has joined
+**** ENDING LOGGING AT Wed Aug 16 19:56:47 2017
+
+**** BEGIN LOGGING AT Thu Aug 17 19:24:47 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	alasi (uid197723@gateway/web/irccloud.com/x-avkjozqdmsgzibys) has joined
+*	mayhew has quit (Remote host closed the connection)
+*	Rodya_ (~Rodya_@2601:46:4001:e0b4:415:82be:b2de:25c7) has joined
+**** ENDING LOGGING AT Thu Aug 17 19:52:43 2017
+
+**** BEGIN LOGGING AT Sun Aug 20 11:13:45 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	kadoban (~mud@unaffiliated/kadoban) has joined
+<crucify_me>	hey I'm not sure about the Integral class. It contains Int and Integer, but only because its an instance of Enum, right? other questions follow... thanks
+*	eacameron has quit (Ping timeout: 240 seconds)
+*	zero_byte (~zer0@cst-prg-236-254.cust.vodafone.cz) has joined
+<erisco>	crucify_me, it has those instances because they are intregral types, I don't know what is relevant about Enum
+<erisco>	other than all Integral are Enum I see :P
+<monochrom>	Still, the "because" is wrong.
+<monochrom>	If anything, it is the other way round.
+*	merijn (~merijn@a212-238-239-156.adsl.xs4all.nl) has joined
+*	mengu (~mengu@unaffiliated/mengu) has joined
+<erisco>	why do the Haskell numeric classes feel like such a mess
+<monochrom>	I seem to see 51% of humans say "P because C" when they mean "C because P".
+<crucify_me>	its the wording of a book question.
+<monochrom>	Design by committee.
+<crucify_me>	that has me confused.
+<crucify_me>	monochrom, what do mean the other way round?
+<crucify_me>	you
+<monochrom>	For example, Int is an instance of Enum because it is an instance of Integral.
+<crucify_me>	I see. the multiple choice question is " The type Integral includes : "  a) Int and Integer numbers b) ...etc    so I guess a is correct
+<erisco>	does it really say that? because Integral is not a type =\
+<monochrom>	"Int and Integer numbers" is very confused.
+<crucify_me>	sorry typeclass is what it says
+<crucify_me>	yeah something about the question seems I wrong.. I could paste it
+<erisco>	I am not a fan of "includes" to mean "has instances"
+<crucify_me>	let me paste it if you have time to look
+<monochrom>	I mean a student writing "Int and Integer numbers" is understandable, they're just beginning. But a teacher is supposed to be more sophisticated than that.
+<erisco>	only because it might also refer to the methods
+<monochrom>	Yeah this teacher is all about being imprecise and warm-and-fuzzy feeling.
+<crucify_me>	https://ptpb.pw/WN68
+<erisco>	wat
+<crucify_me>	wat wat
+<crucify_me>	so is there anything to get from that exercise?
+<monochrom>	If we're lucky, the teacher means "(a) these two sets: first set is the set of Int-typed values, second set is the set of Integer-typed values" and "merely" commits the crime of conflating type with set.
+<monochrom>	If we're unlucky, the teacher downright believes that (5::Int) is a member of Integral.
+<crucify_me>	its a book
+<monochrom>	This teacher is a BSing essay writer. All you will learn from this teacher is writing nice-sounding sentences that "make a lot of sense" but no working code ever.
+<crucify_me>	its *the* book
+<monochrom>	Heh
+<crucify_me>	uh oh
+<monochrom>	Well I guess there are other chapters that actually contain working code.
+*	albertus1 has quit (Ping timeout: 240 seconds)
+<monochrom>	I am impressed by the lambda calculus chapter too. It has a lot of exercises that make you work objectively and no BS.
+<monochrom>	But I guess there are bad parts of the book.
+<crucify_me>	monochrom, I did a bunch of the sicp book and scheme. still don't fully get lambda calculus
+<crucify_me>	I shouldn't say "of the book".. "of the first chapter"
+<crucify_me>	I keep looking at Graham Hutton's book
+<crucify_me>	(looking to buy it)
+<monochrom>	Hutton's book got a favourable recent review from Thompson. I am more and more interested in it.
+<srhb>	crucify_me: Which question number is this?
+<monochrom>	http://lambda-the-ultimate.org/node/5465
+<crucify_me>	chapt 6:14 under mult choice
+<crucify_me>	it is a free version from december 2016
+<erisco>	well, what book do I have... Hindley & Seldin
+<crucify_me>	I don't know, I get all hyped about the ultimate book. I read scads of reviews to decide on a book. SICP is the ultimate cs ever written blah blah. I *suck* at programming
+<crucify_me>	cs book
+*	argent0 has quit (Ping timeout: 248 seconds)
+<crucify_me>	*the* book is 1800 pages long
+*	Deide (~Deide@94.12.221.62) has joined
+<crucify_me>	I mean, Integral is key to understanding basic number theory functions, right?
+<crucify_me>	like divMod and all that
+<geekosaur>	Haskell's numeric type hierarchy sadly has little to do with number theory
+<geekosaur>	it's more an ad hoc attempt to behave like languages that arbitrarily promote/demote numeric types as required
+<kadoban>	If you want to know number theory you kind of have to study it. Any programming language is barely going to help at all.
+<crucify_me>	I just mean the absolute basics to implement prime number finder, etc
+<monochrom>	Depends on what you mean by "basic number theory".
+<crucify_me>	if I may paste something...
+<Akii>	bitemyapp: yup, figured it out though :)
+<Akii>	bitemyapp: coming along nicely, just added custom markers hrhr gotta put the haskell logo in the footer and the link to the repo
+<crucify_me>	https://ptpb.pw/I6ui
+<crucify_me>	I've queried re: this before
+*	lkolstad has quit (Ping timeout: 240 seconds)
+*	albertus1 (~seb@x55b4d7dd.dyn.telefonica.de) has joined
+<crucify_me>	monochrom a PM is in order if you don't mind briefly
+<erisco>	it isn't the worst but Haskell's handling of numbers still has some reek of computerisms
+*	merijn has quit (Ping timeout: 240 seconds)
+<erisco>	of course you can define more accurate classes if you want to
+<monochrom>	Sorry I want to be left alone.
+<crucify_me>	no problem just looking for refuge :)
+<crucify_me>	erisco, re: that long paste?
+<erisco>	I am referring to Num and the rest of the motley crew of numeric classes :P
+<erisco>	if you want to begin looking at numbers more simply then start with Semigroup, Monoid, Group, and so on
+<erisco>	I imagine there is Ring and Field floating around in some package edwardk wrote
+*	zero_byte has quit (Ping timeout: 240 seconds)
+*	kadoban has quit (Ping timeout: 246 seconds)
+<crucify_me>	erisco do you know the sorts of mathematicians most likely to be using haskell? bad question maybe, but I work at a major uni
+<erisco>	your mathematicians will more likely be using proof assistants such as Coq
+<erisco>	Haskell is not a convenient language to do mathematical proofs in
+<crucify_me>	thanks.. I'll just slog through this book then. I'll be ancient when I finish it
+<erisco>	maybe you'll find a type theorist... I don't know what departments they hang in
+*	lkolstad (~ljk@c-24-16-12-195.hsd1.wa.comcast.net) has joined
+<monochrom>	Mathematicians use the computer for email and LaTeX only. And I'm already talking about today's mathematicians.
+<monochrom>	Yesterday's mathematicians used the computer for email only. They asked the department secretary to do the LaTeX.
+<crucify_me>	funny ! monochrom I want to learn some math along the way as I learn how to program (if ever)
+<crucify_me>	thanks erisco just saw that re: type theorists.
+<crucify_me>	actually really enjoy the Bartosz videos so far
+<erisco>	well I am being optimistic... if you were to find a mathematician somewhere near programming then what would that look like :)
+<crucify_me>	you mean like, fully inaccessible?
+*	takle_ has quit (Remote host closed the connection)
+*	Zialus has quit (Ping timeout: 240 seconds)
+*	marvin2 (~m@cpe-188-129-117-22.dynamic.amis.hr) has joined
+<monochrom>	No, a mathematician near programming is much more likely to use Mathematica than to use Coq.
+<qu1j0t3>	:-(
+<crucify_me>	thing is, I thought haskell was built on some beautiful math concepts. that is (was) very appealing to me.
+*	Zialus (~RMF@174.203.60.94.rev.vodafone.pt) has joined
+*	lkolstad has quit (Ping timeout: 248 seconds)
+<geekosaur>	"some"
+<qu1j0t3>	all programming is, just that haskell doesn't pretend otherwise as vigorously as other environments do
+<crucify_me>	qu1j0t3, well said
+<geekosaur>	however the primary focus wasn't math concepts, it was exploring laziness. and these days it's about type system experimentation
+<monochrom>	Some beautiful math concepts didn't come from mathematicians.
+<monochrom>	Instead, logicians, philosophers, computer scientists.
+*	tholen (~mo@2001:5b0:50d9:88e8:7bbc:932e:3486:3cdf) has left
+<qu1j0t3>	some apples are red and some are green
+*	howdoi has quit (Quit: Connection closed for inactivity)
+<crucify_me>	well, given I have just you good people and *the* book , I'm just looking for the correct "path" , but haven't found it yet.
+<qu1j0t3>	surely the path is just go out and solve problems?
+<monochrom>	When you talk about mathematicians you should picture Terrance Tao as the poster boy example in your mind, and while he blogs a lot on the computer, I don't see him getting anywhere near Coq. Ask him about Curry-Howard some day, see if he has even heard of it.
+<crucify_me>	dang, he went to UC Berkeley?
+<monochrom>	Why is it a path? Why is it not a landscape? Does it have to be perfect?
+*	Big_G (~Big_G@75-165-48-101.tukw.qwest.net) has joined
+<crucify_me>	monochrom, yes, since I have mental problems :)
+<erisco>	do you think the gift is based on intuiting bad notation? :P
+<crucify_me>	well taken though
+<monochrom>	I was a perfectionist too. But my method of achieving perfection was to explore more of the landscape to find how to improve.
+<monochrom>	In other words I was perfectionist on the final outcome, not perfectionist on the intermediate journey. I never asked "is it a waste of time to try this?".
+<crucify_me>	yeah, thanks a lot. it's strange, learning category theory is, somehow, vaguely, reaching me. very encouraging monochrom you're right
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+*	Gurkenglas_ (~Gurkengla@dslb-178-008-180-030.178.008.pools.vodafone-ip.de) has joined
+<monochrom>	Use a space-filling curve. Now it is both a path and a landscape. There is no need to choose sides.
+<crucify_me>	word .. thank you
+*	kadoban (~mud@unaffiliated/kadoban) has joined
+Python interface unloaded
+**** ENDING LOGGING AT Sun Aug 20 12:40:54 2017
+
+**** BEGIN LOGGING AT Mon Aug 21 12:33:29 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+<crucify_me>	hi why does 'let fl :: Float; fl = 1.2' not require a constraint, but 'fl :: Fractional a => a; fl = 4.5' does require it ? sorry, so basic! 
+<srhb>	crucify_me: It's unclear what you mean by require here. Both work fine, yes?
+<crucify_me>	I don't understand the error message "Expected a type, but 'Fractional' has kind '* -> Constraint' .
+<crucify_me>	srhb yes but..
+<srhb>	crucify_me: Fractional is a type class, not a type.
+<srhb>	crucify_me: In the second example you're saying: For any type a which has a Fractional instance
+<srhb>	crucify_me: In the first example you're saying "for the type Float"
+<crucify_me>	I'm asking because Fractional won't work with the constraint.
+<crucify_me>	sorry without* 
+<srhb>	crucify_me: Because it is not a type. Unlike Float.
+<srhb>	crucify_me: Constraints like that are predicates you can use to talk about types, in this case the type variable 'a'
+<srhb>	crucify_me: You're saying: fl is 4.5, and fl has the type 'a' where 'a' can be _any_ type that has a Fractional instance.
+*	iAmerikan (~dwshrewt@unaffiliated/iamerikan) has joined
+<srhb>	crucify_me: You cannot say that 4.5 is Fractional, because Fractional is not a type, it is a type class.
+<crucify_me>	Fractional is not a type ?
+<srhb>	Indeed.
+<crucify_me>	hold on now ! :)
+*	millku (~Mutter@131.89-10-150.nextgentel.com) has joined
+*	srhb grips firmly to the sides of Freenode
+<crucify_me>	waaaait a doggone minute !
+<crucify_me>	so obviously I don't know what the hell is going on
+<crucify_me>	thanks srhb !
+<srhb>	:)
+<srhb>	crucify_me: The things to the right of => are types. The things to the _left_ of it are constraints that operate on those types to the _right_ of it
+<millku>	Hi do you declare the type of the function first then define it? 
+<millku>	Parameter types first then the lambda function under it
+<millku>	?
+*	amatecha has quit (Ping timeout: 246 seconds)
+*	edwardk has quit (Read error: Connection reset by peer)
+<srhb>	millku: Often I initially omit the type signature completely.
+<srhb>	Let ghc work it out.
+<srhb>	If I'm debugging and I'm unsure what's wrong, I'll add explicit type.
+<srhb>	s
+*	wedens has quit (Ping timeout: 240 seconds)
+<millku>	I see 
+*	dkov (~dkov@84-114-31-82.cable.dynamic.surfer.at) has joined
+<millku>	Thanks
+*	edwardk (sid47016@haskell/developer/edwardk) has joined
+*	zph has quit (Ping timeout: 246 seconds)
+<millku>	You are still online
+<millku>	:)
+<srhb>	For a while yet.
+<millku>	Working with Haskell today?
+*	Tspoon (tlarjoma@hilla.kapsi.fi) has joined
+<crucify_me>	srhb, so I'm missing something key. what is this part ' but 'Fractional' has kind '* -> Constraint '    ?
+*	amatecha (sid10006@gateway/web/irccloud.com/x-gsrhuldoiizxrkfy) has joined
+*	wedens (uid222242@gateway/web/irccloud.com/x-qvvkuysigpjevmmh) has joined
+<crucify_me>	cannot you put a constraint of Float as well/
+<crucify_me>	?
+<crucify_me>	on*
+<srhb>	crucify_me: You put constraints on type _variables_
+*	thoradam has quit (Ping timeout: 255 seconds)
+<srhb>	crucify_me: * -> Constraint should be read as "given a type, it produces a constraint"
+<srhb>	crucify_me: read * as Type
+*	zph (sid26878@gateway/web/irccloud.com/x-rxnplwpmuheqzzno) has joined
+<crucify_me>	good start srhb thanks. I tried putting a constraint on the Float version.
+<crucify_me>	and got..
+<crucify_me>	can I cut and paste from the terminal or is that chaos?
+*	thoradam (sid154141@gateway/web/irccloud.com/x-yudjkicrihaqrpyb) has joined
+*	eacameron has quit (Remote host closed the connection)
+<crucify_me>	Expected kind '* -> Constraint', but 'Float' has kind '*'
+<srhb>	crucify_me: Use lpaste.net please
+<geekosaur>	Float is not the same as Floating
+<MarcelineVQ>	pasting more than 2 lines tends to be a bad idea
+<srhb>	If you have multiline
+<geekosaur>	Floating is a typeclass. Float is a type which has a Floating instance
+<geekosaur>	(Double is another type with a Floating instance)
+<srhb>	geekosaur: I think they tried Fractional Float
+<crucify_me>	geekosaur, ok the upperCase made me treat them equally thanks all
+<srhb>	No, wrong error message..
+*	mengu has quit (Ping timeout: 240 seconds)
+<crucify_me>	ok Floating yeah that works. 
+<juanbono>	Hi! What happens to stack if I install Cabal 2? is it safe? 
+*	millku has quit (Quit: Mutter: www.mutterirc.com)
+<MarcelineVQ>	srhb: it's the error for  fl :: Float a => a
+<MarcelineVQ>	juanbono: perfectly safe
+<juanbono>	MarcelineVQ: thank you!
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+*	argent0 (~aner@186.133.237.178) has joined
+<srhb>	MarcelineVQ: Ah :)
+*	millku (~Mutter@131.89-10-150.nextgentel.com) has joined
+<srhb>	millku: Sorry, you were asking me? No, I'm actually fiddling with NixOS mostly today.
+<srhb>	Or nixpkgs rather.
+<millku>	:)
+*	eacameron has quit (Ping timeout: 248 seconds)
+*	peterbecich (~peterbeci@75-142-96-216.static.mtpk.ca.charter.com) has joined
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+*	millku has quit (Quit: Mutter: www.mutterirc.com)
+Python interface unloaded
+**** ENDING LOGGING AT Mon Aug 21 13:04:05 2017
+
+**** BEGIN LOGGING AT Tue Aug 22 11:56:38 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	hphuoc25 (~hphuoc25@132.147.107.135) has joined
+*	carlomagno (~cararell@inet-hqmc01-o.oracle.com) has joined
+*	carlomagno1 has quit (Ping timeout: 255 seconds)
+*	argent0 (~aner@201.180.112.104) has joined
+*	carlomagno has quit (Ping timeout: 240 seconds)
+<crucify_me>	https://ptpb.pw/_y2P  hi wondering why (if?) sort is overridden here. can't see what is operating here
+<crucify_me>	in the young' func
+*	carlomagno (~cararell@inet-hqmc01-o.oracle.com) has joined
+<mud>	:t sort
+<lambdabot>	Ord a => [a] -> [a]
+*	freeman42z[m] has quit (Ping timeout: 240 seconds)
+*	hphuoc25 has quit (Remote host closed the connection)
+<mud>	Is that what you mean by overriden? It's polymorphic. It works on lists of elements, where the elements are instances of Ord
+<geekosaur>	young' is being given its natural type signature (what it would have if you let it be inferred). young has a more specific signature
+<simony>	what's a good image processing library if i want to process some images and extract say top 5 occuring colors or something?
+*	juanpauc_ (~juanpauca@host-186-101-150-143.netlife.ec) has joined
+*	freeman42x[m] (~Freeman42@83.136.43.94) has joined
+*	juanpaucar has quit (Ping timeout: 248 seconds)
+*	madjestic (~madjestic@ip565848f4.direct-adsl.nl) has joined
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+<crucify_me>	geekosaur, mud thanks kindly one moment please
+*	patbecich (~user@75-142-96-216.static.mtpk.ca.charter.com) has joined
+*	eacameron has quit (Ping timeout: 255 seconds)
+<crucify_me>	geekosaur, mud .. the thing is, Ord doesn't work. So head always just returns the first char in the young' example
+*	Disconnected (Connection reset by peer)
+**** ENDING LOGGING AT Tue Aug 22 12:28:00 2017
+
+**** BEGIN LOGGING AT Tue Aug 22 12:28:19 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+<mud>	"Ord doesn't work" based on what? And what does "doesn't work" mean here?
+<n_blownapart>	hold on did I not write Ord correctly there ? (missing [] s ?)
+<geekosaur>	it looks fine to me
+<geekosaur>	the Ord instance for lists is built automatically, you have to supply the Ord for the type of list elements. so this is correct as written
+<erisco>	I knew it, I am losing messages somehow
+<erisco>	I never saw n_blownapart's question
+<n_blownapart>	oh sorry I should be crucify_me today
+<geekosaur>	erisco, no, they probably dropped connection, and rejoined. (n_blownapart is evidently crucify_me)
+<geekosaur>	your old connection hasn't been reaped by the server yet
+<erisco>	way to expose my confirmation bias
+*	crucify_me has quit (Ping timeout: 240 seconds)
+<geekosaur>	there it goes
+<n_blownapart>	sorry I get disconnected in this cafe often
+<n_blownapart>	wha?
+<geekosaur>	[22 19:27:49] <geekosaur> that sounds wrong. but show your examples, not just the functions
+*	roachmd has quit (Remote host closed the connection)
+<mud>	> head (sort "blahityfoo")
+<lambdabot>	 'a'
+<n_blownapart>	' > young' "Tickets" ' returns 'T'   .. so I was expecting 'c'
+<qu1j0t3>	case sensitive?
+<qu1j0t3>	T < c   in ascii
+<geekosaur>	default collation for letters is case sensitive
+<mud>	> head (sort "blah Tickets")
+<lambdabot>	 ' '
+<geekosaur>	> ord 'T' `compare` ord 'c'
+<mud>	> head (sort "blahTickets")
+<lambdabot>	 LT
+<lambdabot>	 'T'
+<geekosaur>	you need to use a module to get locale dependent collation
+<geekosaur>	default sorting is by Unicode codepoint
+<n_blownapart>	qu1j0t3, geekosaur mud ok yeah that was it.  
+<n_blownapart>	thanks
+<geekosaur>	(locale dependent sorting is trickier than you think)
+<n_blownapart>	I'll say
+*	roachmd (~roachmd@64.124.76.250) has joined
+*	aarvar (~foewfoiew@50.34.105.170) has joined
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+*	roachmd has quit (Ping timeout: 246 seconds)
+*	mengu has quit (Ping timeout: 255 seconds)
+*	mengu (~mengu@unaffiliated/mengu) has joined
+Python interface unloaded
+**** ENDING LOGGING AT Tue Aug 22 12:44:14 2017
+
+**** BEGIN LOGGING AT Tue Aug 22 18:37:54 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+<crucify_me>	confused again : how is it that only b is constrained to Eq ?   https://ptpb.pw/SAZz
+<crucify_me>	how do you think through this to write the function?
+<crucify_me>	(the signature is given)
+<jared-w>	It's an interesting function
+<jared-w>	the first argument says "I convert an 'a' to a 'b'", the second argument is an a, the third argument is a b
+<monochrom>	The code never compares "a" with anything. It only compares "f a" with "b". Both have type b rather than type a.
+<jared-w>	So when you write (f a) you're applying f to the a which makes it a b
+<crucify_me>	thanks hold on please
+<crucify_me>	so (f a) is of type b ? I really don't see that sorry
+<crucify_me>	I see how the lhs is set up
+<monochrom>	f :: a->b; a::a; therefore...
+<jared-w>	crucify_me: it's "equivalent" to some Java code like: chk(f, a, b) { return f(a) == 26; }   (pretend f is the function Character.getNumericValue() )
+<monochrom>	In fact there is now a way you can get ghci to tell you those.
+*	hphuoc25 (~hphuoc25@132.147.107.135) has joined
+<crucify_me>	monochrom what is that code you have after the ';'  the a::a;  ?
+<monochrom>	It's analogous to "f::a->b", except it's for "a" rather than "f".
+*	jathan (~jathan@189.216.204.127) has joined
+<crucify_me>	??
+<jared-w>	a :: a is saying that a is of type a
+*	jathan has quit (Remote host closed the connection)
+<jared-w>	f is a function of type 'a -> b', and since the 'a' parameter of the function 'chk' is of type a, when a is applied to f the resulting value will be of type b
+<crucify_me>	ok got that much thanks
+<crucify_me>	oh so that is how (f a) is of type b
+<crucify_me>	so on the rhs, both operands need to be b type
+<jared-w>	yes
+*	jathan (~jathan@189.216.204.127) has joined
+<crucify_me>	jared-w, thanks, could we apply this to something where I could see practical inputs and outputs?
+<jared-w>	Did you see the java pseudo-code example I gave?
+<crucify_me>	sorry friend, I know nothing of java or any language
+<jared-w>	no problem, one second
+*	eacameron has quit (Remote host closed the connection)
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+<jared-w>	http://lpaste.net/357899
+<crucify_me>	by the way the person who wrote the solution said there were multiple implementations..  oh thanks hold on..
+<jared-w>	yes there are multiple possible implementations. Anything that can convert an a to a b will work
+*	jathan has quit (Quit: Leaving)
+<MarcelineVQ>	by implementations they mean for  chk  itself
+*	jathan (~jathan@189.216.204.127) has joined
+<crucify_me>	right MarcelineVQ for the function I guess?
+*	eacameron has quit (Ping timeout: 240 seconds)
+<MarcelineVQ>	such as  chk f a b = False   which is significantly less useful
+<jared-w>	oh, right, that. Yes, that's an important point
+*	Youmu (uid129469@gateway/web/irccloud.com/x-ulbcwuqxqfkaytgo) has joined
+<crucify_me>	what is important? (default "sorry" for each post of mine)
+*	jathan has quit (Quit: Leaving)
+<crucify_me>	so is that why this is chk, since its likely used to check with a Bool that the function works?
+*	jathan (~jathan@189.216.204.127) has joined
+<MarcelineVQ>	It's important that there's rarely just one single way to write a function based only on its type.
+<MarcelineVQ>	Types do help guide you though, you can assume from   chk :: Eq b => (a -> b) -> a -> b -> Bool   that you're wanting to use the methods of Eq to compare two values
+*	systemfault (~rcyr@unaffiliated/rcyr) has joined
+<crucify_me>	got that much thanks. MarcelineVQ - what threw me was that it was constrained to b type. initially that confused me about how to begin
+<MarcelineVQ>	luckily the first argument is a function that can produce b's when given a's, and you have an a
+*	jathan has quit (Remote host closed the connection)
+*	jathan (~jathan@189.216.204.127) has joined
+<jared-w>	The purpose of that was to help you learn how to use functions as first class values (so you can apply functions to arguments without knowing anything about how they work)
+<jared-w>	It's part of the book's overall goal of trying to get you familiar with using the typesystem and relying on the information it can give you about the function's behavior
+<crucify_me>	so does that mean that only one operand needs to have an instance of Eq.?    
+<crucify_me>	yeah jared-w ...
+<MarcelineVQ>	no
+<MarcelineVQ>	:t (==)
+<lambdabot>	Eq a => a -> a -> Bool
+<crucify_me>	right, so I need to see that both of those are actually b
+<jared-w>	crucify_me: if you have two 'b's you can use (==). The function gave you an 'a' and a way to make a 'b' from an 'a'
+<jared-w>	It's really just combining things together in a way that typechecks and does what you want
+*	jathan has quit (Client Quit)
+*	vmesons (~rmacleod@192-0-133-18.cpe.teksavvy.com) has joined
+*	vmeson has quit (Ping timeout: 246 seconds)
+<geekosaur>	you have: (1) a proof that, for any type "b", you can compare two values of that type for equality
+<geekosaur>	(2) a function that, when given a type "a", will give you back a type "b"
+<crucify_me>	jared-w, you instantly saw that it was an interesting function.
+<geekosaur>	(3) a value of type "a"
+<geekosaur>	(4) a value of type "b"
+*	jathan (~jathan@189.216.204.127) has joined
+<jared-w>	crucify_me: I did. It's fairly clear from the type signature what it's intended to do. You'll be able to see it with practice
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+<geekosaur>	(in a given type signature, and in the absence of interior "forall"s, all uses of a given type variable represent the same type)
+<crucify_me>	many thanks. geekosaur you're saying the function is a generic way to prove equality?
+*	shafox_ (uid28637@gateway/web/irccloud.com/x-rsmxrljliukcqxsi) has joined
+<crucify_me>	I mean given the terms
+<geekosaur>	no, I am saying what I said
+<geekosaur>	those are not 4 independent points
+*	erisco has quit (Quit: Leaving)
+*	jathan has quit (Remote host closed the connection)
+<jared-w>	crucify_me: you could think of it as being a way to compare a value of type b with a value of type a given a conversion function from a to be (but then I'm just rephrasing what geekosaur said)
+*	peterbecich has quit (Ping timeout: 260 seconds)
+*	jathan (~jathan@189.216.204.127) has joined
+<geekosaur>	you know you can compare two things of type b, AND you have a function that can produce a value of type b when given a value of type a, AND you have a value of type a, AND you have a value of type b.
+<crucify_me>	yes good explanations - you people are *great* thanks so much
+*	louispan has quit (Quit: louispan)
+<geekosaur>	THEREFORE, you can: apply the function to the value of type a, resulting in a value of type b, AND then compare that value with the value of type b that you were given
+*	jathan has quit (Remote host closed the connection)
+*	jathan (~jathan@189.216.204.127) has joined
+*	jathan has quit (Remote host closed the connection)
+*	jathan (~jathan@189.216.204.127) has joined
+*	eacameron has quit (Remote host closed the connection)
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+*	jathan has quit (Remote host closed the connection)
+*	jathan (~jathan@189.216.204.127) has joined
+*	eacameron has quit (Ping timeout: 240 seconds)
+*	magistr (c047d50e@gateway/web/freenode/ip.192.71.213.14) has joined
+*	ChanServ sets ban on *!*@gateway/web/freenode/ip.192.71.213.14
+*	ChanServ has kicked magistr from #haskell-beginners (User is banned from this channel)
+*	jathan has quit (Quit: Leaving)
+*	jathan (~jathan@189.216.204.127) has joined
+*	jathan has quit (Remote host closed the connection)
+*	jathan (~jathan@189.216.204.127) has joined
+*	jathan has quit (Remote host closed the connection)
+*	jathan (~jathan@189.216.204.127) has joined
+*	jathan has quit (Remote host closed the connection)
+*	jathan (~jathan@189.216.204.127) has joined
+*	jathan has quit (Remote host closed the connection)
+*	jathan (~jathan@189.216.204.127) has joined
+*	eacameron (~eacameron@cpe-74-137-151-17.kya.res.rr.com) has joined
+*	hphuoc25 has quit (Remote host closed the connection)
+Python interface unloaded
+**** ENDING LOGGING AT Tue Aug 22 19:57:49 2017
+
+**** BEGIN LOGGING AT Wed Aug 23 18:16:11 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+<crucify_me>	hi how do you run this program, ie if I wanted to add 4 + 5
+<crucify_me>	https://ptpb.pw/EEri
+<crucify_me>	 << clueless
+<crucify_me>	it compiles..am I missing something ? 
+<crucify_me>	well, I have other questions about it
+<marvin2>	crucify_me if you want to create executable you need main. if you just want to test function you can run ghci in the same directory as your source file and then type import filename 
+<geekosaur>	e.g. arith fromRational 1 (2/1)
+<geekosaur>	with nothing else specified, it will probably give you back a Double
+*	pbrant has quit (Ping timeout: 240 seconds)
+*	amar_ (~amarpotgh@p57967D45.dip0.t-ipconnect.de) has joined
+<crucify_me>	thanks one moment 
+*	amar_ is now known as Guest84404
+<geekosaur>	also: Haskell uses a well known entry point 'main', like C, C++, and Java do; it does not execute top to bottom like e.g. Python
+<geekosaur>	so you have a module without a 'main', you can load it into ghci but you cannot run it as a program
+*	erisco has quit (Read error: Connection reset by peer)
+<crucify_me>	strange one sec please
+*	louispan has quit (Quit: louispan)
+<crucify_me>	ok thanks marvin2 geekosaur I see how this works. I am trying to pose another question
+*	Guest84404 has quit (Ping timeout: 252 seconds)
+*	peterbecich (~peterbeci@75-142-96-216.static.mtpk.ca.charter.com) has joined
+<crucify_me>	very basic, but in that example are both i and a bound to the toInteger function?
+*	malaclyps has quit (Ping timeout: 276 seconds)
+<geekosaur>	did you look at my example of how to call it?
+<crucify_me>	yeah I was easily able to understand how it works by it.  t
+<ab9rf>	i don't understand what "both i and a bound to the toInteger function" means
+<crucify_me>	so in the expression where the (f a) is written ...
+*	hghwng_ (~hghwng@59.63.249.8) has joined
+<ab9rf>	still not understanding your question
+<crucify_me>	could that a also be an Integer value?
+<ab9rf>	a can be any type at all
+<ab9rf>	of course, it has to bec ompatible with the type of f
+<ab9rf>	a could even be bottom
+<crucify_me>	hold on thanks let me sort this out
+<geekosaur>	a can be any type that f can convert to an unstance of Num
+*	hghwng_ has quit (Remote host closed the connection)
+<geekosaur>	if f is ord then a is a Char, because ord :: Char -> Int
+<ab9rf>	of course, if f is, say, const 10, that's any type whatsoever
+<crucify_me>	so the choice of the argument names here..
+<geekosaur>	f is some function. i must be an Integer, by the type signature. a is any type consistent with (f :: Num b => a -> b)
+<geekosaur>	and as ab9rf said, if f = const 10 then a is ignored and can be any type at all
+*	mengu has quit (Remote host closed the connection)
+<crucify_me>	so only i needs to be morphed by fromInteger. You could use fromRational for the f argument on the lhs.
+*	louispan (~textual@203.38.203.134) has joined
+<crucify_me>	At first I was thinking both arguments needed to be Integers initially
+<ab9rf>	sure, as long as a is an instance of the type Rational
+<ab9rf>	no, a doesn't havce to be an Integer
+<ab9rf>	in fact, it only has to be an Integer if f is of type (Num b) => Integer -> b
+<geekosaur>	:t fromInteger
+<lambdabot>	Num a => Integer -> a
+<ab9rf>	fromInteger is a function with that type
+<geekosaur>	so i is an Integer but can be used at any type with a Num instance. which instance will be determined by f and a
+<crucify_me>	right ab9rf but that's a different signature. geekosaur shit hold on please I want to make sure I get your last point
+<ab9rf>	crucify_me: how is it different?
+<ab9rf>	(Num b) => Integer -> b and Num a => Integer -> a are the same type
+<geekosaur>	crucify_me, the type of f must be compatible with Num b => a -> b
+<geekosaur>	so it gets to determine what b is, which also determines the type fromInteger produces because they must match
+<geekosaur>	(because (+) :: Num a => a -> a -> a)
+<crucify_me>	right I understand how they must match
+<crucify_me>	this is somewhat complex
+<ab9rf>	> fromInteger (20) :: Complex Double
+<lambdabot>	 20.0 :+ 0.0
+*	takle (~takle@cpc73668-dals20-2-0-cust505.20-2.cable.virginm.net) has joined
+<crucify_me>	that's interesting
+*	takle has quit (Ping timeout: 240 seconds)
+<ab9rf>	just making it more explicitly complex :)
+<crucify_me>	word ab9rf thanks ..  geekosaur, you're saying whatever function a is sent to, it will return a Num, since b is already a Num. You can't do a morphism a -> b with a more specific a , if b is already a Num. you can't dumb it down .
+<ab9rf>	no, that's not what is being said
+<ab9rf>	first, there's no such thing as "a Num"
+<ab9rf>	Num is a typeclass. there are no values of type Num because Num isn't a type
+<geekosaur>	a can become any type with a Num instance. so, what instance must be determined by something else.
+<geekosaur>	er. a at type levle, i at value level.
+<geekosaur>	hm, wait, no. I'm confusing myself
+<crucify_me>	sorry
+*	Michael__ has quit (Quit: Leaving)
+<geekosaur>	i is always Integer. a has type a but (f :: Num b => a -> b) will produce some type with a Num instance
+<geekosaur>	if f does not specify a particular Num instance, then other rules come into play
+<geekosaur>	and here things become a bit tricky, because the rules are different in ghci vs. compiled programs
+<geekosaur>	because ghci has ExtendedDefaultRules turned on by default
+<ab9rf>	geekosaur: i've been trying to remember what ghci does when a top-level value is of a constrained type with multiple possible instances, but not succeeding
+<geekosaur>	defaulting
+<ab9rf>	i vaguely recall reading of how it's handled for numeric types but i don't recall what the rules are
+<crucify_me>	(hmm, re: ghci )  your earlier example is good with fromRational because its easier to distinguish what is happening. i is subject to fromInteger alone. we have a lot of flexibility with a, as long as we match with instances of Num
+<geekosaur>	https://www.haskell.org/onlinereport/haskell2010/haskellch4.html#x10-790004.3.4 describes the rules for compiled programs
+<ab9rf>	i remmeber my early forays into haskell resulting in programs with lots of "fromInteger", "fromIntegral", and "toInteger" littered randomly about
+<geekosaur>	https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/ghci.html#extended-default-rules describes what ghci does by default
+<ab9rf>	crucify_me: indeed, one of the functions you ocould use for f is "length"
+<ab9rf>	:t length
+<lambdabot>	Foldable t => t a -> Int
+<crucify_me>	is that post essentially correct?
+<crucify_me>	^
+<crucify_me>	my last post
+<geekosaur>	crucify_me, essentially.the fromInteger will adapt to any type with a Num instance
+<geekosaur>	so we need to use the type of the function f to pick an instance
+<geekosaur>	now, if we use fromRational as that function, we are still left with an ambiguity
+<geekosaur>	:t fromRational
+<lambdabot>	Fractional a => Rational -> a
+<ab9rf>	geekosaur: aha, that does look familiar
+<geekosaur>	so we have replaced a Num constraint with a Fractional constraint
+<crucify_me>	thanks. right "to pick an instance" with f is a good way to put it
+<geekosaur>	to pick a type, ghc ends up using defaulting. I linked to the rules earlier; relevant here is that the only typeclasses involved are Num and subclasses thereof, so defaulting can proceed
+*	peterbecich has quit (Ping timeout: 260 seconds)
+<geekosaur>	the 'default default' is:  default (Integer, Double)
+<geekosaur>	so ghc will first try b ~ Integer, and find that it doesn't have a Fractional instance and therefore cannot be used as b
+<geekosaur>	next it tries b ~ Double; this has a Fractional instance, and typechecking succeeds
+<crucify_me>	got that
+<geekosaur>	we end up with: f :: Num b => a -> b, a :: Rational, b :: Double
+<geekosaur>	er.
+<geekosaur>	we end up with: f :: Rational -> Double, a :: Rational, b :: Double
+<geekosaur>	since fromRational can unify with that type, by using `instance Fractional Double where fromRational = ...`
+<crucify_me>	this example with yesterday's chk :: Eq b => (a -> b) -> a -> b -> Bool  ,  is enough to sleep on.  so there's a precedence during the typechecking
+<crucify_me>	(re: your last few posts)
+*	louispan has quit (Quit: louispan)
+<crucify_me>	At least I was correct with my first try: I was trying to use fromInteger. thanks ALL 
+*	acarrico (~acarrico@pppoe-68-142-58-22.gmavt.net) has joined
+*	activefire (605d7b49@gateway/web/freenode/ip.96.93.123.73) has joined
+<activefire>	Hello all.  I have another haskell beginner question
+<activefire>	This tie about recrusion and lists
+<geekosaur>	you should ask it, if you want an answer...
+<activefire>	Oh
+<activefire>	I thought someone had to volunteer first
+<activefire>	okay, I'll ask
+<activefire>	I am trying to make a function to split a string on spaces and return a list where each element is the individual parts of the original string
+<activefire>	Question 1 on chapter 9.6 of the haskell book
+<activefire>	This is what I've gotten
+<activefire>	lpaste.net/357929
+<activefire>	does not work.  This enters an infinite loop
+<activefire>	can' figure out while
+<activefire>	the fist case ends if there is no more spaces
+<crucify_me>	geekosaur, hey one thing, is this exactly how you would write that function? : arith f i a = (f a) + (fromInteger i)   
+<activefire>	THe otherwise case calls the resuse function with two arguments.  The first is the string with the first word dropped and the second is the list with the first word appended
+<crucify_me>	with the arguments in that order : f i a   ?
+<activefire>	So, split a string into a list of words
+<ski>	> span (' ' ==) "   a b  c  "
+<lambdabot>	 ("   ","a b  c  ")
+<ski>	> span (' ' ==) "de"
+<lambdabot>	 ("","de")
+<geekosaur>	crucify_me, the order is fairly arbitrary
+<crucify_me>	in terms of readability ?
+<geekosaur>	crucify_me, it kinda doesn't matter. generally we determine parameter order in terms of what's easier for partial application.
+<geekosaur>	activefire, you might want to think about what happens when you give your function something that does not start with a space, but has at least one space later
+<ski>	activefire : just because the `elemIndex' call fails doesn't mean `a' *starts* with a space
+<ski>	(s/fails/succeeds/)
+<activefire>	This is the string I am practicing with  "Hello I Am Cool and awesome and wonderful"
+<crucify_me>	ok I need to consider that. if partial application is possible here at all...
+<crucify_me>	thanks
+<activefire>	dropWhile will drop until we get a string with "Wonderful" then we will return resut
+<activefire>	which, should be each word
+<activefire>	meh
+<geekosaur>	crucify_me, sure it is. (arith fromRational) :: Fractional b => Integer -> Rational -> b
+<crucify_me>	right, that's basic, but its still interesting to me.
+<crucify_me>	I need to remember that stuff is going on.
+<geekosaur>	activefire, that is not what your code does. first case fails (elemIndex produces a Just), second case strips nonexistent leading spaces and recurses on exactly the same string
+<crucify_me>	thanks a lot .. signing off
+<activefire>	geekosaur, really?  The second case.  dosen't dropWhile returns a list after the function returns true, so, in my case, the list after the first instance of ' ' ?
+*	peterbecich (~peterbeci@75-142-96-216.static.mtpk.ca.charter.com) has joined
+<activefire>	not arguing with you, I'm just wondering
+<geekosaur>	activefire, how many spaces are at the start of a string starting with "H"
+*	jathan (~jathan@189.216.204.127) has joined
+**** BEGIN LOGGING AT Thu Aug 24 11:45:47 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+<crucify_me>	hi more drama: how do I get this to inherit from Num ?  https://ptpb.pw/EhVL 
+*	iAmerikan has quit (Ping timeout: 252 seconds)
+*	Cale has quit (Remote host closed the connection)
+*	albertus1 (~seb@x55b4d499.dyn.telefonica.de) has joined
+<kadoban>	Jacoby6000__: (a, a) in some context. Like   f :: (a, a) -> a   would be a possible type for a function
+<Jacoby6000__>	Ohh.. I think I see.  I think what I was looking for was f :: a -> a -> (a, a) 
+<Jacoby6000__>	the types being defined seperately from the function throws me off sometimes
+*	seangrove (~user@52.119.115.133) has joined
+<kadoban>	Yeah, it can be a bit hard to get used to. It's nice and flexible once you do though.
+*	jyu__ (~jiayao.yu@rrcs-173-196-171-202.west.biz.rr.com) has left
+<Jacoby6000__>	what if I wanted a datatype that was like tuple, but only supported values of the same type?
+<crucify_me>	since there is no type signature, I'm unfamiliar with how Num is utilized ^^
+*	eacameron (~eacameron@2601:403:c003:ecc0:11a1:a810:9107:25c4) has joined
+<Jacoby6000__>	data Tup a = (a, a)? :D
+*	iAmerikan (~dwshrewt@unaffiliated/iamerikan) has joined
+*	eacameron has quit (Ping timeout: 240 seconds)
+*	iAmerika1 has quit (Ping timeout: 252 seconds)
+*	Cale (~cale@CPEf48e38ee8583-CM0c473de9d680.cpe.net.cable.rogers.com) has joined
+*	merijn (~merijn@a212-238-239-156.adsl.xs4all.nl) has joined
+*	abhiroop has quit (Quit: Leaving...)
+*	shafox (~pbehera@106.51.129.97) has joined
+*	peterbecich has quit (Ping timeout: 260 seconds)
+*	merijn has quit (Ping timeout: 240 seconds)
+<MarcelineVQ>	like it says in that section where Nada is from, you have to define a Num instance.
+*	eacameron (~eacameron@2601:403:c003:ecc0:11a1:a810:9107:25c4) has joined
+<MarcelineVQ>	which would be the same process you see for Fractional is there, except for Num  https://hackage.haskell.org/package/base-4.10.0.0/docs/Prelude.html#t:Num
+*	monad-learner has quit (Quit: My MacBook has gone to sleep. ZZZzzz…)
+<MarcelineVQ>	crucify_me: if you're unsure of how you'd write Num for Nada I strongly reccomend redoing the chapter.
+<MarcelineVQ>	crucify_me: in the case of   newtype Nada = Nada Double  there is a particular ghc shortcut to use Double's Num instance, someone might tell you about this when they see your example there, but that's not what that section is about
+<MarcelineVQ>	actually I see lyxia is trying to give you that shortcut right now hehe
+<MarcelineVQ>	anyway I think you should try to write the instance by hand, buf if you just want an instance for other reasons: you need to have {-# Language GeneralizedNewtypeDeriving #-} at the top of your file to derive Num there
+<crucify_me>	thanks MarcelineVQ one moment
+<crucify_me>	no I just don't understand all this yet. I was frustrated with the whole section "don't write code like this" which led to "this is even worse [don't write code like this] you spend a lot of time trying to understand something you're not encouraged to use.
+*	monad-learner (~textual@rrcs-74-143-39-18.central.biz.rr.com) has joined
+<MarcelineVQ>	keep in mind that Nada isn't an exercise, it's just an example to wrap up the chapter, but if it's completely baffling you would benefit from going over the chapter again
+<crucify_me>	definitely confused by this chapter but the type-kwon-do exercises chk and arith I found very interesting.
+*	peterbecich (~peterbeci@75-142-96-216.static.mtpk.ca.charter.com) has joined
+<crucify_me>	thanks for your help MarcelineVQ 
+Python interface unloaded
+**** ENDING LOGGING AT Thu Aug 24 12:40:05 2017
+
+**** BEGIN LOGGING AT Sat Aug 26 11:33:07 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	albertus1 has quit (Ping timeout: 240 seconds)
+*	lambdabot has quit (Remote host closed the connection)
+*	lambdabot (~lambdabot@haskell/bot/lambdabot) has joined
+<Boarders>	oh yeah it was nonsense, I should have written the cons as a general infix operator
+<Boarders>	but zip tail is it, thank you
+*	You are now known as n_blownapart
+*	dni- has quit (Remote host closed the connection)
+<Boarders>	+ap
+*	louispan has quit (Quit: louispan)
+*	Fuuzetsu has quit (Read error: Connection reset by peer)
+*	albertus1 (~seb@x55b4b9cb.dyn.telefonica.de) has joined
+*	louispan (~textual@14-203-219-236.static.tpgi.com.au) has joined
+*	You are now known as crucify_me
+*	hphuoc25 (~hphuoc25@132.147.107.135) has joined
+*	RonnieHolm has quit (Remote host closed the connection)
+Python interface unloaded
+**** ENDING LOGGING AT Sat Aug 26 11:59:51 2017
+
+**** BEGIN LOGGING AT Sat Aug 26 12:32:11 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+<crucify_me>	hi would someone write out how this would look in lambda calculus notation? this involves shadowing. thanks..   https://ptpb.pw/dGR0        
+<erisco>	crucify_me, which line?
+<crucify_me>	well, my says under the hood its a never ending series of lambda expressions. so the input lines if you have time erisco 
+<crucify_me>	my *book
+<erisco>	I don't understand... a let is not translatable to LC, but a let/in is
+*	zerokarmaleft (~zkl@morpheus.net) has joined
+<crucify_me>	ok thanks hold on please
+<crucify_me>	y
+<erisco>	are you asking about  z y   if we inline their definitions?
+<crucify_me>	yeah since y acts differently, so it must be bound differently when we introduce z
+*	takle (~takle@cpc73668-dals20-2-0-cust505.20-2.cable.virginm.net) has joined
+*	dxld has quit (Ping timeout: 276 seconds)
+<crucify_me>	so y in this case is *bound* to z, right?  let z y - y * 10
+<erisco>	z y  is  (\y -> y * 10) (\x -> x + 5)   just by inlining the definitions
+<crucify_me>	sorry typo
+<crucify_me>	let z y = y * 10
+<erisco>	oh sorry I misread, that is not y
+<crucify_me>	ok
+<erisco>	(\y -> y * 10) (5 + 5)
+*	takle has quit (Remote host closed the connection)
+*	takle (~takle@cpc73668-dals20-2-0-cust505.20-2.cable.virginm.net) has joined
+<erisco>	so we beta reduce to (5 + 5) * 10
+<erisco>	now we either call it quits or use some extra theory to reduce that
+<crucify_me>	sorry I'm not following the beta reduction part
+<erisco>	substitute 5 + 5 for y in y * 10
+<crucify_me>	what if you write it in dot notation like in chapt. 1 like \xy.x  or similar
+<erisco>	(λy. y * 10) (5 + 5)
+<erisco>	\ is λ and -> is .
+*	dxld (~dxld@2002:506d:9110:0:be5f:f4ff:fe9b:ef7c) has joined
+*	RonnieHolm (~user@130.225.245.18) has joined
+<crucify_me>	right but what if you also included the z in the lambda/dot notation there erisco ?  
+<erisco>	what z? there is no z
+<crucify_me>	ok so z is just the lambda you're saying
+<crucify_me>	lambda symbol
+<erisco>	z y = y * 10 is the same as z = \y -> y * 10
+<erisco>	let x = y in e  is the same as  (\x -> e) y   (though note in Haskell you'll need RankNTypes to do that properly)
+<crucify_me>	sorry lost that last point  ..  but isn't z essentially an anonymous function that can be represented with  λ ?
+*	louispan has quit (Quit: louispan)
+<erisco>	that is incoherent
+<erisco>	saying z is an anonymous function is like saying crucify_me is an anonymous IRC user
+<erisco>	what you can say is  let x = 5 in let y = x + 5 in let z y = y * 10 in z y
+<erisco>	(\x -> let y = x + 5 in let z y = y * 10 in z y) 5
+<erisco>	(\x -> (\y -> let z y = y * 10 in z y) (x + 5)) 5
+<erisco>	(\x -> (\y -> let z = \y -> y * 10 in z y) (x + 5)) 5
+<erisco>	(\x -> (\y -> (\z -> z y) (\y -> y * 10)) (x + 5)) 5
+<erisco>	now we just beta reduce
+<erisco>	what I gave you are structural rules to translate to LC
+<crucify_me>	thanks so much, going through that
+<erisco>	(λx. (λy. (λz. z y) (λy. y * 10)) (x + 5)) 5
+<erisco>	that is the last step, I suppose
+*	hvr has quit (Remote host closed the connection)
+*	hvr (~hvr@h081217016230.dyn.cm.kabsi.at) has joined
+*	hvr has quit (Changing host)
+*	hvr (~hvr@haskell/developer/hvr) has joined
+<crucify_me>	ok that's good I can see where the z is written.
+<crucify_me>	thanks I'll copy that into my editor 
+*	blissdev (uid2510@gateway/web/irccloud.com/x-vcooxozlonooxprb) has joined
+<erisco>	> (\x -> (\y -> (\z -> z y) (\y -> y * 10)) (x + 5)) 5
+<lambdabot>	 100
+<erisco>	just making sure we're sane
+<crucify_me>	erisco excellent
+<crucify_me>	how do you get the lambda character in the irc I forgot
+<erisco>	you type it
+<erisco>	or, you copy and paste it
+<crucify_me>	What do you type?
+<crucify_me>	not \
+<erisco>	<caps_lock> <*> <l>
+<crucify_me>	excellent thanks
+*	hvr has quit (Remote host closed the connection)
+<erisco>	caps lock is my compose key
+<crucify_me>	oh I have a debian linux box
+<crucify_me>	I'll figure it out
+*	hvr (~hvr@h081217016230.dyn.cm.kabsi.at) has joined
+*	hvr has quit (Changing host)
+*	hvr (~hvr@haskell/developer/hvr) has joined
+<erisco>	crucify_me, https://github.com/kragen/xcompose
+<crucify_me>	erisco, thanks!
+<erisco>	and the combo will probably be the same for you because WinCompose uses the same list
+<erisco>	(ノಠ益ಠ)ノ彡┻━┻
+<erisco>	up up down down left right left right b a
+<crucify_me>	katakana? I used to live in Japan
+*	peterbecich has quit (Ping timeout: 260 seconds)
+<erisco>	the characters weren't chosen for their meaning :P
+<crucify_me>	realized that just sayin
+<crucify_me>	thanks again, working on your posts.
+*	AndChat|79476 (~AndChat79@75-165-48-101.tukw.qwest.net) has joined
+*	ali_bush has quit (Quit: No Ping reply in 180 seconds.)
+*	ali_bush (~ali_bush@118-92-203-102.dsl.dyn.ihug.co.nz) has joined
+*	ali_bush has quit (Changing host)
+*	ali_bush (~ali_bush@gentoo/developer/alibush) has joined
+Python interface unloaded
+**** ENDING LOGGING AT Sat Aug 26 13:20:04 2017
+
+**** BEGIN LOGGING AT Sun Aug 27 11:49:12 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+<erisco>	how many instances have you written for these classes?
+*	Rodya_ (~Rodya_@2601:46:4001:e0b4:cd74:8269:f040:6d23) has joined
+*	mounty has quit (Ping timeout: 255 seconds)
+*	mounty (~mounty@n106-70-230-157.rdl1.qld.optusnet.com.au) has joined
+*	merijn (~merijn@a212-238-239-156.adsl.xs4all.nl) has joined
+*	argent0 has quit (Ping timeout: 264 seconds)
+*	Guest83851 has quit (Quit: Page closed)
+*	shafox has quit (Quit: This computer has gone to sleep)
+*	Rodya_ has quit (Remote host closed the connection)
+*	dispanser has quit (Ping timeout: 246 seconds)
+*	shafox (~pbehera@106.51.240.179) has joined
+<Akii>	the way you can structure a servant server is just amazing https://github.com/Akii/elescore/blob/master/src/Elescore/Api.hs
+<Akii>	my favorite library
+<Akii>	my pipes always end up being a giant mess https://github.com/Akii/elescore/blob/master/src/Elescore/Pipeline.hs#L39
+<Akii>	but I love the semantics
+*	frank_dillon has quit (Remote host closed the connection)
+*	erisco has quit (Ping timeout: 248 seconds)
+<Akii>	jared-w: this is what I ended up doing https://github.com/Akii/elescore/blob/master/src/Elescore/Users/Registration.hs
+<Akii>	separated the registration but not the watchlist
+<Akii>	should suffice for a long time
+*	Rodya_ (~Rodya_@2601:46:4001:e0b4:869:ee18:c8fc:eb36) has joined
+*	Rodya_ has quit (Remote host closed the connection)
+*	eHammarstrom (~initiumdo@31.208.64.89) has joined
+*	herr_jth has quit ()
+*	shafox has quit (Quit: This computer has gone to sleep)
+*	shafox (~pbehera@106.51.240.179) has joined
+*	Rodya_ (~Rodya_@2601:46:4001:e0b4:1027:8e45:aaa8:3b5b) has joined
+*	Rodya_ has quit (Remote host closed the connection)
+*	takle has quit (Remote host closed the connection)
+*	albertus1 (~seb@x4e32df9e.dyn.telefonica.de) has joined
+*	dispanser (~dispanser@x590e14a6.dyn.telefonica.de) has joined
+*	shafox has quit (Quit: This computer has gone to sleep)
+*	colt44 (~colt44@189.4.73.253) has joined
+*	dahan (uid190916@gateway/web/irccloud.com/x-yvidkkdcdoodjlsz) has joined
+*	amar_ (~amarpotgh@p5796711B.dip0.t-ipconnect.de) has joined
+*	amar_ is now known as Guest20166
+*	takle (~takle@cpc73668-dals20-2-0-cust505.20-2.cable.virginm.net) has joined
+*	dispanser has quit (Ping timeout: 240 seconds)
+*	takle has quit (Remote host closed the connection)
+**** ENDING LOGGING AT Sun Aug 27 13:30:12 2017
+
+**** BEGIN LOGGING AT Mon Aug 28 11:38:40 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+<n_blownapart>	aka crucify_me
+<n_blownapart>	https://ptpb.pw/FZmz  still writing nonsense. trying to make this func work with the correct type signature. still don't have the hang of it
+<Akii>	what should this function do?
+*	jbgi has quit (Ping timeout: 252 seconds)
+<Akii>	n_blownapart: your `Bool` makes no sense; you're producing the result with `x > y`
+<Akii>	that function is.. weird :)
+<n_blownapart>	its a book exercise.
+<n_blownapart>	it just adds 5 to whatever is returned by the comparison
+<n_blownapart>	but the func is correct. I'm trying to write the signature which is not required by the exercise
+*	lkolstad (~ljk@c-24-16-12-195.hsd1.wa.comcast.net) has joined
+*	rzp (~christoph@dslb-088-073-066-106.088.073.pools.vodafone-ip.de) has joined
+<Akii>	why did you put the `Bool` in the type signature?
+<n_blownapart>	Akii right, yeah it doesn't produce a Bool, it is if/else so that's wrong
+<n_blownapart>	It wasn't my first gues
+<n_blownapart>	s
+<Akii>	http://lpaste.net/358032
+<Akii>	I've re-written it a bit
+<n_blownapart>	thanks I just haven't figured this stuff out. its confusing
+<Akii>	do you understand what I did?
+<n_blownapart>	yes hold on pls
+<Akii>	added your version above
+<Akii>	:D
+<Akii>	also no need to hurry, I've all the time in the world
+<n_blownapart>	Akii, thanks, yeah the exercise is to turn that (your version) into a lambda notation version
+<n_blownapart>	so I did that without fuss
+<n_blownapart>	but I want to make sure I understand the signature on each exercise
+*	prophile has quit (Quit: The Game)
+<Akii>	actually good excercise
+<Akii>	what you did is not what I wrote below
+<Akii>	do you see the difference?
+<Akii>	can you transform "ifThen x y" into "ifThen x"?
+<Akii>	ifThen x y = (if x > y then y else x) + 5
+*	dispanser has quit (Ping timeout: 276 seconds)
+<Akii>	ifThen x = ???
+*	bsima (~bsima@138.68.63.9) has joined
+*	argent0 (~aner@186.133.188.1) has joined
+*	cranston (6b4ddf31@gateway/web/freenode/ip.107.77.223.49) has joined
+<n_blownapart>	hold on sorry this is wrong: ' ifThen = ((\x -> \y -> if x > y then y else x) + 5)
+*	cranston has quit (Quit: Page closed)
+<Akii>	do the `ifThen x` part first
+<Akii>	one step at a time
+*	eacameron has quit (Remote host closed the connection)
+<n_blownapart>	hold on pls I thought that part was right (posted above)
+<Akii>	let me ask GHC if that is right
+*	eacameron (~eacameron@2601:403:c003:ecc0:c1b4:c6:6fe1:a66e) has joined
+<Akii>	GHC says "nope" in it's weird an unambigous way
+<Akii>	its*
+*	Boarders (5683993c@gateway/web/freenode/ip.86.131.153.60) has joined
+<Akii>	 No instance for (Num (t0 -> t0 -> t0)) arising from a use of ‘+’
+<Akii>	I must say this is.. abstract
+<Akii>	could you try getting it to compile with `ifThen x`? it might make it obvious
+<Akii>	ifThen x y = (if x > y then y else x) + 5
+<Akii>	^ this works
+<Akii>	(might want to confirm that first)
+<Akii>	(it will whine about some stuff but it will compile)
+<ski>	@type min
+<lambdabot>	Ord a => a -> a -> a
+<Akii>	ski:  you'll spoil this :P
+<Akii>	you might already have
+<n_blownapart>	yeah so in anon notation its just \x y = (if x > y then y else x) + 5  correct
+<n_blownapart>	no that's also wrong
+<ski>	> (\x -> x^2 + 1) 5
+<Akii>	n_blownapart: anon is basically `\x -> foobar x` or `\x -> \y -> foobar x y`
+<lambdabot>	 26
+<n_blownapart>	it was already spoiled. I've been looking at a solution, one that doesn't work
+<ski>	> let f = \x -> x^2 + 1 in f 5
+<lambdabot>	 26
+<ski>	> let f x = x^2 + 1 in f 5
+<lambdabot>	 26
+<Akii>	ifThen = (\x -> (\y -> (if x > y then y else x) + 5))
+<ski>	`\x -> x^2 + 1' is "the function that, when given an input, call it `x', returns/computes `x^2 + 1'"
+<ski>	`f = \x -> x^2 + 1' is a definition that says that we'll refer to this function by the name `f'
+<n_blownapart>	I can't look at x^2 right now, apologies!
+<n_blownapart>	I'm starting to rush but have all this on log
+<ski>	`f x = x^2 + 1' is a definition that amounts to (indirectly) define `f' as being the same function. it indirectly defines `f' by defining what the result of applying `f' to `x' (a name given to an arbitrary input passed to the function). the result is then expressed in terms of this (temporary/local) name `x' for the input
+<n_blownapart>	I'm trying to determine what the book is asking for. 
+<Akii>	probably `ifThen :: (Ord a, Num a) => a -> a -> a`
+<n_blownapart>	Akii, dang I was very close to that
+*	Orion3k (~Orion3k@47-51-33-228.static.mtpk.ca.charter.com) has joined
+<Akii>	as an exercise, try go from `ifThen = (\x -> (\y -> (if x > y then y else x) + 5))` to that
+<Akii>	the compiler will guide you as it has guided me right now
+<Akii>	(had no idea about the Num constraint but it makes sense because of +)
+<ski>	(and, implicit here, is that the only information you have about a function, the only thing that can distinguish it from another function, is "how it behaves", iow which results it gives, for each possible input. so there's nothing more to be said for the semantics/meaning of a function, than what results it gives, for each possible input (here named `x'))
+*	argent0 has quit (Ping timeout: 248 seconds)
+<n_blownapart>	thanks both of you , ski your slant is looking very exotic but I promise I will follow it when I have the time
+<Akii>	n_blownapart: also read what ski has to say, he knows stuff beyond my comprehension :)
+<ski>	(and if case it's not clear, `\x y -> ..x..y..' is short for `\x -> \y -> ..x..y..', which means `\x -> (\y -> ..x..y..)'. so it's a function that when given an input (call it `x') gives back another function which ... -- in short, we call this a (curried) function of two arguments)
+<n_blownapart>	word ski helps me a lot Akii thanks so much!
+<ski>	(really, every function in Haskell always takes exactly one argument. if we talk about taking more than one argument, then we typically mean either (most common) that it "takes one after the other", like above ("curried style"), or else that the "multiple arguments" are bundled together (e.g. in a tuple or record). the corresponding function would be written as `\(x,y) -> ..x..y..')
+<n_blownapart>	ski yes I do understand your (second to last) post
+<n_blownapart>	\(x, y) oh so that goes to the -> if/then/else statement?
+<n_blownapart>	ski
+<n_blownapart>	the tuple goes directly to the logic part?
+*	dispanser (~dispanser@x590e23ca.dyn.telefonica.de) has joined
+<n_blownapart>	its just that the ... stuff in the irc gets me confused a bit
+<ski>	n_blownapart : that was about two different ways in which to *encode* "multiple arguments" in Haskell
+<ski>	i'm not quite sure what your actual question is
+<ski>	(these two different ways sometimes referred to as "curried style" and "tupled style")
+<ski>	consider `\x -> \y -> sqrt (x^2 + y^2) vs. `\(x,y) -> sqrt (x^2 + y^2)'
+<ski>	these express the same "multiple-argument" function, in these two different styles (curried vs. tupled)
+<ski>	we could give names to them :
+<ski>	  curriedHypothenuse = \x -> \y -> sqrt (x^2 + y^2)
+<n_blownapart>	ski if you have time could you paste the two variations with the corresponding signatures? I ended up having a little time. Akii posted the correct signature I believe ' `ifThen :: (Ord a, Num a) => a -> a -> a '  
+<ski>	  tupledHypothenuse = \(x,y) -> sqrt (x^2 + y^2)
+<n_blownapart>	ski you lost me with the sqrt example but I can sort it out later
+<ski>	one can also define these indirectly (more common), i.e. in terms of what the result is, when applying these functions to "typical/arbitrary inputs", so
+<ski>	  tupledHypothenuse (x,y) = sqrt (x^2 + y^2)
+*	Akii is still working on his last encounter with ski >_>
+<ski>	for the latter one
+<ski>	for the former one we can do it in two steps. first we "move `x' over the `=', removing the `\' and `->" :
+<n_blownapart>	ski sorry I cannot juggle these two . very kind of you, for patience
+<ski>	  curriedHypothenuse x = \y -> sqrt (x^2 + y^2)
+<ski>	then the same for `y'
+<n_blownapart>	your*
+<ski>	  curriedHypothenuse x y = sqrt (x^2 + y^2)
+<ski>	example : `curriedHypothenuse 3 4' evaluates to `5'. while `tupledHypothenuse (3,4)' also evaluates `5'
+<n_blownapart>	ski this is not being absorbed but I study the log later.
+<ski>	so these are just two different ways to effect the transmission of two arguments in the common (i.e. same) function body (repeated) `sqrt (x^2 + y^2)'
+<n_blownapart>	yeah Akii ski is a taskmaster !
+<n_blownapart>	I understand the gist of it.
+<ski>	in practice, one would pick one of the two styles (which to pick depends on how one intend to use the function. sometimes it doesn't matter much, and then curried style tends to be the default, in Haskell culture) -- and then one'd rename it to just `hypothenuse' to avoid the longish name
+<n_blownapart>	ski if you could paste the original two versions in lambda notation with the add 5 problem. using this signature if it is correct ' `ifThen :: (Ord a, Num a) => a -> a -> a '
+<n_blownapart>	that would be great
+<ski>	n_blownapart : the main takeaway is that there's two common ways to *encode* "multiple arguments" in Haskell. sometimes you'll hear "`blah' is a curried function". this is short for "we'd chosen to encode passing multiple arguments to `blah' by using curried style"
+<n_blownapart>	yes I prefer the curried style because, I believe, it is closer to scheme which I've spent some time with
+*	ski looks back on what n_blownapart is saing
+<n_blownapart>	:)  !!
+<ski>	Scheme actually has "multiple arguments" in the language (unlike Haskell)
+<ski>	`curried-hypothenuse' would be `(lambda (x) (lambda (y) (sqrt (+ (expt x 2) (expt y 2)))))' in Scheme
+<ski>	while `tupled-hypothenuse would be `(lambda (xy) (let ((x (car xy)) (y (cadr xy))) (sqrt (+ (expt x 2) (expt y 2)))))' (or something like that
+<ski>	)
+<n_blownapart>	oh boy now I'm really reeling :)
+<ski>	in the former case, you'd call it like `((curried-hypothenuse 3) 4)', in the latter case like `(tupled-hypothenuse (list 3 4))'
+<ski>	of course, you can also simply define a multiple-argument version `hypothenuse' as `(lambda (x y) (sqrt (+ (expt x 2) (expt y 2))))', which you'd call as `(hypothenuse 3 4)' -- which would be the normal route to go in Scheme, unless you have some specific reason to deviate
+<ski>	(sorry if this is a bit of a mouthful. proceed at your own pace)
+<n_blownapart>	ski thanks could you paste my above request? I gotta go to work quite soon
+<ski>	"if you could paste the original two versions" -- the original two versions of what ?
+<ski>	the hypothenuse example ? your `ifThen' or something related ?
+<n_blownapart>	yes the ifThen   ..   `ifThen :: (Ord a, Num a) => a -> a -> a   putting both versions in anon notation with this signature or correct signature 
+<n_blownapart>	both versions being the tuple and just curry
+<ski>	(btw, `hypothenuse' is meant to compute the length of the hypothenuse in a right triangle, when given the lengths of the two catheti)
+<n_blownapart>	excellent plan to study that 
+<ski>	do you already have a paste with your attempt regarding `ifThen' ?
+*	ravennat (~Nat@24.117.208.46.dyn.plus.net) has joined
+<n_blownapart>	yeah hold on
+*	albertus1 (~seb@x55b4b8f7.dyn.telefonica.de) has joined
+*	albertus1 has quit (Max SendQ exceeded)
+*	albertus1 (~seb@x55b4b8f7.dyn.telefonica.de) has joined
+<ski>	@paste
+<lambdabot>	Haskell pastebin: http://lpaste.net/
+*	HallaSurvivor (~HallaSurv@2601:547:501:21b2::e6c4) has joined
+<ski>	can be used, in case you're preparing a new paste
+<n_blownapart>	as close to correct as possible? https://ptpb.pw/JAQx
+<n_blownapart>	ski
+<n_blownapart>	sorry not editable
+<Akii>	lpaste is really good :)
+<n_blownapart>	yeah this is a little app that lets you copy directly from within the term. I think there's a way to edit a public file.
+<n_blownapart>	put this in your .bashrc pb() (curl -F c=@- https://ptpb.pw/ < $1 )   pb is a function alias
+*	cschneid_ has quit ()
+<n_blownapart>	it copies files incl screenshots .png's etc to a url directly
+<ski>	looks like chrisdone's <https://github.com/chrisdone/chrisdone-emacs/blob/master/packages/lpaste/lpaste.el> will paste the selected region in Emacs to λPaste -- not sure if you use Emacs, though
+<ski>	@where lpaste.el
+<lambdabot>	I know nothing about lpaste.el.
+<ski>	@where+ lpaste.el chrisdone's `lpaste-region' for Emacs at <https://github.com/chrisdone/chrisdone-emacs/tree/master/packages/lpaste>
+<lambdabot>	I will never forget.
+<n_blownapart>	ski ok let me put the code on lpaste didn't see some posts there. ski
+<ski>	n_blownapart : perhaps you can also paste your question (in a comment, if you prefer) at the same time ?
+<ski>	n_blownapart : btw, lpaste is supposed to announce pastes (and annotations (possibly) other people do to it) in the channel you select -- however, it seems the lpaste bot is down at the moment
+<n_blownapart>	ski lost track. here is a paste with question. I gotta go soon thanks kindly .. Akii thanks!
+<n_blownapart>	http://lpaste.net/358035
+*	malaclyps has quit (Ping timeout: 255 seconds)
+*	mbonneau (~quassel@d-24-233-216-211.cpe.metrocast.net) has joined
+<Akii>	annotated your original idea below
+*	FernandoBasso has quit (Quit: Leaving)
+<n_blownapart>	Akii ok that is the tuple version you added?
+<MarcelineVQ>	why couldn't you test it?
+<Akii>	n_blownapart: nope
+*	yaewa has quit (Quit: Leaving...)
+<Akii>	I've no idea where ski is going with their line of explanation tbh :S
+<Akii>	of whatever is even the question now
+<Akii>	lost it completely
+<n_blownapart>	me too got way lost. :) but sk*i was explaining a tuple version of, I thought, the same problem
+<n_blownapart>	sk*i went awol
+*	ski blinks
+*	dispanser has quit (Ping timeout: 246 seconds)
+<Akii>	:D
+<ski>	(was caught up in a discussion with someone else)
+<n_blownapart>	no worries!
+*	Akii tries not to interfer with skis explanations
+*	LiaoTao has quit (Quit: ZNC 1.6.4 - http://znc.in)
+<n_blownapart>	no the only thing I hope to see is the tuple version in anon notation and its signature
+*	machinedgod has quit (Quit: leaving)
+<ski>	n_blownapart : your paste looks ok to me (still not being sure what your goal is, so can't comment on whether it helps achieve that)
+<n_blownapart>	ski if you could add the tuple version?
+<ski>	otoh, the line Akii added in their annotation does not look ok to my inner type-checker
+<ski>	one moment
+<Akii>	of course not, this was the initial thing
+<Akii>	the question was something along the lines "this does not compile, why"
+<Akii>	the answer is placement of parenthesis; I bet there is a more precise word for that
+<n_blownapart>	this works:   ifThen = (\x -> (\y -> (if x > y then y else x) + 5))
+*	nickolay has quit (Ping timeout: 248 seconds)
+<n_blownapart>	so what would the signature and code look like for the tuple version? that would help a lot for later study
+<Akii>	I've this fun idea, if you want
+<n_blownapart>	shoot
+<n_blownapart>	gotta go though like pronto
+<Akii>	there is like this cool function called "unschönfinkelsation"
+<Akii>	:t uncurry
+<lambdabot>	(a -> b -> c) -> (a, b) -> c
+<Akii>	define ifThen like you wrote above then check the type after applying uncurry
+<Akii>	and then implement uncurry!
+*	LiaoTao (~LiaoTao@gateway/tor-sasl/liaotao) has joined
+*	herr_jth has quit ()
+<n_blownapart>	ok I copied that to read later .thanks Akii ski more drama later
+Python interface unloaded
+FiSHLiM plugin unloaded
+**** ENDING LOGGING AT Mon Aug 28 13:27:58 2017
+
+**** BEGIN LOGGING AT Sat Sep  2 12:52:28 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+<crucify_me>	hi when you have a Bool involved in a case statement, that is not reflected in the type signature . I expected this program to have     pal' :: String -> Bool -> String  https://ptpb.pw/mLFW
+*	takle has quit (Ping timeout: 246 seconds)
+<crucify_me>	my question is how does the logic statement preclude the Bool from showing up in the signature?
+<jared-w>	The type signature tells you certain things. It doesn't necessairly tell you /everything/ about the function
+<jared-w>	pal' :: String -> String means "give me a string, I give you a string"
+<crucify_me>	fair enough
+<jared-w>	pal' :: String -> Bool -> String means "give me a string and a boolean and I give you a string"
+*	hazyPurple (~hazyPurpl@14.140.110.205) has joined
+<crucify_me>	right, so since I didn't give the Bool, but the program provided the Bool, its not needed
+<jared-w>	with the bool in the type signature, the function is not allowed to use "their own" boolean (unless they ignore yours)
+*	hazyPurple has quit (Max SendQ exceeded)
+<crucify_me>	that is helpful thanks
+<jared-w>	Well it's needed to make the function work the way it's supposed to, it just doesn't show up in the type signature because you don't give the function a boolean
+*	hazyPurple (~hazyPurpl@14.140.110.205) has joined
+<jared-w>	The function tests whether or not something is a palindrome or not. A "truer" function would be
+<jared-w>	pal' :: String -> Bool; pal' xs = xs == reverse xs
+<crucify_me>	yeah, more elegant
+<jared-w>	which returns true if the string is the same as the reversed string and false if it is not
+<crucify_me>	Able was I ere I saw Elba (james joyce)
+<jared-w>	So imagine a second function boolToString :: Bool -> String; boolToString b = case b of True -> "yes"; False -> "no"
+<jared-w>	Then you would have palbool :: String -> String; palbool = pal' . boolToString
+<jared-w>	(did that last bit make sense?)
+*	takle (~takle@host86-166-243-7.range86-166.btcentralplus.com) has joined
+<crucify_me>	hold on please
+*	AndreasK has quit (Ping timeout: 248 seconds)
+<crucify_me>	ok you're composing there
+<jared-w>	yes
+<crucify_me>	so I'll write that into a file and study it .. thanks
+<jared-w>	And if you have a function  A -> B and a function B -> C and you glue them together
+<jared-w>	what you have is a function A -> C
+<jared-w>	(this is the rule 'modus ponens' in formal logic)
+<crucify_me>	got it. so doing that, are you "more true" to haskell?
+<monochrom>	Wait, modus ponens is function application.
+<jared-w>	Not really. When I did that I made explicit what was happening in the first function you were confused about and made it so that the two separate things that were happening were split out into two separate functions
+<jared-w>	monochrom: did I mess something up somewhere?
+<crucify_me>	thanks that is a good illustration. I was slightly confused, since I half-thought that 'yeah the logic statement didn't need to be in the signature'
+<monochrom>	Yeah, modus ponens refers to starting with A->B and with A, getting B.
+<crucify_me>	I think I have begun to over-rely on the type signatures, but I enjoy working on them
+*	systemfault has quit (Quit: Bye!)
+<jared-w>	oh, duh. I got MP and a different rule mixed up
+<crucify_me>	as for me, I'm ignoring the Latin at this stage :)
+<crucify_me>	but its nice to see it
+*	Denthir (~textual@128-76-242-152-cable.dk.customer.tdc.net) has joined
+<jared-w>	my latin was the wrong thing anyway. I meant to say something like 'transitive property, not MP
+<crucify_me>	right, I've been watching these category theory videos on haskell
+<crucify_me>	just to be familiar
+*	marvin2 (~m@cpe-188-129-60-232.dynamic.amis.hr) has joined
+*	conal (~conal@185.169.255.8) has joined
+*	conal_ (~conal@client-7-151.visitor-network.oxuni.org.uk) has joined
+*	conal has quit (Ping timeout: 248 seconds)
+<crucify_me>	jared-w, monochrom if you guys are still on ...
+<crucify_me>	I'm getting an error on the last line here https://ptpb.pw/BArn  one moment pls
+<crucify_me>	Couldn't match type ‘[Char]’ with ‘Bool’ Expected type: String -> String
+<crucify_me>	or any willing victim ^^
+*	slomo has quit (Read error: Connection reset by peer)
+<colt44>	Lets say I have a list of ints [n] and I fold over it twice, once to do different calculations and reduce it to a single value - http://lpaste.net/358169
+<colt44>	is it possible to use (&&&) or some other func to fold over the list only once?
+*	conal (~conal@185.169.255.8) has joined
+*	systemfault (~rcyr@unaffiliated/rcyr) has joined
+*	conal_ has quit (Ping timeout: 240 seconds)
+*	peterbecich has quit (Ping timeout: 260 seconds)
+*	grdryn has quit (Quit: WeeChat 1.9)
+*	peterbecich (~peterbeci@71-84-251-238.static.lsan.ca.charter.com) has joined
+<glguy>	colt44: You don't need anything fancy, just use both doSomeCalculation1 and doSomeCalculation2 inside a single use of foldl'
+<glguy>	crucify_me: You've got your use of . backward
+*	Rodya_ (~Rodya_@2601:46:4001:e0b4:e54b:d09d:1247:16a8) has joined
+*	hazyPurple has quit (Ping timeout: 246 seconds)
+<colt44>	glguy: I know that is one way of doing that. I was wondering if there would be other ways (fancy or not)
+*	dkov has quit (Quit: dkov)
+<glguy>	colt44: the complicated way to merge those two things is http://hackage.haskell.org/package/folds
+*	lkolstad has quit (Ping timeout: 248 seconds)
+<colt44>	gluy: thx, I'll take a look at it
+*	mengu (~mengu@unaffiliated/mengu) has joined
+<jared-w>	crucify_me: palbool should be:  `palbool = boolToString . palindrome`
+<jared-w>	I accidentally switched the function order in my head the first time, my bad. (You also have a typo, you write pal' instead of palindrome)
+*	nickolay has quit (Ping timeout: 240 seconds)
+*	conal has quit (Ping timeout: 252 seconds)
+*	Rodya_ has quit (Remote host closed the connection)
+*	Rodya_ (~Rodya_@2601:46:4001:e0b4:88d0:5ff6:2861:2d1) has joined
+<crucify_me>	jared-w, thanks kindly gotta get some food in me
+<crucify_me>	re: the typo I have a new paste https://ptpb.pw/O4iW  jared-w 
+<crucify_me>	hope to figure it out later
+*	Rodya_ has quit (Remote host closed the connection)
+*	lkolstad (~ljk@c-24-16-12-195.hsd1.wa.comcast.net) has joined
+**** ENDING LOGGING AT Sat Sep  2 14:37:37 2017
+
+**** BEGIN LOGGING AT Sat Sep  2 17:28:34 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	peterbecich has quit (Ping timeout: 260 seconds)
+*	Rodya_ (~Rodya_@2601:46:4001:e0b4:197f:1da3:9fd2:99df) has joined
+**** ENDING LOGGING AT Sat Sep  2 17:36:14 2017
+
+**** BEGIN LOGGING AT Sat Sep  2 17:40:21 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	amar_ (~amarpotgh@p579678CD.dip0.t-ipconnect.de) has joined
+*	amar_ is now known as Guest92514
+*	Guest92514 has quit (Ping timeout: 240 seconds)
+*	mizu_no_oto_work (~textual@c-24-60-15-130.hsd1.ma.comcast.net) has joined
+*	carlomagno (~cararell@inet-hqmc02-o.oracle.com) has joined
+*	peterbecich has quit (Ping timeout: 260 seconds)
+*	Rodya_ has quit (Remote host closed the connection)
+*	Rodya_ (~Rodya_@2601:46:4001:e0b4:197f:1da3:9fd2:99df) has joined
+*	peterbecich (~peterbeci@71-84-251-238.static.lsan.ca.charter.com) has joined
+*	madjestic has quit (Ping timeout: 255 seconds)
+*	peterbecich has quit (Ping timeout: 260 seconds)
+*	Rodya_ has quit (Remote host closed the connection)
+*	Rodya_ (~Rodya_@2601:46:4001:e0b4:8818:81e2:271e:febc) has joined
+*	Bhootrk_ (~Bhootrk_@118.189.203.83) has joined
+**** BEGIN LOGGING AT Sun Sep  3 11:44:01 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	shafox has quit (Quit: This computer has gone to sleep)
+*	Casa (~Casa@31.22.190.60) has left ("WeeChat 1.7")
+*	takle has quit (Remote host closed the connection)
+*	Squant has quit (Ping timeout: 260 seconds)
+*	argent0 (~aner@186.133.132.26) has joined
+*	ali_bush (~ali_bush@2407:7000:8141:cf00::2) has joined
+*	ali_bush has quit (Changing host)
+*	ali_bush (~ali_bush@gentoo/developer/alibush) has joined
+*	freeman42x[m] (~freeman42@86.47.59.60) has joined
+*	trinkelhoff has quit (Quit: This computer has gone to sleep)
+*	mizu_no_oto_work (~textual@c-24-60-15-130.hsd1.ma.comcast.net) has joined
+*	conal (~conal@client-7-151.visitor-network.oxuni.org.uk) has joined
+*	chrissl (~chris@mail.meicloud.at) has joined
+*	trinkelhoff (~trinkelho@90.220.208.185) has joined
+*	conal_ (~conal@185.145.156.52) has joined
+*	conal has quit (Ping timeout: 240 seconds)
+*	freeman42y[m] (~freeman42@83.136.45.123) has joined
+*	freeman42x[m] has quit (Ping timeout: 240 seconds)
+*	zero_byte (~zer0@ip-89-103-110-138.net.upcbroadband.cz) has joined
+*	takle (~takle@host86-166-243-7.range86-166.btcentralplus.com) has joined
+*	delexi has quit (Ping timeout: 246 seconds)
+*	freeman42y[m] has quit (Ping timeout: 248 seconds)
+*	mac10688 (~mac10688@c-24-21-116-24.hsd1.or.comcast.net) has joined
+*	trinkelhoff has quit (Quit: Leaving)
+*	madjestic (~madjestic@ip565848f4.direct-adsl.nl) has joined
+*	conal_ has quit (Ping timeout: 240 seconds)
+*	conal_ (~conal@185.145.156.52) has joined
+*	moei has quit (Quit: Leaving...)
+*	conal_ has quit (Quit: Computer has gone to sleep.)
+*	Big_G has quit (Read error: Connection reset by peer)
+*	slomo has quit (Read error: Connection reset by peer)
+*	albertus1 (~seb@x55b4bad7.dyn.telefonica.de) has joined
+*	hphuoc25 has quit (Remote host closed the connection)
+*	stef204 (~stef204@unaffiliated/stef-204/x-384198) has joined
+*	MitchellSalad has quit (Quit: WeeChat 1.4)
+*	thc202 has quit (Ping timeout: 240 seconds)
+*	jared--w (~jared-w@138.68.44.28) has joined
+*	albertus1 has quit (Quit: Leaving.)
+*	jared-w has quit (Quit: ZNC - 1.6.0 - http://znc.in)
+*	jared--w is now known as jared-w
+*	Bhootrk_ has quit (Quit: Leaving)
+*	Bhootrk_ (~Bhootrk_@118.189.203.83) has joined
+*	Bhootrk_ has quit (Max SendQ exceeded)
+*	erisco (~erisco@198-84-159-71.cpe.teksavvy.com) has joined
+*	amar_ (~amarpotgh@tmo-097-76.customers.d1-online.com) has joined
+*	amar_ is now known as Guest50010
+*	herr_jth has quit ()
+*	Guest50010 has quit (Ping timeout: 240 seconds)
+*	eacameron (~eacameron@dsl-50-5-80-133.fuse.net) has joined
+*	stef204 has quit (Quit: WeeChat 1.9)
+*	hiratara has quit (Ping timeout: 255 seconds)
+*	eacameron has quit (Remote host closed the connection)
+*	hiratara (~hiratara@240f:7:4708:1:64c1:459e:e8b7:3556) has joined
+<crucify_me>	 λ > let ff f (x:xs) = f x : map f xs; ff (+) [4,5,6,10]
+<crucify_me>	  hi this gives me a parse error (incorrect indentation or mismatched brackets)
+<madjestic>	hey guys, I've got a got an event loop where I am visulizing a piece of geomtry, which is described by a file on disk.  It looks like the file is being re-read every cycle, even though the contents of the file does not change.  I wonder if there's a way to avoid re-reads and re-use some sort of cache instead?
+<geekosaur>	crucify_me, ghci isn't smart enough to do that
+<geekosaur>	it wants the thing after the semicolon to be another equation defining ff
+<crucify_me>	hmm ok thanks geekosaur 
+<crucify_me>	doing it from a file is also causing me trouble. 
+<geekosaur>	that sounds wrong
+<geekosaur>	oh no, from a file you can;t just have a bare expression like that
+<crucify_me>	printing in haskell with main and deriving Show and all that is maddening. 
+*	setre has quit (Quit: ZNC 1.6.3+deb1 - http://znc.in)
+<erisco>	needs more ToString
+<geekosaur>	and you can't print that anyway as its result type is a function :)
+<erisco>	needs more disassembly
+<Cale>	crucify_me: What's so hard about that? :)
+<geekosaur>	ff (+) [4, 5, 6, 10] :: Num a => [a -> a]
+<crucify_me>	Cale I don't know 
+*	Miroboru has quit (Read error: Connection reset by peer)
+<geekosaur>	arguably you wanted a single parameter function there instead of (+)
+<crucify_me>	anyway, after a half hour I cannot demonstrate that in any way
+<crucify_me>	you can't map addition on a list?
+<geekosaur>	*Main> ff (+1) [4, 5, 6, 10]
+<geekosaur>	[5,6,7,11]
+<geekosaur>	you can but you get a list of functions back
+<geekosaur>	as I showed earlier
+<geekosaur>	[03 22:14:51] <geekosaur> ff (+) [4, 5, 6, 10] :: Num a => [a -> a]
+<monochrom>	Do not expect to print a list of functions.
+<Cale>	crucify_me: You can map addition on a list, but you get a list of functions
+<Cale>	What should it show you?
+<monochrom>	Also, do not oversimplify what geekosaur and Cale said.
+<Cale>	It would be pretty cute if it could print [(+) 4, (+) 5, (+) 6, (+) 10] or something
+<Cale>	but it can't
+<erisco>	symbolic numbers
+<crucify_me>	maybe I'm confusing it with scheme I did a year ago
+<Cale>	In scheme, + is variadic, so if you were to map it over a list of numbers, I would expect it would add each of them to nothing else, and you'd just get the same list of numbers back
+<erisco>	compile lambdas as CCCs and print that
+<crucify_me>	variadic ? dany
+<crucify_me>	dang
+<crucify_me>	can't wait to get haskell decently
+*	conal (~conal@client-7-151.visitor-network.oxuni.org.uk) has joined
+<Cale>	As in, it can take a variable number of arguments
+<Cale>	(+ 1) in scheme will give you 1
+<Cale>	(+ 1 2) will give you 3
+<Cale>	(+ 1 2 3) will give you 6
+<Cale>	etc.
+*	eacameron (~eacameron@dsl-50-5-80-133.fuse.net) has joined
+<crucify_me>	ok thanks
+<erisco>	an extension to generalise a magma to be variadic
+*	pbrant has quit (Ping timeout: 246 seconds)
+<erisco>	that sounds… plausible
+<erisco>	s/extension/library/
+<monochrom>	Just use "sum" and a list.
+<jared-w>	monochrom: but that's not /generalized/ enough. It ain't trendy either. You need fancy words and fancier ways of doing the same thing after all :p
+<monochrom>	> map sum [[3], [1], [4]]
+<lambdabot>	 [3,1,4]
+<monochrom>	I can generalize from "list" to "Foldable instance" if you want.
+<erisco>	actually function composition forms a magma and I had a lot of trouble generalising that
+<jared-w>	like in Haskell or just theoretically speaking?
+<erisco>	mm, but I was trying to generalise the arrow, this is different
+<monochrom>	Function composition generalizes to Control.Category
+*	conal has quit (Ping timeout: 248 seconds)
+*	eacameron has quit (Remote host closed the connection)
+*	nickolay has quit (Ping timeout: 255 seconds)
+*	hiratara has quit (Quit: ZNC - http://znc.in)
+<crucify_me>	won't work. please critique https://ptpb.pw/X6FP
+*	eacameron (~eacameron@dsl-50-5-80-133.fuse.net) has joined
+*	hiratara (~hiratara@240f:7:4708:1:717c:9ac6:2d90:4a99) has joined
+<jared-w>	> sum [3,4,5]
+<lambdabot>	 12
+<Cale>	crucify_me: sum takes a list as an argument
+<Cale>	crucify_me: You need a function which is capable of taking a single number if you want to map over the list [3,4,5]
+<erisco>	which library makes printf the funky way rather than with a GADT?
+<Cale>	crucify_me: You could try  map sum [[1,2],[3,4,5],[6,7]]
+<monochrom>	erisco: base. I am serious. Text.Printf is in base.
+<erisco>	lol
+<crucify_me>	hmm thanks
+<erisco>	this is delightful
+*	mengu (~mengu@unaffiliated/mengu) has joined
+<erisco>	ah ha, that makes sense
+<monochrom>	It's like  <A> Where do all these ants come from?!  <B> Your home.
+<erisco>	f :: (a -> a -> a) -> a -> a -> F a   I was starting with this and wondering how possibly to define F
+*	systemfa_ (~rcyr@unaffiliated/rcyr) has joined
+*	systemfault has quit (Ping timeout: 240 seconds)
+*	mayhew (~mayhew@142.167.222.89) has joined
+<geekosaur>	crucify_me, there is a typo in your definition of map' (it invokes map instead of recursively map')
+<crucify_me>	thanks geekosaur 
+<monochrom>	But then it will also miss out a base case.
+*	systemfa_ has quit (Read error: Connection reset by peer)
+*	zero_byte has quit (Ping timeout: 252 seconds)
+<crucify_me>	sorry I got confused there
+*	systemfault (~rcyr@unaffiliated/rcyr) has joined
+<crucify_me>	this is what works with sum and [[2,3], [6,7]]   :
+<crucify_me>	map' f (x:xs) = f x : map f xs
+<crucify_me>	where was the typo?
+<jared-w>	map should be map'  you're calling a new function entirely and never actually using map'
+*	ajmccluskey has quit ()
+*	peterbecich has quit (Read error: Connection reset by peer)
+*	takle has quit (Remote host closed the connection)
+*	conal (~conal@client-7-151.visitor-network.oxuni.org.uk) has joined
+<crucify_me>	it compiles that way, but I get this https://ptpb.pw/X6FP
+*	conal_ (~conal@client-7-151.visitor-network.oxuni.org.uk) has joined
+*	takle (~takle@host86-166-243-7.range86-166.btcentralplus.com) has joined
+<crucify_me>	please disregard that paste...
+<geekosaur>	crucify_me, map f xs
+*	systemfault has quit (Quit: Bye!)
+<geekosaur>	shouldn't that be map' f xs?
+<geekosaur>	or did you really want to switch from your map' to the Prelude map ?
+<crucify_me>	hold on geekosaur see post above^ (disregard paste)
+<crucify_me>	thanks
+<geekosaur>	enh, I was late (but I was the one who mentioned it the first time)
+<crucify_me>	here's what you were meant to see https://ptpb.pw/VKhq
+*	systemfault (~rcyr@unaffiliated/rcyr) has joined
+<crucify_me>	it did compile
+*	conal has quit (Ping timeout: 252 seconds)
+<geekosaur>	I didn;t even look at the paste, but [03 22:43:49] <crucify_me> map' f (x:xs) = f x : map f xs
+<MarcelineVQ>	do you notice a difference between the prelude map and yours in your paste?
+*	conal_ has quit (Ping timeout: 240 seconds)
+<geekosaur>	^
+<geekosaur>	you are missing a key part
+<crucify_me>	base case?
+<MarcelineVQ>	you tell me, try it and see
+<crucify_me>	so in the commented Prelude> line, there is a base case that would have prevented that non-exaustive error
+<crucify_me>	?
+<geekosaur>	yes
+<MarcelineVQ>	did it prevent that error when you tried it for yours?
+*	eacameron has quit (Remote host closed the connection)
+<crucify_me>	yes ! thanks MarcelineVQ geekosaur !
+<crucify_me>	I didn't even realize that was part of the definition. I thought it was an example 
+*	zero_byte (~zer0@ip-89-103-110-138.net.upcbroadband.cz) has joined
+*	marvin2 has quit ()
+<erisco>	I have the variadic concept working but need to strengthen the inference, hrm
+<erisco>	heh, type checker is hanging...
+*	FreemanXiong (~user@101.127.191.107) has joined
+*	madjestic has quit (Ping timeout: 248 seconds)
+<erisco>	I thought it was supposed to terminate after a certain depth
+Python interface unloaded
+FiSHLiM plugin unloaded
+**** ENDING LOGGING AT Sun Sep  3 16:32:00 2017
+
+**** BEGIN LOGGING AT Sun Sep  3 17:59:08 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	acarrico has quit (Ping timeout: 240 seconds)
+*	acarrico (~acarrico@pppoe-68-142-58-22.gmavt.net) has joined
+*	Guest50103 has quit (Changing host)
+*	Guest50103 (~nitrix@haskell/developer/nitrix) has joined
+*	Guest50103 is now known as nitrix
+*	vaibhavsagar (~vaibhavsa@42.61.209.77) has joined
+*	Big_G (~Big_G@75-165-48-101.tukw.qwest.net) has joined
+*	louispan (~textual@203.38.203.134) has joined
+*	darjeeling_ (~darjeelin@115.215.40.70) has joined
+*	Youmu (uid129469@gateway/web/irccloud.com/x-kcldraqgvspwvayr) has joined
+*	pilne (~pilne@75-132-212-62.dhcp.stls.mo.charter.com) has joined
+*	louispan has quit (Quit: louispan)
+*	ali_bush has quit (Remote host closed the connection)
+*	louispan (~textual@203.38.203.134) has joined
+*	mengu has quit (Quit: Leaving...)
+*	takle (~takle@host86-166-243-7.range86-166.btcentralplus.com) has joined
+*	argent0 has quit (Ping timeout: 255 seconds)
+*	sigmundv__ has quit (Ping timeout: 252 seconds)
+*	mizu_no_oto_work has quit (Quit: My MacBook has gone to sleep. ZZZzzz…)
+*	ali_bush (~ali_bush@gentoo/developer/alibush) has joined
+*	takle has quit (Ping timeout: 240 seconds)
+*	ali_bush has quit (Read error: Connection reset by peer)
+*	louispan has quit (Quit: louispan)
+*	ali_bush (~ali_bush@2407:7000:8141:cf00::2) has joined
+*	ali_bush has quit (Changing host)
+*	ali_bush (~ali_bush@gentoo/developer/alibush) has joined
+**** ENDING LOGGING AT Sun Sep  3 18:54:13 2017
+
+**** BEGIN LOGGING AT Mon Sep  4 12:05:32 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	takle (~takle@host109-153-108-68.range109-153.btcentralplus.com) has joined
+*	mlehmk has quit ()
+<crucify_me>	 what is the concept behind " const id " or " flip const " ? (I read a comment that 'const id' was a "terrible way to express the concept")
+<crucify_me>	trying to understand when that would be used, basically
+*	meadowlark (~meadowlar@unaffiliated/meadowlark) has joined
+*	sigmundv__ (~sigmundv@31.200.141.195.threembb.ie) has joined
+*	emmanuel_erc has quit (Remote host closed the connection)
+*	monochrom (trebla@216.138.220.146) has joined
+*	albertus1 (~seb@x55b4bb70.dyn.telefonica.de) has joined
+*	Guest52771 has quit (Remote host closed the connection)
+<crucify_me>	what is the concept behind " const id " or " flip const " ? (I read a comment that 'const id' was a "terrible way to express the concept") trying to understand when that would be used, basically
+*	takle has quit (Remote host closed the connection)
+*	amar_ (~amarpotgh@p57967C29.dip0.t-ipconnect.de) has joined
+*	amar_ is now known as Guest79700
+*	takle (~takle@host109-153-108-68.range109-153.btcentralplus.com) has joined
+*	hablo has quit (Quit: hablo)
+*	takle has quit (Read error: No route to host)
+Python interface unloaded
+**** ENDING LOGGING AT Mon Sep  4 12:55:57 2017
+
+**** BEGIN LOGGING AT Mon Sep  4 13:19:52 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+<nickolay>	its a research project after all
+*	hablo has quit (Ping timeout: 264 seconds)
+*	dmj` (sid72307@gateway/web/irccloud.com/x-mmvuaxfdqwtexifw) has joined
+*	dkov has quit (Quit: dkov)
+<nickolay>	personally I like the records problem solution most of all :)
+<nickolay>	dependent typing is just a nice small addition to it :)
+<joebetz>	https://www.reddit.com/r/haskell/comments/6h64ue/10_pleasant_surprises_of_idris_that_improve_the/ <- if you haven't read it already ...
+<joebetz>	seems that a lot of these improvements (if half-baked) are already in haskell, or could be added
+<joebetz>	agreed about the records problem :)
+<jared-w>	nickolay: which record solution method do they take? Row polymorphism?
+<nickolay>	jared-w: haven't checked yet, the docs says every record just starts a new namespace for its fields
+<nickolay>	jared-w: in fact, its possible to "manually" declare several namespaces in single module
+<nickolay>	and it totally makes sense if you think about it, as fields are some internal properties of the record
+*	Youmu has quit (Quit: Connection closed for inactivity)
+*	eacameron has quit (Remote host closed the connection)
+<joebetz>	hmm, so how do records go about exposing that namespace?
+*	eacameron (~eacameron@dsl-50-5-80-133.fuse.net) has joined
+<joebetz>	oh right, they're exposing by default and overloading takes care of disambiguating
+*	Rodya_ has quit (Remote host closed the connection)
+*	Rodya_ (~Rodya_@2601:46:4001:e0b4:1d83:686d:41da:2c74) has joined
+*	Guest79700 has quit (Ping timeout: 260 seconds)
+*	argent0 (~aner@186.133.132.26) has joined
+Python interface unloaded
+**** ENDING LOGGING AT Mon Sep  4 14:01:03 2017
+
+**** BEGIN LOGGING AT Tue Sep  5 12:41:06 2017
+
+*	Now talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+*	Deide (~Deide@2.220.50.147) has joined
+<crucify_me>	hi once again I could benefit from seeing an example of a barebones book example, thanks: https://ptpb.pw/c5mt
+<mud>	crucify_me: Can you explain more what you're looking for?
+*	Rodya_ has quit (Remote host closed the connection)
+<crucify_me>	this looks recursive to me, not sure.. plus how does eta reduction apply to that func, if at all.
+<crucify_me>	mud ...
+*	Rodya_ (~Rodya_@c-71-224-101-129.hsd1.pa.comcast.net) has joined
+<crucify_me>	if you wouldn't mind fleshing it out into a working example
+<mud>	It's not recursive. I don't think eta reduction does apply, the way it's written. And isn't that a working example?
+<hexagoxel>	@let returnAfterApply f a c = f a
+<lambdabot>	 Defined.
+<hexagoxel>	> returnAfterApply not True "whatever"
+<lambdabot>	 False
+*	nickolay_ has quit (Remote host closed the connection)
+<hexagoxel>	(it is also the same as (.) const, if that helps..)
+<hexagoxel>	:t [(.) const, returnAfterApply]
+<lambdabot>	[(a1 -> a) -> a1 -> b -> a]
+<crucify_me>	hexagoxel, thanks, hold on yeah that is helpful if it is related to const
+*	Guest887 has quit (Remote host closed the connection)
+<crucify_me>	the keyword not is used as an argument there hexagoxel ?
+<hexagoxel>	not a keyword :)
+<hexagoxel>	:t not
+<lambdabot>	Bool -> Bool
+<hexagoxel>	otherwise, yes
+<hexagoxel>	> (.) const (+1) 3 'z'
+<lambdabot>	 4
+<crucify_me>	thanks so in that last one
+<crucify_me>	...
+<hexagoxel>	apply the first to the second argument, ignore the third.
+<crucify_me>	right, so you're composing const (+1) 3    with 'z', but 'z' is ignored.
+<crucify_me>	so the compose actually isn't.. it doesn't get that far?
+<hexagoxel>	> ((((.) const) (+1)) 3) 'z'
+<lambdabot>	 4
+<hexagoxel>	it is rather composing of const and (+1)
+<crucify_me>	re: last point: really?    ok thank you kindly hexagoxel this is related to something I was asking last night, which, if you have time, is ....
+<crucify_me>	const id = flip const
+<hexagoxel>	> ((const . (+1)) 3) 'z'
+<lambdabot>	 4
+<hexagoxel>	> const 4 'z'
+<lambdabot>	 4
+<hexagoxel>	crucify_me: you might want to read the logs, somebody replied after you yesterday.
+<hexagoxel>	+left
+<crucify_me>	dang really?
+<crucify_me>	whats +left is that an irc command?
+<hexagoxel>	no, i forgot a word before :)
+<crucify_me>	oh yeah duh
+<hexagoxel>	(hm, there are logs, right? they where in the topic before..)
+<crucify_me>	wait, you can view the logs on a website, like in the math channel?
+<MarcelineVQ>	idk if there's realiable public logs anymore
+<crucify_me>	well, am I missing something, regarding const id = flip const  ? I mean, how would that be used constructively?
+<hexagoxel>	crucify_me: http://lpaste.net/4104112641721499648
+*	malaclyps has quit (Ping timeout: 246 seconds)
+<hexagoxel>	how would what be used? either function? the equivalence?
+<crucify_me>	hexagoxel, thanks, is that your own log or did you fetch that somewhere?
+<crucify_me>	news reporting? :)
+<hexagoxel>	my own. im on here via bouncer on server, so never offline.
+<crucify_me>	oh thanks gotta learn how to do that.. as for your last question to me ...
+<crucify_me>	yes , when would you want to use flip const, say ?
+<crucify_me>	(-)yes
+<crucify_me>	or use the second argument sent to const ?
+<crucify_me>	I guess I'm missing something basic.
+*	mayhew (~mayhew@142.167.222.89) has joined
+*	amar_ (~amarpotgh@p5796792B.dip0.t-ipconnect.de) has joined
+*	hexagoxel evades by generalizing to "i'd use it when its semantics is what i need"..
+*	amar_ is now known as Guest73367
+<crucify_me>	thanks will work on that
+<hexagoxel>	crucify_me: do you realize how to write it using nothing but a lambda?
+<crucify_me>	give me a second thank you
+<crucify_me>	do you mean say flip const ?
+*	Youmu has quit (Quit: Connection closed for inactivity)
+<hexagoxel>	yeah
+<crucify_me>	idk   \a -> b -> a -> b
+<hexagoxel>	you are mixing type and value-level syntax.
+*	peterbecich has quit (Ping timeout: 260 seconds)
+<crucify_me>	idk   \a -> \b -> \a -> b
+<hexagoxel>	:t  \a -> \b -> \a -> b
+<lambdabot>	t2 -> t1 -> t -> t1
+<hexagoxel>	:t flip const
+<lambdabot>	b -> c -> c
+<crucify_me>	right, since const takes only 2 args
+<hexagoxel>	eh, not even sure if that is a good reason, since
+<hexagoxel>	:t flip id
+<lambdabot>	b -> (b -> c) -> c
+<hexagoxel>	:t id
+<lambdabot>	a -> a
+<hexagoxel>	unification can be .. unintuitive at first
+*	malaclyps (~malaclyps@unaffiliated/malaclyps) has joined
+<crucify_me>	oh boy
+<hexagoxel>	before composing and applying stuff, do you have a clear picture what the components do? like flip, const and id?
+<crucify_me>	yes, pretty sure
+<hexagoxel>	can you give an implementation of const?
+<crucify_me>	but :t flip id   ..   ghci is adding the c, right?
+<crucify_me>	since flip takes 2 args
+<hexagoxel>	technically, every function takes exactly one argument
+<hexagoxel>	it unifies "a -> a" with "c -> b -> c"
+<crucify_me>	cool ok hold on pls
+<crucify_me>	that is trippy
+<crucify_me>	:t const id
+<lambdabot>	b -> a -> a
+<crucify_me>	flip const
+<crucify_me>	> flip const
+<lambdabot>	 error:
+<lambdabot>	     • No instance for (Typeable b0)
+<lambdabot>	         arising from a use of ‘show_M334868068027980612912345’
+<crucify_me>	:t flip const
+<lambdabot>	b -> c -> c
+*	harfangk has quit (Ping timeout: 240 seconds)
+<hexagoxel>	haskell is one long trip..
+<crucify_me>	should a person not be confused by this?
+<hexagoxel>	:t map (+) [1,2,3]
+<lambdabot>	Num a => [a -> a]
+<hexagoxel>	> zipWith id (map (+) [1,2,3]) [4,5,5]
+<lambdabot>	 [5,7,8]
+<hexagoxel>	(you never write that computation in that way; just meant to highlight another "arity-breaking" unification)
+<hexagoxel>	:t map
+<lambdabot>	(a -> b) -> [a] -> [b]
+<hexagoxel>	:t (+)
+*	DataComputist (uid228606@gateway/web/irccloud.com/x-bqdocnnqovoekpca) has joined
+<lambdabot>	Num a => a -> a -> a
+<hexagoxel>	:t map (+)
+<lambdabot>	Num a => [a] -> [a -> a]
+<hexagoxel>	here, the "b" in map unifies with "a -> a"
+<hexagoxel>	or perhaps simpler:
+<hexagoxel>	> [f 3 | f <- map (+) [1,2,3]]
+<lambdabot>	 [4,5,6]
+*	iAmerikan has quit (Ping timeout: 252 seconds)
+<hexagoxel>	but that uses comprehension syntax, perhaps not a good choice either.
+<crucify_me>	I can follow the comprehension syntax pretty well at least
+*	monad-learner has quit (Quit: My MacBook has gone to sleep. ZZZzzz…)
+<crucify_me>	thanks very much..I gotta get to work hexagoxel really appreciate it
+<crucify_me>	and I have my log
+<hexagoxel>	crucify_me: you'll get used to it.. in no time the only confusing part will be ghc's choice of renaming those type variables to "t2" and "t1" sometimes :)
+*	iAmerikan (~dwshrewt@unaffiliated/iamerikan) has joined
+<crucify_me>	yeah that really is confusing, and the numbers descend 
+*	zero_byte (~zer0@ip-89-103-110-138.net.upcbroadband.cz) has joined
+*	pfurla (~textual@38.86.167.91) has joined
+<geekosaur>	but that won't make any sense at all unless you run ghc with the option to dump a typechecker trace
+*	Guest73367 has quit (Ping timeout: 248 seconds)
+*	iAmerikan has quit (Ping timeout: 248 seconds)
+*	monad-learner (~textual@rrcs-74-143-39-18.central.biz.rr.com) has joined
+<crucify_me>	geekosaur, oh thanks, could we pick that up later? would like to learn that
+*	madjestic (~madjestic@ip565848f4.direct-adsl.nl) has joined
+<crucify_me>	I'm just having a hard time but its seeping in..
+<crucify_me>	pax gotta go thank you
+<geekosaur>	crucify_me, that is not something I would bother learning. the point is (a) it's controlled by ghc internals (b) the behavior changes with every release
+*	caasih has quit (Ping timeout: 246 seconds)
+*	caasih (~caasihuan@106.186.125.58) has joined
+<crucify_me>	you mean the t2 -> t1 stuff?
+<geekosaur>	how exactly it chooses names, what names it uses (the t* stuff is relatively recent, ghc7.10 I think), etc.
+<crucify_me>	ok cool thanks. pax
+Python interface unloaded
+FiSHLiM plugin unloaded
+**** ENDING LOGGING AT Tue Sep  5 14:09:10 2017
+
