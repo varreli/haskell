@@ -1,0 +1,101 @@
+
+w talking on #haskell-beginners
+*	Topic for #haskell-beginners is: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+*	Topic for #haskell-beginners set by bitemyapp!~callen@198.199.80.102 (Wed Jan 27 15:40:49 2016)
+<crucify_me>	hi still working on a problem from yesterday. I thought I had it beat, but got some unexpected results. On the last 2 entries here, I was expecting 10 to be returned, not 2   https://ptpb.pw/Lui7
+*	iAmerikan (~dwshrewt@unaffiliated/iamerikan) has joined
+<crucify_me>	how could that possibly return the value of type c ?
+<monochrom>	Can you show a step-by-step calculation of evaluating returnAfterApply (flip const) "z" 10 2 until you get a final answer?
+<monochrom>	The same way in highschool algebra you can show how (4+5)/(4-1) evaluates to 3.
+<crucify_me>	but in those arguments , isn't 2 in the 'c' parameter ?
+<monochrom>	I don't know. And there are too many "c"s.
+<crucify_me>	(flip const) would just be f, right?
+*	Bhootrk_ has quit (Quit: Leaving)
+*	iAmerikan has quit (Ping timeout: 252 seconds)
+<crucify_me>	sorry yeah let me paste the whole thing
+*	Big_G (~Big_G@75-165-48-101.tukw.qwest.net) has joined
+<crucify_me>	monochrom, thanks for helping. hope this is what you were asking for :  https://ptpb.pw/TnC7
+<crucify_me>	essentially I was surprised to see that [Char] in the signature for the (flip const) version
+<geekosaur>	crucify_me, your rreturnAfterApply consumes the "c", so the returned function never sees it
+<geekosaur>	the result of (rreturnAftApply (flip const) 1 2) is ((flip const) 1). this is applied to the remaining parameter, "t"
+<monochrom>	No. ((flip const) 2)
+<crucify_me>	??wait please
+<monochrom>	Err, nevermind.
+<geekosaur>	heh
+*	Guest36961 has quit (Remote host closed the connection)
+<geekosaur>	crucify_me, c does not occur after the = in rreturnAftApply. it just goes away, cannot affect anything else at al
+<crucify_me>	but isn't "t" in the c parameter ?
+<crucify_me>	it returns "t"
+<geekosaur>	no, 2 is
+*	peterbecich has quit (Ping timeout: 260 seconds)
+<geekosaur>	f = flip apply; a = 1; c = 2; "t" is waiting for a function to be applied to it
+<geekosaur>	er f = flip const
+<crucify_me>	ok please hold on, really trying to see this
+<geekosaur>	(rreturnAftApply (flip const) 1 2) t
+<geekosaur>	sigh
+<geekosaur>	(rreturnAftApply (flip const) 1 2) "t"
+<geekosaur>	so rreturnAftApply is producing a function. in this case it is a partial application: ((flip const) 1)
+<geekosaur>	which is applied to "t"; this becomes ((flip const) 1 "t") which is (const "t" 1) which is "t"
+<crucify_me>	ok that is very helpful one sec
+<geekosaur>	the 2 ends up as c in `rreturnAftApply f a c`, and as c does not appear after the = it plays no more part in the result.
+*	andyhoang4 has quit (Ping timeout: 248 seconds)
+*	Gurkenglas has quit (Ping timeout: 240 seconds)
+<crucify_me>	excellent got it thanks geekosaur monochrom !
+<geekosaur>	you may be thinking the (flip const) happens before rreturnAftApply is evaluated. It is not; Haskell is lazy, it is passed as the f parameter, unevaluated yet
+<crucify_me>	very interested... if its any consolation I WILL get this !
+<crucify_me>	interesting*
+*	amarp (~amarpotgh@p57967DBF.dip0.t-ipconnect.de) has joined
+<crucify_me>	so, in a way, the const function is applied twice, correct geekosaur ?
+<crucify_me>	in that case
+<geekosaur>	only in the sense that you could rewrite `rreturnAftApply f a c = f a` to use const instead of just not mentioning c
+<geekosaur>	it is not using the const that you gave it as part of f
+*	iAmerikan (~dwshrewt@unaffiliated/iamerikan) has joined
+<geekosaur>	but if you tried to rewrite this in SKI calculus, you would need to use K (which is the SKI form of Haskell's const) to make c go away
+<crucify_me>	er ...
+<MarcelineVQ>	crucify_me: this particular problem is good type lego.  flip const :: b -> (c -> c)     returnAfterApply :: (t2 -> t1) -> t2 -> t -> t1      for (t2 -> t1)  to unify with (b -> (c -> c))   t2 becomes b, t1 becomes (c -> c)   Can you write the type of returnAfterApply substituting b for t2 and c -> c for t1?
+<geekosaur>	crucify_me, I'm trying to say that in some sense const is happening a second time, but it is not related to the const you gave it.
+<geekosaur>	it's implicit in the fact that (\f a c = f a) does not mention c
+<geekosaur>	after the =
+<crucify_me>	ok still working on that thanks kindly
+*	amarp has quit (Ping timeout: 240 seconds)
+<geekosaur>	this *is* a form of const, and there are ways to write it that use something like const, but this has nothing to do with the const you are giving it separately; it's wired into the definition of rreturnAftApply
+*	Orion3k has quit (Ping timeout: 240 seconds)
+<geekosaur>	you can see this by evaluating it something other than const, e.g. (rreturnAftApply (+) 1 7 4) the 7 will still not show up in the result
+<crucify_me>	do you mean the 4 ?   
+<geekosaur>	no, I mean the 7
+<geekosaur>	the 4 will be consumed by the result of (rreturnAftApply (+) 1 7)
+<geekosaur>	the 7 will never have any effect, because when applying rreturnAftApply, f = (+), a = 1, c = 7, and c does not appear after the =
+*	iAmerikan has quit (Ping timeout: 248 seconds)
+<geekosaur>	at this level you should think in terms of rewriting / replacement.
+<geekosaur>	rreturnAftApply does not evaluate anything, it just does substitutions.
+<geekosaur>	rreturnAftApply f a c = f a -- none of f, a, c are evaluated, just "copied over"
+<crucify_me>	working
+*	Orion3k (~Orion3k@47-51-33-228.static.mtpk.ca.charter.com) has joined
+<geekosaur>	rreturnAftApply (flip const) 1 2 "t"     --(rewrite rreturnAftApply = \f a c -> f a)-->   (flip const) 1 "t"   --(rewrite flip = \f a b -> f b a)-->   const "t" 1   --(rewrite const = \f a b = a)-->   "t"
+<geekosaur>	er, no, last part wrong
+<geekosaur>	rreturnAftApply (flip const) 1 2 "t"     --(rewrite rreturnAftApply = \f a c -> f a)-->   (flip const) 1 "t"   --(rewrite flip = \f a b -> f b a)-->   const "t" 1   --(rewrite const = \a b = a)-->   "t"
+<geekosaur>	rreturnAftApply (flip const) 1 2 "t"     --(rewrite rreturnAftApply = \f a c -> f a)-->   (flip const) 1 "t"   --(rewrite flip = \f a b -> f b a)-->   const "t" 1   --(rewrite const = \a b -> a)-->   "t"     (I think I got it right this time, sigh)
+<geekosaur>	when it stops doing rewriting is when it's left with a simple value like 1 or "t", or it has a "primop" (something that actually needs to be evaluated instead of rewritten, like (+) :: Integer -> Integer -> Integer which you can;t do just by rewriting terms
+<crucify_me>	so the interpreter doesn't see 4 as bound to a parameter. 7 is bound to c. (+1) is looking for another operand, and it is listed just left of the = sign. geekosaur 
+*	andyhoang4 (~andyhoang@116.118.104.236) has joined
+<geekosaur>	crucify_me, not as a parameter to rreturnAftApply. it is a parameter to the function that rreturnAftApply produces
+*	Orion3k has quit (Ping timeout: 260 seconds)
+<geekosaur>	because ((+) 1) is partially applied, and needs another parameter to be fully applied
+*	peterbecich (~peterbeci@47.37.164.78) has joined
+*	Orion3k (~Orion3k@47-51-33-228.static.mtpk.ca.charter.com) has joined
+<geekosaur>	:t ((+) 1)
+<lambdabot>	Num a => a -> a
+*	darjeeling_ (~darjeelin@115.215.43.56) has joined
+<crucify_me>	right, its looking for one arg, or operand
+<geekosaur>	rreturnAftApply (+) 1 7 4   --(rewrite rreturnAftApply = \f a c -> f a)-->   (+) 1 4   --((+) @Integer = primop)-->  5
+<crucify_me>	need to study that, but when you see rreturnAftApply (+) 1 7 4 , 4 is behaving according to how the primative (+) operator is designed to work
+<crucify_me>	a and c are applied as far as rreturnAftApply is concerned, and 4 gets added
+<crucify_me>	not the c is "applied"
+<crucify_me>	that*
+<crucify_me>	is that correct geekosaur ?
+<geekosaur>	at the time rreturnAftApply is reduced, it does not know that f has anything to do with (+)
+<geekosaur>	actually I'm not quite sure what you were trying to say...
+<monochrom>	If you are looking at the behaviour of (+), you're ahead of yourself.
+<crucify_me>	please let me work on this for a while. getting kicked out of coffeehouse.  thanks !!
+<crucify_me>	got it all in the log thanks
+
