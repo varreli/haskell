@@ -1,0 +1,73 @@
+
+	crucify_me, your rreturnAfterApply consumes the "c", so the returned function never sees it
+	the result of (rreturnAftApply (flip const) 1 2) is ((flip const) 1). this is applied to the remaining parameter, "t"
+
+	c does not occur after the = in rreturnAftApply. it just goes away, cannot affect anything else at al
+
+<crucify_me>	but isn't "t" in the c parameter ?
+
+	no, 2 is
+
+	f = flip const; a = 1; c = 2; "t" is waiting for a function to be applied to it
+
+	(rreturnAftApply (flip const) 1 2) "t"
+
+  rreturnAftApply is producing a function. in this case it is a partial application: ((flip const) 1)
+
+	which is applied to "t"; this becomes ((flip const) 1 "t") which is (const "t" 1) which is "t"
+
+	the 2 ends up as c in `rreturnAftApply f a c`, and as c does not appear after the = it plays no more part in the result.
+
+	you may be thinking the (flip const) happens before rreturnAftApply is evaluated. It is not; Haskell is lazy, it is passed as the f parameter, unevaluated yet
+
+
+  the const function is used twice, but only in the sense that you could rewrite `rreturnAftApply f a c = f a` to use const instead of just not mentioning c
+	it is not using the const that you gave it as part of f
+
+  this particular problem is good type lego.
+  flip const :: b -> (c -> c)
+  returnAfterApply :: (t2 -> t1) -> t2 -> t -> t1
+
+  for (t2 -> t1)  to unify with (b -> (c -> c)) :
+  t2 becomes b, t1 becomes (c -> c)   Can you write the type of returnAfterApply substituting b for t2 and c -> c for t1?
+
+	In some sense const is happening a second time, but it is not related to the const you gave it.
+	it's implicit in the fact that (\f a c = f a) does not mention c
+	after the =
+
+	this *is* a form of const, and there are ways to write it that use something like const, but this has nothing to do with the const you are giving it separately; it's wired into the definition of rreturnAftApply
+
+	consider:
+  (rreturnAftApply (+) 1 7 4) the 7 will still not show up in the result
+
+	the 4 will be consumed by the result of (rreturnAftApply (+) 1 7)
+	the 7 will never have any effect, because when applying rreturnAftApply, f = (+), a = 1, c = 7, and c does not appear after the =
+
+	at this level you should think in terms of rewriting / replacement.
+	rreturnAftApply does not evaluate anything, it just does substitutions.
+	rreturnAftApply f a c = f a -- none of f, a, c are evaluated, just "copied over"
+
+	rreturnAftApply (flip const) 1 2 "t"
+  --(rewrite rreturnAftApply = \f a c -> f a) -->
+  (flip const) 1 "t"
+  --(rewrite flip = \f a b -> f b a) -->
+  const "t" 1
+  --(rewrite const = \a b -> a)-->
+  "t"
+
+	when it stops doing rewriting is when it's left with a simple value like 1 or "t", or it has a "primop" (something that actually needs to be evaluated instead of rewritten, like (+) :: Integer -> Integer -> Integer which you can;t do just by rewriting terms
+
+  ME:	so the interpreter doesn't see 4 as bound to a parameter. 7 is bound to c. (+1) is looking for another operand, and it is listed just left of the = sign ?
+
+	not as a parameter to rreturnAftApply. it is a parameter to the function that rreturnAftApply produces. because ((+) 1) is partially applied, and needs another parameter to be fully applied
+
+	:t ((+) 1)
+  <lambdabot>	Num a => a -> a
+
+  ME: right, its looking for one arg, or operand
+
+	rreturnAftApply (+) 1 7 4   --(rewrite rreturnAftApply = \f a c -> f a)-->   (+) 1 4   --((+) @Integer = primop)-->  5
+
+	at the time rreturnAftApply is reduced, it does not know that f has anything to do with (+)
+
+  <monochrom>	If you are looking at the behaviour of (+), you're ahead of yourself.
