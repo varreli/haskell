@@ -71,3 +71,7 @@
 	at the time rreturnAftApply is reduced, it does not know that f has anything to do with (+)
 
   <monochrom>	If you are looking at the behaviour of (+), you're ahead of yourself.
+
+   how to evaluate ( (\f a c -> f a) const 1 2 "t" ) ? That's what you need to do for gg.
+
+   haskell knows form the types that gg produces a function that needs a parameter, and is holding out the "t" for application to that returned function.
