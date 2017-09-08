@@ -66,7 +66,7 @@ gg f a c = f a -- none of f, a, c are evaluated,
 just "copied over"
 
 gg (flip const) 1 2 "t"
---(rewrite rreturnAftApply = \f a c -> f a) -->
+--(rewrite gg = \f a c -> f a) -->
   
 (flip const) 1 "t"
 --(rewrite flip = \f a b -> f b a) -->
