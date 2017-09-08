@@ -103,7 +103,7 @@ gg (+) 1 7 4
 --(rewrite gg = \f a c -> f a)-->   
 (+) 1 4   
 
---((+) @Integer = primop)-->  5
+--((+) @Integer = primop)-->  5 .
 
 At the time gg is reduced, it does not know that 
 f has anything to do with (+)
