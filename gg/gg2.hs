@@ -1,12 +1,12 @@
-λ > let returnAfterApply f a c = f a
+λ > let gg f a c = f a
 Defined.
 
-λ > returnAfterApply not True "Oden"
+λ > gg not True "Oden"
 False
 
 -- it is also the same as (.) const:
 
-λ > :t [(.) const, returnAfterApply]
+λ > :t [(.) const, gg]
 (a1 -> a) -> a1 -> b -> a]
 
 λ > :t not
