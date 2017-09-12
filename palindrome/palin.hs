@@ -1,21 +1,21 @@
--- this is wrong because with the bool in 
--- the type signature, the function is not 
--- allowed to use its own boolean. Instead
--- it takes a Bool as input:
+palindrome0 :: Eq a => [a] -> Bool
+palindrome0 x = x == (reverse x)
 
--- palindrome :: String -> Bool -> String
+palindrome1 :: Eq a => [a] -> [a] -> Bool
+palindrome1 a b = a == (reverse b)
 
 
-palindrome :: String -> String
-palindrome xs =
+-- note no Bool in signature :
+
+palindrome2 :: String -> String   
+palindrome2 xs =
   case y of
     True -> "yes"
     False -> "no"
   where y = xs == reverse xs
 
 
--- Alternatively, you can write it as:
-palindrome' xs = 
+palindrome3 xs = 
   case xs == reverse xs of
     True  -> "yes"
     False -> "no"
