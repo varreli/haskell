@@ -14,3 +14,10 @@ adder p q = p + q
 -- curry is the function that turns addTuple 
 -- into adder. Uncurry turns adder into addTuple.
 
+
+-- Prelude> fst (1, 2)
+-- 1
+-- Prelude> curry fst 1 2
+-- 1
+
+
