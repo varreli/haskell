@@ -1,9 +1,9 @@
-mapper :: (a -> b) -> [a] -> [b]
-mapper _ [] = []
-mapper f (x:xs) = f x : mapper f xs
+mapp :: (a -> b) -> [a] -> [b]
+mapp _ [] = []
+mapp f (x:xs) = f x : mapp f xs
 
-fillter :: (a -> Bool) -> [a] -> [a]
-fillter _ [] = []
-fillter p (x:xs)
-    | p x         = x : fillter p xs
-    | otherwise = fillter p xs
+filterr :: (a -> Bool) -> [a] -> [a]
+filterr _ [] = []
+filterr p (x:xs)
+    | p x         = x : filterr p xs
+    | otherwise = filterr p xs
