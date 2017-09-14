@@ -13,8 +13,8 @@ gg = \f a c -> f a
 -- λ > ( (\f a c -> f a) const 1 2 "t" )
 -- 1
 
--- note gg and (+) unify and require a 
--- third parameter :
+-- note gg and (+) - when unified - create the 
+-- need of a third parameter :
 
 -- λ > ((\f a c -> f a) (+) 1 2 3 ) 
 -- 4

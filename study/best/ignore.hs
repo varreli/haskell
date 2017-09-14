@@ -1,3 +1,4 @@
+-- these are all signatures for const id:
 
 agg :: (a -> c) -> a -> a  -- more complex type
 fug :: (a -> a) -> a -> a  -- than inferred.
@@ -7,6 +8,16 @@ fot :: a -> b -> b
 agg f x = x
 fug f x = x
 fot f x = x
+
+-- λ > agg (+) 50
+-- 50 
+--
+-- λ > fug (* 3) 4
+-- 4
+ 
+-- λ > fot "t" "r"
+-- "r"
+ 
 
 
 -- ignore the first argument.
