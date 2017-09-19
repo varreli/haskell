@@ -1,7 +1,30 @@
-λ > take 5 (enumFrom [1..])
+module Arith2 where
 
-<interactive>:80:1: error:
-    • Non type-variable argument in the constraint: Enum [t]
-      (Use FlexibleContexts to permit this)
-    • When checking the inferred type
-        it :: forall t. (Enum [t], Enum t, Num t) => [[t]]
+add :: Int -> Int -> Int
+add x y = x + y
+
+addPF :: Int -> Int -> Int
+addPF = (+)
+
+addOne :: Int -> Int
+addOne = \x -> x + 1
+
+addOnePF :: Int -> Int
+addOnePF = (+ 1)
+
+main :: IO ()
+main = do
+  print (0 :: Int)
+  print (add 1 0)
+  print (addOne 0)
+  print (addOnePF 0) 
+  print ((addOne   . addOne) 0)
+  
+  print ((addOnePF . addOne) 0)
+  print ((addOne . addOnePF) 0)
+  print ((addOnePF . addOnePF) 0)
+  print (negate (addOne 0))
+  print ((negate . addOne) 0)
+  print ((addOne . addOne . addOne
+          . negate . addOne) 0)
+  
