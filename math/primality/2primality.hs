@@ -21,10 +21,10 @@ main = do
   print (factors 5390)
   print (factors 5266)
 
--- main = print (factors 99) >> print (factors 5390) >> print (factors 5266) 
+-- we are making a list where the first element 
+-- is ld n, or p and the remainder is factors 
+-- (div n p) .
+-- The result of p is consed onto the list:
 
--- we are making a list where the first element is ld n, or p
--- and the remainder is factors (div n p)
--- the `:` function is used to construct lists, so the result of p is consed onto the list:
 -- prelude> 5:[4,3]
 -- [5,4,3]
