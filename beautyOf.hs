@@ -16,6 +16,19 @@ seriesUp = seriesUp' 0
                   | otherwise  = []
 
 
+-- non-recursive:
 
-f = concatMap r . r 
-  where r n = [1..n]
+f = concatMap rr . rr 
+  where rr n = [1..n]
+-- note: f n = concatMap rr . rr n
+
+-- Prelude> let rr n = [1..n]
+
+-- Prelude> rr 5
+-- [1,2,3,4,5]
+--
+-- Prelude> map rr (rr 5)
+-- [[1],[1,2],[1,2,3],[1,2,3,4],[1,2,3,4,5]]
+
+-- Prelude> concat (map rr (rr 5))
+-- [1,1,2,1,2,3,1,2,3,4,1,2,3,4,5]
