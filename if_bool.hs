@@ -1,16 +1,16 @@
 foldBool :: a -> a -> Bool -> a
 foldBool x y z =
   case z of
-  True -> x
-  False -> y
+  False -> x
+  True  -> y
 
 
 foldBool' :: a -> a -> Bool -> a
 foldBool' x y z 
-  | z = x
-  | otherwise = y
+  | z = y 
+  | otherwise = x
 
 
 foldBooll :: a -> a -> Bool -> a
-foldBooll x y True = x
-foldBooll x y False = y
+foldBooll x _ False = x
+foldBooll _ y True  = y
