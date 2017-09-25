@@ -22,7 +22,10 @@ z y  is  (\y -> y * 10) (\x -> x + 5)
 
 \ is λ and -> is .
 
-let x = 5 in let y = x + 5 in let z y = y * 10 in z y
+-- following is an expression, not a definition.
+-- try it with 9:
+
+-- let x = 5 in let y = x + 5 in let z y = y * 10 in z 9 
 
 (\x -> let y = x + 5 in let z y = y * 10 in z y) 5
 
