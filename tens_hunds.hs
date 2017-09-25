@@ -18,3 +18,6 @@ hunsDigit x = huns
     
   where xLast   = fst $ divMod x 100
         huns    = snd $ divMod xLast 10
+
+
+-- divMod just does div and mod at the same time and returns them tupled
