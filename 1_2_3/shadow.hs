@@ -16,20 +16,19 @@ Prelude> z 9
 Prelude> z y
 100
 
-z y  is  (\y -> y * 10) (\x -> x + 5)
-
-(λy. y * 10) (5 + 5)
 
 \ is λ and -> is .
 
--- following is an expression, not a definition.
--- try it with 9:
+
+-- (\x -> (\y -> let z y = y * 10 in z y) (x + 5)) 5
+-- (\x -> let y = x + 5 in let z y = y * 10 in z y) 5
+
+-- following are expressions, not definitions.
+-- so we need inputs :
 
 -- let x = 5 in let y = x + 5 in let z y = y * 10 in z 9 
+-- (\x -> let y = x + 5 in let z y = y * 10 in z 4) 5
 
-(\x -> let y = x + 5 in let z y = y * 10 in z y) 5
-
-(\x -> (\y -> let z y = y * 10 in z y) (x + 5)) 5
 -- a more recent binding of y; the original binding is
 -- shadowed. "z" defines its own y binding, completely
 -- hiding (shadowing) the original one within the
