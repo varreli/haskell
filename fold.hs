@@ -12,9 +12,28 @@ foldr :: (a -> b -> b) -> b -> [a] -> b
 foldr _ z []     =  z
 foldr f z (x:xs) =  f x (foldr f z xs)
 
-(*) has both right and left identity: (1*) (*1)
-(+) has both right and left identity: (y+) (+y)
+(*) -- has both right and left identity: (1*) (*1)
+(+) -- has both right and left identity: (y+) (+y)
 
-(-) has only right identity
-(^) has only right identity
-(/) has only right identity: /1
+(-) -- has only right identity
+(^) -- has only right identity
+(/) -- has only right identity: /1
+
+(:) -- takes two arguments not of the same type.
+
+
+
+--  λ > foldr (*) 10 [2,3,4]
+--  240
+
+
+--  λ > scanr (*) 10 [2,3,4]
+--  [240,120,40,10]
+
+
+-- λ > head (scanr (*) 10 [2,3,4]) == foldr (*) 10 [2,3,4]
+-- True
+
+
+
+-- http://www.cantab.net/users/antoni.diller/haskell/units/unit06.html
