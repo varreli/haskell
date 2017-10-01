@@ -9,17 +9,25 @@ foldl (yourFunction [1,2,3] 10)
 -- it expects a list back, and flip is required
 -- because the types need to agree with (:) :
 
-foldl (flip (:)) 10 [1,2,3]
-10 : [1,2,3]
+foldl (flip (:)) [1,2,3] 10
+-- is the same as:
+(:) 10 [1,2,3]
 
-(:) has this pattern 
+-- (:) has this pattern 
 a -> [a] -> [a] 
 
-so we need (flip (:)) to get :
+-- so we need (flip (:)) to get :
 [a] -> a -> [a]
 
 foldl :: (b -> a -> b) -> b -> [a] -> b
 foldl (flip (:)) :: Foldable t => [a] -> t a -> [a]
+
+(b -> a -> b) -> b -> [a] -> b
+
+-- so now substitute in our relations of those to t: 
+(b ~ [t], a ~ t):  ([t] -> t -> [t]) -> [t] -> [t] -> [t]
+
+-- b unifies with [t], a unifies with t 
 
 -- (flip (:)) is handed the current base (b) and a list 
 -- element (a) and produces a new base (b). You provide
