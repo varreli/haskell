@@ -12,6 +12,21 @@ foldl (yourFunction [1,2,3] 10)
 foldl (flip (:)) 10 [1,2,3]
 10 : [1,2,3]
 
+(:) has this pattern 
+a -> [a] -> [a] 
+
+so we need (flip (:)) to get :
+[a] -> a -> [a]
+
+foldl :: (b -> a -> b) -> b -> [a] -> b
+foldl (flip (:)) :: Foldable t => [a] -> t a -> [a]
+
+-- (flip (:)) is handed the current base (b) and a list 
+-- element (a) and produces a new base (b). You provide
+-- an initial base (misnamed accumulator), and a list 
+-- (Foldable).  
+
+
 
 λ > foldl (/) 64 [4,2,4] 
 
