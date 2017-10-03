@@ -5,6 +5,5 @@ applyTimes n f b = f . applyTimes (n - 1) f $ b
 
 
 incTimes :: (Eq a, Num a) => a -> a -> a
-
-incTimes times n = applyTimes times (* 2) n
+incTimes times n = applyTimes times ( + 1 ) n
 
