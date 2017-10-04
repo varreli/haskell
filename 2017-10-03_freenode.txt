@@ -1,0 +1,242 @@
+17:27 You have joined the channel
+17:27 n_blownapart has joined (~n_blownap@128.32.176.159)
+17:27 Topic: Code of Conduct: https://github.com/bitemyapp/learnhaskell/blob/master/coc.md | Book: http://haskellbook.com/ | Paste code: http://lpaste.net/ | Cat, Dog & Goat pictures can be used to bribe people for help
+17:27 bitemyapp set the topic at: Jan 27, 2016, 3:40 PM
+17:27 Mode: +nt
+17:27 Created at: May 4, 2014, 5:52 PM
+17:27 n_blownapart is now known as crucify_me
+17:28 juanpaucar has left IRC (Ping timeout: 240 seconds)
+17:29 crucify_me: https://ptpb.pw/jF2A   hi the second function is commented out here, why can't I run this with applyTimes 5 (+ 1)  5 ?       (getting error ' Occurs check: cannot construct the infinite type: a ~ a -> a ' )
+17:30 crucify_me: do I need a different base case? (I tried a few alternatives)
+17:30 romanix has left IRC (Ping timeout: 248 seconds)
+17:31 crucify_me: or is it that I cannot pass in a function with a numeric literal like that?
+17:33 crucify_me: I thought that would work standalone
+17:34 machuga has joined (~machuga@unaffiliated/machuga)
+17:37 erisco: applyTimes (n - 1) f :: b -> b  given  n - 1 :: a  f :: b -> b
+17:39 erisco: from  f . applyTimes (n - 1) f  we get that  f :: (b -> b) -> b
+17:39 erisco: now we have to figure out how to unify  f :: (b -> b) -> b  and  f :: b -> b
+17:39 erisco: which means unifying  b  with  b -> b
+17:40 erisco: so, lets say  b = c -> c
+17:40 erisco: now we have to unify  c -> c  with  (c -> c) -> (c -> c)
+17:40 erisco: so lets say  c = d -> d
+17:40 erisco: you can see where this is going
+17:40 malaclyps has left IRC (Ping timeout: 240 seconds)
+17:40 twopoint718 has joined (~twopoint7@fsf/member/twopoint718)
+17:40 crucify_me: erisco: sorry no I'm not following that
+17:41 erisco: what is the type of (.) ?
+17:41 crucify_me: ok that I know (b -> c) -> (a -> b) -> (a -> c)
+17:41 erisco: what is the type of f?
+17:42 crucify_me: @t (+)
+17:42 lambdabot: Maybe you meant: tell thank you thanks thesaurus thx tic-tac-toe ticker time todo todo-add todo-delete type v @ ? .
+17:42 crucify_me: > :t (+)
+17:42 lambdabot:  <hint>:1:1: error: parse error on input ‘:’
+17:43 erisco: what type do you intend for f?
+17:43 crucify_me: Num a => a -> a -> a
+17:43 erisco: no, that is not what you intend for f, not by what you wrote for applyTimes
+17:43 crucify_me: one moment please
+17:44 crucify_me: well its (b -> b)
+17:44 erisco: sorry I goofed in my own conclusions
+17:44 towerio has left IRC (Remote host closed the connection)
+17:45 crucify_me: no worries
+17:45 erisco: I was convinced that applyTimes did not type check
+17:46 crucify_me: yeah I thought it would work just like that. the exercise wants us to write it out by hand for applyTimes 5 (+) 5  , which I essentially know how to do
+17:46 crucify_me: but I just tried it like that in the prelude
+17:46 erisco: I do not see any problem with incTimes
+17:47 crucify_me: no it works fine with incTimes. that is what I don't see
+17:47 crucify_me: why applyTimes won't take 5 (+) 5
+17:47 crucify_me: alone
+17:48 crucify_me: so something in incTimes terminates the calculation
+17:48 towerio has joined (~towerio@137.139.132.175)
+17:48 erisco: no
+17:48 erisco: it is just about type checking and nothing else
+17:48 erisco: applyTimes :: a -> (b -> b) -> b -> b
+17:48 erisco: lets ignore the constraints because they don't matter here
+17:49 crucify_me: ok
+17:49 erisco: applyTimes 5 :: (b -> b) -> b -> b
+17:49 erisco: (+) :: Int -> Int -> Int
+17:49 machinedgod has joined (~machinedg@198-84-249-5.cpe.teksavvy.com)
+17:49 erisco: so  applyTimes 5 (+)  says  (+) :: b -> b
+17:49 erisco: but we also know  (+) :: Int -> Int -> Int
+17:50 erisco: so now we have to figure out how  b -> b  can look like  Int -> Int -> Int  by finding a b
+17:50 erisco: so,  b ~ Int  and  b ~ Int -> Int
+17:50 erisco: which says  Int ~ Int -> Int
+17:50 erisco: which is wrong
+17:50 erisco: now, I have used Int here instead of a type variable to make it simpler to see
+17:51 erisco: (+) :: a -> a -> a  of course, ignoring constraints again
+17:51 crucify_me: ok now I see where you're going
+17:51 Gurkenglas has left IRC (Ping timeout: 248 seconds)
+17:52 erisco: replacing Int with a type variable again, you get to  a ~ a -> a
+17:53 crucify_me: so (+) doesn't agree with the signature. If (+) is abstracted in the incTimes, it stays in local scope .. is that true?
+17:53 erisco: which is what GHC is calling an infinite type, because if you try and find an 'a' to make both sides match, the type becomes infinite in size
+17:53 erisco: no
+17:53 erisco: incTimes is defined as  applyTimes times (+1) n
+17:53 erisco: (+) and (+1) are not the same thing
+17:55 crucify_me: when you say make both sides match, what exactly are you referring to?
+17:55 erisco: a ~ a -> a  is a constraint that says "'a' is equal to 'a -> a'"
+17:56 erisco: the only way to satisfy this constraint is by reflexivity
+17:56 erisco: and that means that the left and right side are exactly the same
+17:56 erisco: for example, Int ~ Int is satisfiable, because reflexivity says  a ~ a  for all choices of 'a'
+17:57 crucify_me: I'm partially there
+17:57 twopoint718 has left IRC (Quit: My MacBook Air has gone to sleep. ZZZzzz…)
+17:58 erisco: well,  a ~ a -> a  is not exactly the same on both sides
+17:58 erisco: but 'a' is a variable, so GHC tries to find some substitution for 'a' which makes both sides equal
+17:58 crucify_me: I only recently learned the ~ notation  ..
+17:58 erisco: for example, if the problem is  Maybe Int ~ f a  then GHC will choose  f = Maybe  and  a = Int
+17:58 erisco: because  Maybe Int ~ Maybe Int
+17:59 erisco: so, with  a ~ a -> a  GHC tries to find a substitution for 'a'
+18:00 crucify_me: confused, very sorry
+18:00 erisco: okay, if I said  5 = x  and asked you to solve for x, what would you tell me?
+18:01 crucify_me: that is the solution
+18:02 erisco: the solution is 5
+18:02 crucify_me: yes
+18:02 erisco: because if I substitute 5 for x, I get 5 = 5, and that is true by reflexivity
+18:02 crucify_me: ok
+18:02 crucify_me: so hold on pls
+18:02 crucify_me: the program is expected (b -> b)
+18:03 crucify_me: but we are giving it an input that is a -> a -> a
+18:03 crucify_me: expecting*
+18:04 crucify_me: sorry I realized I cut you off
+18:04 erisco: yes, that is correct
+18:04 crucify_me: ok standing by
+18:04 erisco: now, if I gave you the problem  Int ~ x  and asked you to solve for x, what would you tell me?
+18:05 mniip has left IRC (Ping timeout: 600 seconds)
+18:06 twopoint718 has joined (~twopoint7@fsf/member/twopoint718)
+18:07 tmciver has joined (~tmciver@cpe-198-255-176-132.maine.res.rr.com)
+18:07 erisco: note that ~ is an equivalence relation just like = is
+18:08 crucify_me:  ok so x is related to Int, given a certain context
+18:08 erisco: the solution is Int, just like the solution before was 5
+18:09 crucify_me: yes
+18:09 erisco: the solution may be variable, as well, if not enough is yet known
+18:09 Pupnik has joined (~Pupnik@2001:44b8:41c4:ba00:de4b:12fa:8add:639a)
+18:10 erisco: for example, if I say  a = b  and solve for b, the answer is 'a'
+18:10 crucify_me: ok
+18:10 erisco: in other words, whatever we pick for 'a', that is also what 'b' is
+18:10 erisco: similarly, we may have a constraint such as  a ~ b  and it works exactly the same way
+18:10 erisco: or we may have a constraint like   Maybe a ~ b  in which case the solution for 'b' is 'Maybe a'
+18:11 erisco: now we look at  b -> b ~ a -> a -> a
+18:11 erisco: well, this is the same as  b -> b ~ a -> (a -> a)
+18:11 andyhoang has joined (~andyhoang@27.78.92.56)
+18:12 crucify_me: so on line 4, we have a problem because the type on the rhs is not equivalent to the lhs type for the function...   so wait what you said says there are equivalent/
+18:12 crucify_me: ?
+18:12 erisco: constructors are injective, and so therefore we can break this problem down to  (b ~ a, b ~ a -> a)
+18:12 erisco: now, by transitivity, we learn  a ~ a -> a
+18:13 erisco: knowing  a ~ a -> a  now solve for 'a'
+18:13 crucify_me: a -> a
+18:14 erisco: okay, lets say that
+18:14 erisco: then  a -> a ~ (a -> a) -> (a -> a)
+18:14 erisco: solve for 'a' again
+18:15 erisco: this is an example of what is meant by an infinite type
+18:16 erisco: if we say  a ~ a -> a  is true then what we have described 'a' to be is an infinitely large type
+18:16 andyhoang has left IRC (Ping timeout: 258 seconds)
+18:16 erisco: because if  a ~ a -> a  then  a -> a ~ (a -> a) -> (a -> a)  and therefore  a ~ (a -> a) -> (a -> a)  and we can keep going
+18:18 crucify_me: ok could you illustrate that in terms of the difference between (+) and (+ 1)    ?  
+18:18 erisco: Haskell lets us have this a different way by allowing a data type to refer to itself
+18:19 crucify_me: so the problem lies in passing (+ 1) to applyTimes
+18:19 erisco: newtype F a = F (F a -> F a)
+18:21 erisco: the problem with using (+) is it requires unifying 'a' with 'a -> a' which is impossible (or we can say "disallowed")
+18:22 erisco: :t (+) :: a -> a
+18:22 ianandrich has left IRC (Ping timeout: 260 seconds)
+18:22 lambdabot: error:
+18:22 lambdabot:     • Couldn't match type ‘a1’ with ‘a1 -> a1’
+18:22 lambdabot:       ‘a1’ is a rigid type variable bound by
+18:23 erisco: seems a differently worded error message happens here
+18:24 erisco: :t (+) `asTypeOf` id -- so lets use this instead
+18:24 lambdabot: error:
+18:24 lambdabot:     • Occurs check: cannot construct the infinite type: a ~ a -> a
+18:24 lambdabot:       Expected type: a -> a -> a
+18:24 crucify_me: one sec
+18:25 erisco: (+1)  unifies with  b -> b  without issue, that is already its type (modulo a constraint)
+18:26 crucify_me: right that is just like identity  like id (+ 1)
+18:26 machinedgod has left IRC (Ping timeout: 240 seconds)
+18:26 crucify_me: it just returns itself
+18:26 conal has left IRC (Ping timeout: 260 seconds)
+18:27 conal has joined (~conal@209.58.144.228)
+18:30 crucify_me: Is that incorrect ?   ^
+18:30 crucify_me: I didn't get the bit about modulo a constraint
+18:33 twopoint718 has left IRC (Quit: My MacBook Air has gone to sleep. ZZZzzz…)
+18:36 ianandrich has joined (~ianandric@c-73-223-61-224.hsd1.ca.comcast.net)
+18:37 crucify_me: sorry thanks for you help erisco  .. I hope you're not annoyed I am still getting used to ~   .  I do see how a ~ a -> a might have 'infinitely large' results anyway
+18:40 erisco: no, that is not analogous
+18:40 eacameron has left IRC (Remote host closed the connection)
+18:40 ianandrich has left IRC (Ping timeout: 258 seconds)
+18:40 erisco: the type required of  (+1)  by its application to  applyTimes times  is  b -> b
+18:40 blissdev has left IRC (Quit: Connection closed for inactivity)
+18:41 crucify_me:  yes got that last post  --  if I may tell you precisely where I lost track of your explanation erisco
+18:41 erisco: please do
+18:41 thc202 has left IRC (Ping timeout: 248 seconds)
+18:42 erisco: (`asTypeOf` id) f  says that f must have the same type as id
+18:42 erisco: so when I say  (+) `asTypeOf` id  it says that (+) must have the same type as id
+18:42 erisco: I am using id as an example of  b -> b
+18:43 erisco: the error caused by this is analogous to the error caused by your use of (+) with applyTimes
+18:44 crucify_me: I was following your posts pretty well, excitedly, until about here:
+18:44 crucify_me:  '  now we look at  b -> b ~ a -> a -> a  ' 
+18:45 crucify_me: I was following the logic of it a few posts beyond that
+18:45 erisco: applyTimes x :: (b -> b) -> b -> b  so whatever we apply to  applyTimes x  must have type  b -> b  for some choice of  b
+18:45 ianandrich has joined (~ianandric@c-73-223-61-224.hsd1.ca.comcast.net)
+18:46 erisco: we apply (+) to  applyTimes x  and so  (+) :: b -> b  
+18:46 erisco: but we also know  (+) :: a -> a -> a
+18:46 crucify_me: well one post beyond to here: this is the same as  b -> b ~ a -> (a -> a)
+18:46 lambdamu has joined (~lambdamu@p57AB3A26.dip0.t-ipconnect.de)
+18:46 erisco: so, GHC has to unify these types  b -> b  and  a -> a -> a
+18:46 crucify_me: yes I see that
+18:46 erisco: which is analogous to saying  b -> b ~ a -> a -> a
+18:47 crucify_me: so after the unification, we have an error
+18:47 crucify_me: even though it compiled
+18:47 erisco: no, it didn't compile
+18:47 crucify_me: I mean , after we input badly
+18:48 crucify_me: (+ !)
+18:48 crucify_me: 1
+18:48 erisco: a program must be well-typed to compile, no exceptions
+18:49 lambdamu_ has left IRC (Ping timeout: 258 seconds)
+18:49 erisco: programs that are not well-typed are fair to call "nonsense"
+18:49 crucify_me: right,  I meant that b -> b ~ a -> a -> a  is what caused the error, since that creates a bottom or infinite scenario
+18:49 erisco: bottom? no, that is a value and we are only talking about types here
+18:49 crucify_me: ok my bad...
+18:50 erisco: that constraint is unsatisfiable, so yes, that is the problem
+18:50 crucify_me: but I understand
+18:50 crucify_me: not the formal constraint, since we took that away here. you mean (b -> b)  ?
+18:51 erisco: where might I mean that?
+18:51 erisco: I have been writing things like  b -> b ~ a -> a -> a  to mean  (b -> b) ~ (a -> a -> a)
+18:51 erisco: maybe the precedence of ~ is higher than -> in Haskell, I dunno
+18:52 crucify_me: ok I get it. the operator is set up for two inputs, 1 and something else. The function (b -> b) only takes one input so of course we have a problem
+18:52 andyhoang has joined (~andyhoang@27.78.92.56)
+18:52 erisco: no, that is an erroneous reason
+18:53 ianandrich has left IRC (Ping timeout: 240 seconds)
+18:53 erisco: we can choose  b = a -> a  for example and then  (b -> b) ~ ((a -> a) -> a -> a)
+18:53 erisco: and  (a -> a) -> a -> a  we'd describe at taking two arguments
+18:53 erisco: though I do not describe things in such ways because it is just wrong
+18:55 conal has left IRC (Quit: Computer has gone to sleep.)
+18:58 erisco: this is an over-simplification that is often made in many Haskell discussions
+18:58 conal has joined (~conal@209.58.144.228)
+18:59 erisco: what is happening is we are trying to use our intuitions of uncurried functions to work with curried functions
+18:59 erisco: it is perfectly fine to say that  (a, b) -> c  takes two arguments, in the sense that (a, b) is a 2-tuple
+18:59 erisco: this is what we mean, analogously, in languages with uncurried functions
+19:00 ianandrich has joined (~ianandric@c-73-223-61-224.hsd1.ca.comcast.net)
+19:00 erisco: so, new people come to Haskell and we try to leverage their familiarities the best we can
+19:00 erisco: but saying that  a -> b -> c  takes two arguments is wrong
+19:00 erisco: yet, for the beginner it is a helpful crutch to get them going
+19:00 erisco: I am not decided on whether it is worth having them unlearn it later
+19:01 erisco: if you really want to understand Haskell, then you must build into your brain an understanding of curried functions
+19:01 crucify_me: ok in any case, when we unify (b -> b) and (a -> a -> a), we get (b -> b) ~ (a -> a -> a) which is 'not allowable'  because the unification produces a possible set of inputs that is infinitely large.      <please critique I'm reading your most recent posts
+19:03 erisco: (b -> b) ~ (a -> a -> a)  eventually gets to solving  a ~ (a -> a)  and I detailed why
+19:03 erisco: once we are at  a ~ (a -> a)  this is a classic infinite type example, and I explained why it is infinite
+19:04 AndiK has joined (~AndreasK@194-96-158-166.hdsl.highway.telekom.at)
+19:04 erisco: in short, if true, it says that 'a' is equal to a type larger than itself
+19:04 geekosaur has left IRC (Excess Flood)
+19:05 erisco: then, applying that truth over and over again, 'a' is equal to a type infinitely large
+19:06 crucify_me: that's interesting . This is the part of haskell  I really enjoy.
+19:06 erisco: the designers of Haskell were well aware of this problem and decided to disallow it
+19:06 hvr has left IRC (Ping timeout: 246 seconds)
+19:06 andyhoang has left IRC (Ping timeout: 248 seconds)
+19:07 marvin2 has left IRC (Ping timeout: 255 seconds)
+19:07 AndreasK has left IRC (Ping timeout: 258 seconds)
+19:07 crucify_me: I know its a simple idea, in the chat I get flustered but logically it seems easy
+19:07 AndiK is now known as AndreasK
+19:07 crucify_me: what exactly do you call this issue erisco so I can read about it?
+19:08 geekosaur has joined (allbery@dreamshell.ttuttle.net)
+19:17 crucify_me: thanks kindly please have patience . I really appreciate it. In person I think I would have gotten it very quickly if that's any consolation.
+19:17 crucify_me: erisco
+19:19 hvr has joined (~hvr@haskell/developer/hvr)
+19:22 takle has left IRC (Remote host closed the connection)
+19:31 malaclyps has joined (~malaclyps@unaffiliated/malaclyps)
+19:35 lightwave has joined (~lightwave@162.249.160.205)
