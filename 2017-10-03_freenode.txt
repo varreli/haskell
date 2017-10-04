@@ -134,17 +134,22 @@
 18:19 crucify_me: so the problem lies in passing (+ 1) to applyTimes
 18:19 erisco: newtype F a = F (F a -> F a)
 18:21 erisco: the problem with using (+) is it requires unifying 'a' with 'a -> a' which is impossible (or we can say "disallowed")
-18:22 erisco: :t (+) :: a -> a
-18:22 ianandrich has left IRC (Ping timeout: 260 seconds)
-18:22 lambdabot: error:
-18:22 lambdabot:     • Couldn't match type ‘a1’ with ‘a1 -> a1’
-18:22 lambdabot:       ‘a1’ is a rigid type variable bound by
-18:23 erisco: seems a differently worded error message happens here
-18:24 erisco: :t (+) `asTypeOf` id -- so lets use this instead
-18:24 lambdabot: error:
-18:24 lambdabot:     • Occurs check: cannot construct the infinite type: a ~ a -> a
-18:24 lambdabot:       Expected type: a -> a -> a
-18:24 crucify_me: one sec
+
+
+erisco: :t (+) :: a -> a
+
+lambdabot: error:
+lambdabot:     • Couldn't match type ‘a1’ with ‘a1 -> a1’
+lambdabot:       ‘a1’ is a rigid type variable bound by
+
+erisco: seems a differently worded error message happens here
+
+erisco: :t (+) `asTypeOf` id -- so lets use this instead
+
+lambdabot: error:
+lambdabot:     • Occurs check: cannot construct the infinite type: a ~ a -> a
+lambdabot:       Expected type: a -> a -> a
+
 18:25 erisco: (+1)  unifies with  b -> b  without issue, that is already its type (modulo a constraint)
 18:26 crucify_me: right that is just like identity  like id (+ 1)
 18:26 machinedgod has left IRC (Ping timeout: 240 seconds)
@@ -163,32 +168,26 @@
 18:40 blissdev has left IRC (Quit: Connection closed for inactivity)
 18:41 crucify_me:  yes got that last post  --  if I may tell you precisely where I lost track of your explanation erisco
 18:41 erisco: please do
-18:41 thc202 has left IRC (Ping timeout: 248 seconds)
+
 18:42 erisco: (`asTypeOf` id) f  says that f must have the same type as id
+
 18:42 erisco: so when I say  (+) `asTypeOf` id  it says that (+) must have the same type as id
+
 18:42 erisco: I am using id as an example of  b -> b
+
 18:43 erisco: the error caused by this is analogous to the error caused by your use of (+) with applyTimes
-18:44 crucify_me: I was following your posts pretty well, excitedly, until about here:
-18:44 crucify_me:  '  now we look at  b -> b ~ a -> a -> a  ' 
-18:45 crucify_me: I was following the logic of it a few posts beyond that
+
 18:45 erisco: applyTimes x :: (b -> b) -> b -> b  so whatever we apply to  applyTimes x  must have type  b -> b  for some choice of  b
-18:45 ianandrich has joined (~ianandric@c-73-223-61-224.hsd1.ca.comcast.net)
+
 18:46 erisco: we apply (+) to  applyTimes x  and so  (+) :: b -> b  
+
 18:46 erisco: but we also know  (+) :: a -> a -> a
-18:46 crucify_me: well one post beyond to here: this is the same as  b -> b ~ a -> (a -> a)
-18:46 lambdamu has joined (~lambdamu@p57AB3A26.dip0.t-ipconnect.de)
+
 18:46 erisco: so, GHC has to unify these types  b -> b  and  a -> a -> a
-18:46 crucify_me: yes I see that
+
 18:46 erisco: which is analogous to saying  b -> b ~ a -> a -> a
-18:47 crucify_me: so after the unification, we have an error
-18:47 crucify_me: even though it compiled
-18:47 erisco: no, it didn't compile
-18:47 crucify_me: I mean , after we input badly
-18:48 crucify_me: (+ !)
-18:48 crucify_me: 1
+
 18:48 erisco: a program must be well-typed to compile, no exceptions
-18:49 lambdamu_ has left IRC (Ping timeout: 258 seconds)
-18:49 erisco: programs that are not well-typed are fair to call "nonsense"
 18:49 crucify_me: right,  I meant that b -> b ~ a -> a -> a  is what caused the error, since that creates a bottom or infinite scenario
 18:49 erisco: bottom? no, that is a value and we are only talking about types here
 18:49 crucify_me: ok my bad...
