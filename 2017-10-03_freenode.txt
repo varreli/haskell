@@ -63,12 +63,7 @@
 17:50 erisco: which is wrong
 17:50 erisco: now, I have used Int here instead of a type variable to make it simpler to see
 17:51 erisco: (+) :: a -> a -> a  of course, ignoring constraints again
-17:51 crucify_me: ok now I see where you're going
-17:51 Gurkenglas has left IRC (Ping timeout: 248 seconds)
-17:52 erisco: replacing Int with a type variable again, you get to  a ~ a -> a
-17:53 crucify_me: so (+) doesn't agree with the signature. If (+) is abstracted in the incTimes, it stays in local scope .. is that true?
 17:53 erisco: which is what GHC is calling an infinite type, because if you try and find an 'a' to make both sides match, the type becomes infinite in size
-17:53 erisco: no
 17:53 erisco: incTimes is defined as  applyTimes times (+1) n
 17:53 erisco: (+) and (+1) are not the same thing
 17:55 crucify_me: when you say make both sides match, what exactly are you referring to?
@@ -76,15 +71,11 @@
 17:56 erisco: the only way to satisfy this constraint is by reflexivity
 17:56 erisco: and that means that the left and right side are exactly the same
 17:56 erisco: for example, Int ~ Int is satisfiable, because reflexivity says  a ~ a  for all choices of 'a'
-17:57 crucify_me: I'm partially there
-17:57 twopoint718 has left IRC (Quit: My MacBook Air has gone to sleep. ZZZzzz…)
 17:58 erisco: well,  a ~ a -> a  is not exactly the same on both sides
 17:58 erisco: but 'a' is a variable, so GHC tries to find some substitution for 'a' which makes both sides equal
-17:58 crucify_me: I only recently learned the ~ notation  ..
 17:58 erisco: for example, if the problem is  Maybe Int ~ f a  then GHC will choose  f = Maybe  and  a = Int
 17:58 erisco: because  Maybe Int ~ Maybe Int
 17:59 erisco: so, with  a ~ a -> a  GHC tries to find a substitution for 'a'
-18:00 crucify_me: confused, very sorry
 18:00 erisco: okay, if I said  5 = x  and asked you to solve for x, what would you tell me?
 18:01 crucify_me: that is the solution
 18:02 erisco: the solution is 5
@@ -158,16 +149,9 @@ lambdabot:       Expected type: a -> a -> a
 18:27 conal has joined (~conal@209.58.144.228)
 18:30 crucify_me: Is that incorrect ?   ^
 18:30 crucify_me: I didn't get the bit about modulo a constraint
-18:33 twopoint718 has left IRC (Quit: My MacBook Air has gone to sleep. ZZZzzz…)
-18:36 ianandrich has joined (~ianandric@c-73-223-61-224.hsd1.ca.comcast.net)
 18:37 crucify_me: sorry thanks for you help erisco  .. I hope you're not annoyed I am still getting used to ~   .  I do see how a ~ a -> a might have 'infinitely large' results anyway
 18:40 erisco: no, that is not analogous
-18:40 eacameron has left IRC (Remote host closed the connection)
-18:40 ianandrich has left IRC (Ping timeout: 258 seconds)
 18:40 erisco: the type required of  (+1)  by its application to  applyTimes times  is  b -> b
-18:40 blissdev has left IRC (Quit: Connection closed for inactivity)
-18:41 crucify_me:  yes got that last post  --  if I may tell you precisely where I lost track of your explanation erisco
-18:41 erisco: please do
 
 18:42 erisco: (`asTypeOf` id) f  says that f must have the same type as id
 
@@ -188,54 +172,28 @@ lambdabot:       Expected type: a -> a -> a
 18:46 erisco: which is analogous to saying  b -> b ~ a -> a -> a
 
 18:48 erisco: a program must be well-typed to compile, no exceptions
-18:49 crucify_me: right,  I meant that b -> b ~ a -> a -> a  is what caused the error, since that creates a bottom or infinite scenario
-18:49 erisco: bottom? no, that is a value and we are only talking about types here
-18:49 crucify_me: ok my bad...
 18:50 erisco: that constraint is unsatisfiable, so yes, that is the problem
-18:50 crucify_me: but I understand
-18:50 crucify_me: not the formal constraint, since we took that away here. you mean (b -> b)  ?
-18:51 erisco: where might I mean that?
 18:51 erisco: I have been writing things like  b -> b ~ a -> a -> a  to mean  (b -> b) ~ (a -> a -> a)
 18:51 erisco: maybe the precedence of ~ is higher than -> in Haskell, I dunno
-18:52 crucify_me: ok I get it. the operator is set up for two inputs, 1 and something else. The function (b -> b) only takes one input so of course we have a problem
-18:52 andyhoang has joined (~andyhoang@27.78.92.56)
-18:52 erisco: no, that is an erroneous reason
-18:53 ianandrich has left IRC (Ping timeout: 240 seconds)
 18:53 erisco: we can choose  b = a -> a  for example and then  (b -> b) ~ ((a -> a) -> a -> a)
 18:53 erisco: and  (a -> a) -> a -> a  we'd describe at taking two arguments
 18:53 erisco: though I do not describe things in such ways because it is just wrong
-18:55 conal has left IRC (Quit: Computer has gone to sleep.)
 18:58 erisco: this is an over-simplification that is often made in many Haskell discussions
-18:58 conal has joined (~conal@209.58.144.228)
 18:59 erisco: what is happening is we are trying to use our intuitions of uncurried functions to work with curried functions
 18:59 erisco: it is perfectly fine to say that  (a, b) -> c  takes two arguments, in the sense that (a, b) is a 2-tuple
 18:59 erisco: this is what we mean, analogously, in languages with uncurried functions
-19:00 ianandrich has joined (~ianandric@c-73-223-61-224.hsd1.ca.comcast.net)
 19:00 erisco: so, new people come to Haskell and we try to leverage their familiarities the best we can
 19:00 erisco: but saying that  a -> b -> c  takes two arguments is wrong
 19:00 erisco: yet, for the beginner it is a helpful crutch to get them going
 19:00 erisco: I am not decided on whether it is worth having them unlearn it later
 19:01 erisco: if you really want to understand Haskell, then you must build into your brain an understanding of curried functions
-19:01 crucify_me: ok in any case, when we unify (b -> b) and (a -> a -> a), we get (b -> b) ~ (a -> a -> a) which is 'not allowable'  because the unification produces a possible set of inputs that is infinitely large.      <please critique I'm reading your most recent posts
 19:03 erisco: (b -> b) ~ (a -> a -> a)  eventually gets to solving  a ~ (a -> a)  and I detailed why
 19:03 erisco: once we are at  a ~ (a -> a)  this is a classic infinite type example, and I explained why it is infinite
-19:04 AndiK has joined (~AndreasK@194-96-158-166.hdsl.highway.telekom.at)
 19:04 erisco: in short, if true, it says that 'a' is equal to a type larger than itself
-19:04 geekosaur has left IRC (Excess Flood)
 19:05 erisco: then, applying that truth over and over again, 'a' is equal to a type infinitely large
 19:06 crucify_me: that's interesting . This is the part of haskell  I really enjoy.
 19:06 erisco: the designers of Haskell were well aware of this problem and decided to disallow it
-19:06 hvr has left IRC (Ping timeout: 246 seconds)
-19:06 andyhoang has left IRC (Ping timeout: 248 seconds)
-19:07 marvin2 has left IRC (Ping timeout: 255 seconds)
-19:07 AndreasK has left IRC (Ping timeout: 258 seconds)
-19:07 crucify_me: I know its a simple idea, in the chat I get flustered but logically it seems easy
-19:07 AndiK is now known as AndreasK
-19:07 crucify_me: what exactly do you call this issue erisco so I can read about it?
-19:08 geekosaur has joined (allbery@dreamshell.ttuttle.net)
-19:17 crucify_me: thanks kindly please have patience . I really appreciate it. In person I think I would have gotten it very quickly if that's any consolation.
-19:17 crucify_me: erisco
-19:19 hvr has joined (~hvr@haskell/developer/hvr)
-19:22 takle has left IRC (Remote host closed the connection)
-19:31 malaclyps has joined (~malaclyps@unaffiliated/malaclyps)
-19:35 lightwave has joined (~lightwave@162.249.160.205)
+
+In "a ~ [a]" there is no "->"
+Similarly, "d ~ d->d" would not mean "...[[[d]]]..." 
+because in "d ~ d->d" there is no "[]".
