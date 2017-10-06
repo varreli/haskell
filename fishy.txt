@@ -1,0 +1,546 @@
+14:58 You have joined the channel
+14:58 crucify_me has joined (~n_blownap@128.32.176.159)
+14:58 Topic: https://www.haskell.org | https://wiki.haskell.org/IRC_channel | Paste code/errors: http://lpaste.net/new/haskell | Logs: http://tunes.org/~nef/logs/haskell/?C=M;O=D | https://www.reddit.com/r/haskell | Admin: #haskell-ops | Offtopic: #haskell-offtopic | https://downloads.haskell.org | https://summer.haskell.org Summer of Haskell 2017
+14:58 mauke set the topic at: Jul 31, 2017, 5:45 AM
+14:58 Mode: +CLnptz
+14:58 Created at: Nov 25, 2006, 10:42 PM
+14:59 medicijnman has joined (~methos@5ED27E76.cm-7-3b.dynamic.ziggo.nl)
+15:00 xcmw has joined (~textual@cpe-98-28-136-79.cinci.res.rr.com)
+15:01 shloub has left IRC (Quit: Leaving)
+15:01 juanpauc_ has joined (~juanpauca@host-186-101-150-143.netlife.ec)
+15:01 crucify_me: hi yesterday I had an excellent chat with 'member' re: the attempts of ghci to unify a bad input . I studied the log after missing plenty during the chat, and would like to ask specific questions. there are line numbers. http://lpaste.net/7044319382796763136      anyone care to? 
+15:02 Itkovian has left IRC (Quit: My MacBook has gone to sleep. ZZZzzz…)
+15:02 yogo has joined (4f3497f3@gateway/web/freenode/ip.79.52.151.243)
+15:02 crucify_me: ^ transcript of log
+15:02 nicknight has left ("WeeChat 0.4.2")
+15:02 crucify_me: the program is here https://ptpb.pw/jF2A
+15:03 Itkovian has joined (~Itkovian@vpna039.ugent.be)
+15:03 crucify_me: my questions begin around lines 40 - 50
+15:04 fishythe_: go ahead and ask
+15:04 yogo: > unsafeCoerce "yo" :: Maybe Int
+15:04 lambdabot:  error:
+15:04 lambdabot:      Variable not in scope: unsafeCoerce :: [Char] -> Maybe Int
+15:04 fishythe_: usually better just to ask questions and see who responds ;)
+15:05 juanpaucar has left IRC (Ping timeout: 240 seconds)
+15:05 yogo: > coerce "yo" :: Maybe Int
+15:05 lambdabot:  error:
+15:05 lambdabot:      • Variable not in scope: coerce :: [Char] -> Maybe Int
+15:05 lambdabot:      • Perhaps you meant ‘coerced’ (imported from Control.Lens)
+15:05 Guest26 has left IRC (Quit: My MacBook has gone to sleep. ZZZzzz…)
+15:05 qih: I admire crucify_me stalkerish use of chat logs for technical learning +1
+15:06 sigmundv has left IRC (Quit: ZNC 1.6.5 - http://znc.in)
+15:06 crucify_me: yeah its sensitive because the member was super helpful and intelligent, their remarks were a bit over my head but I was sort of getting it. 
+15:06 Xion_ has joined (~xion@host109-148-117-160.range109-148.btcentralplus.com)
+15:06 shae has joined (~user@96-67-126-34-static.hfc.comcastbusiness.net)
+15:06 fishythe_: yogo: lambdabot doesn't have all functions imported. you can also message lambdabot directly instead of in #haskell
+15:06 crucify_me: qih: pardon?
+15:07 iAmerika1 has joined (~dwshrewt@unaffiliated/iamerikan)
+15:07 sepp2k has left IRC (Quit: Leaving.)
+15:07 ebsen has left IRC (Quit: My MacBook has gone to sleep. ZZZzzz…)
+15:07 quazimodo has joined (~quazimodo@155.143.14.28)
+15:08 dkov has joined (~dkov@84-114-31-82.cable.dynamic.surfer.at)
+15:08 crucify_me: fishythe_: thank you. the first thing re: 'says' on line 49
+15:08 fishythe_: mhm
+15:08 crucify_me: that means 'would be b -> b if it were correct, right?
+15:09 fishythe_: kind of
+15:09 qih: crucify_me: No offence intended, good use of chat logs.
+15:09 tgeeky has left IRC (Quit: tgeeky)
+15:09 fishythe_: the full type of applyTimes is a -> (b -> b) -> b -> b
+15:09 medicijnman has left IRC (Quit: Leaving.)
+15:09 crucify_me: yeah because it was awesome I just couldn't keep up qih :)
+15:09 crucify_me: fishythe_: yes
+15:09 jollygood2 has joined (~bc815836@h27.47.138.40.static.ip.windstream.net)
+15:09 fishythe_: line 49 is just saying that supplying the arguments 5 and (+) fills the a and (b -> b) positions
+15:10 tnecniv has left IRC (Quit: My MacBook has gone to sleep. ZZZzzz…)
+15:10 crucify_me: right
+15:10 yogo has left ()
+15:10 mortum5 has left IRC (Ping timeout: 255 seconds)
+15:10 fishythe_: in particular, it means that 5 :: a and (+) :: b -> b
+15:11 crucify_me: but it 'fills' them theoretically since it would need to be a -> a -> a
+15:11 balac has left IRC (Ping timeout: 260 seconds)
+15:11 crucify_me: (b -> b) would need to be ^
+15:11 crucify_me: so I realize its wrong. the chat goes on to explain it in logic using id
+15:11 fishythe_: right, that's the unification going badly
+15:12 beanbagula has left IRC (Ping timeout: 255 seconds)
+15:12 pimlu has joined (~pimlu@128.172.245.41)
+15:12 fishythe_: however, that's from the human point of view
+15:12 Guest26 has joined (~textual@104.193.14.42)
+15:12 fishythe_: you can immediately see that (+) won't fit
+15:13 fishythe_: the procedure that member explains is a more systematic method
+15:13 fishythe_: you just try to solve for b and see where you get stuck
+15:14 fishythe_: assume we specialize to (+) :: Int -> Int -> Int
+15:14 fishythe_: recall that this is the same as Int -> (Int -> Int)
+15:14 fishythe_: if this is the same as b -> b, then we must simultaneously have b ~ Int and b ~ Int -> Int
+15:14 fishythe_: by transitivity, Int ~ Int -> Int, and this is clearly false
+15:15 mson has joined (uid110608@gateway/web/irccloud.com/x-qhhkthwbyeetynic)
+15:15 crucify_me: ok this is where I lost member yesterday. one moment pls
+15:15 crucify_me: note, I just learned ~   so I don't know it very well
+15:15 fishythe_: just think of ~ as type equality here
+15:15 Xion_ has left IRC (Ping timeout: 248 seconds)
+15:16 crucify_me: fishythe_: thanks, give me a minute to form my next question
+15:16 EvanR: and Int ~ Int -> Int is clearly false because
+15:16 hackebeilchen has left IRC (Read error: Connection reset by peer)
+15:16 crucify_me: please look at line 49,50
+15:17 crucify_me: b -> b   ..  
+15:18 pimlu has left IRC (Ping timeout: 240 seconds)
+15:18 ebsen has joined (~ebsene@96-2-74-147-dynamic.midco.net)
+15:19 holuyob has joined (4f3497f3@gateway/web/freenode/ip.79.52.151.243)
+15:19 fishythe_: EvanR: hm?
+15:19 fishythe_ is now known as fishythefish
+15:19 juanpauc_ has left IRC (Read error: Connection reset by peer)
+15:19 quazimodo has left IRC (Ping timeout: 248 seconds)
+15:21 mattyw has left IRC (Quit: Leaving)
+15:21 holuyob has left IRC (Client Quit)
+15:21 fishythefish: crucify_me: what about those lines?
+15:21 crucify_me: ok I 'd like to see logically why this is wrong : b -> b ~ a -> a -> a    I do understand  ...
+15:22 fishythefish: so that's the next step. rather than taking (+) to be Int -> Int -> Int, let's generalize and allow a -> a -> a
+15:22 fishythefish: :t (+)
+15:22 lambdabot: Num a => a -> a -> a
+15:22 crucify_me: that the program compiles because it thinks (+ 1) is a -> a   OR   in this case b -> b
+15:22 fishythefish: we're just ignoring the Num constraint
+15:22 augur has joined (~augur@108-233-87-134.lightspeed.sntcca.sbcglobal.net)
+15:23 crucify_me: :t (+ 1)
+15:23 lambdabot: Num a => a -> a
+15:23 fishythefish: right, in the (+1) case, it unification succeeds because we can unify a -> a with b -> b via a ~ b
+15:23 crucify_me: so a -> a here fits (b -> b) in the signature
+15:23 Itkovian has left IRC (Quit: My MacBook has gone to sleep. ZZZzzz…)
+15:23 crucify_me: right yes that itself is a unification
+15:23 shangxiao has joined (~shangxiao@202.161.22.78)
+15:23 cpup has joined (~cpup@32.218.118.169)
+15:24 systemfault has joined (~rcyr@unaffiliated/rcyr)
+15:24 augur_ has joined (~augur@noisebridge130.static.monkeybrains.net)
+15:24 fishythefish: in the case of (+), we're trying to solve a -> a -> a ~ b -> b
+15:25 fishythefish: remember that a -> a -> a is the same as a -> (a -> a)
+15:25 crucify_me: so at least I understand the conflict. 
+15:25 lkolstad has left IRC (Ping timeout: 240 seconds)
+15:25 pfurla has left IRC (Quit: My MacBook Pro has gone to sleep. ZZZzzz…)
+15:25 fishythefish: so we end up with a ~ b and a -> a ~ b
+15:25 iqubic has joined (1811e538@gateway/web/freenode/ip.24.17.229.56)
+15:25 fishythefish: by transitivity, a ~ a -> a
+15:25 crucify_me: hold on in the case of (+)  ?
+15:26 fishythefish: yup, remember we're trying to unify the type of the function you supply with b -> b
+15:26 JeanCarloMachado has joined (~jean@186.222.6.65)
+15:26 fishythefish: for (+1), the type was a -> a
+15:26 lkolstad has joined (~ljk@c-24-16-12-195.hsd1.wa.comcast.net)
+15:26 fishythefish: for (+), it's a -> a -> a
+15:26 iqubic: What problem are we trying to tackle?
+15:27 iAmerika1 has left IRC (Quit: WeeChat 1.5)
+15:27 crucify_me: http://lpaste.net/7044319382796763136
+15:27 wraithm has left IRC (Quit: My MacBook has gone to sleep. ZZZzzz…)
+15:27 augur has left IRC (Ping timeout: 258 seconds)
+15:27 crucify_me: iqubic: 
+15:27 iqubic: Yes, crucify_me?
+15:28 crucify_me: the problem is in that paste
+15:28 crucify_me: its a chat log
+15:28 crucify_me: one moment fishythefish really appreciate it
+15:28 augur_ has left IRC (Ping timeout: 240 seconds)
+15:28 BaNzoun3t has left IRC (Ping timeout: 248 seconds)
+15:29 iqubic: Can you summarize that for me. Just give me the TL;DR version.
+15:29 yellowj has joined (~yellowj@epm56.neoplus.adsl.tpnet.pl)
+15:29 fishythefish: tl;dr: why can't I supply (+) as an argument of type b -> b?
+15:29 Volt_ has left IRC (Ping timeout: 260 seconds)
+15:29 iqubic: Oh, I see.
+15:29 hiratara has left IRC (Quit: ZNC - http://znc.in)
+15:30 crucify_me: so in this case we are supplying (+1)
+15:30 shangxiao has left IRC (Ping timeout: 240 seconds)
+15:30 iqubic: :t (+1)
+15:30 lambdabot: Num a => a -> a
+15:30 iqubic: :t let f n = (+ n) in f n
+15:30 lambdabot: Expr -> Expr
+15:30 iqubic: Why is that the type?
+15:31 myk267 has left IRC (Quit: Leaving)
+15:31 hiratara has joined (~hiratara@240f:7:4708:1:8d18:5842:df0:2888)
+15:31 hpc: :t n
+15:31 lambdabot: Expr
+15:31 crucify_me: oh boy
+15:31 EvanR: + has two args, b -> b has 1 (simplistic explanation)
+15:31 iqubic: I see.
+15:32 fishythefish: crucify_me: ignore the lambdabot nonsense for now. EvanR's explanation is the important point here
+15:32 fishythefish: though it might not line up with GHC's error message
+15:32 serendependy has left IRC (Ping timeout: 258 seconds)
+15:32 Denommus has left IRC (Quit: going home)
+15:33 iqubic: I was trying to find out the type of "f n = (+) n"
+15:33 hpc: :t let f n = (+ n) in f
+15:33 lambdabot: Num a => a -> a -> a
+15:33 dkov has left IRC (Quit: dkov)
+15:33 sigmundv has joined (~sigmundv@178.62.72.87)
+15:33 iqubic: Yes, that is what I wanted.
+15:34 crucify_me: I do understand EvanR 's post  , thanks. but if you would look at member's irc posts, they go into an interesting explanation that I'd like to fully understand
+15:34 fishythefish: yup, and i've basically been rehashing what member said
+15:34 path[l] has left IRC (Quit: path[l])
+15:35 Tuplanolla: There is a solution to finding an isomorphism between `a -> a` and `b -> b -> b`, but it's a boring one, crucify_me.
+15:35 iqubic: Tuplanolla: What is the solution?
+15:35 sigmundv has left IRC (Client Quit)
+15:36 Tuplanolla: Let `b` be `()` and use the identity of exponentiation, iqubic.
+15:36 forgottenone has left IRC (Quit: Konversation terminated!)
+15:36 iqubic: Oh
+15:36 ebsen has left IRC (Quit: My MacBook has gone to sleep. ZZZzzz…)
+15:36 iqubic: a -> a ~ () -> b -> b?
+15:37 crucify_me: b -> b ~ a -> a -> a is the same as b -> b ~ a -> (a -> a)    << this is where I lost the thread yesterday
+15:37 ski: thought fishythefish meant abstract `a' and `b' ?
+15:37 crucify_me: ok sorry I cannot keep up here
+15:37 ski: crucify_me : `A -> B -> C' is short for `A -> (B -> C)'
+15:37 fishythefish: crucify_me: #haskell isn't known for great pedagogy
+15:37 fishythefish: ski is on the same page as me
+15:37 coot____________ has left IRC (Quit: coot____________)
+15:37 fishythefish: everyone else is supplying technically-correct information which probably isn't useful to you
+15:37 Tuplanolla: Rather `() -> ()` and `() -> () -> ()`, iqubic.
+15:38 fishythefish: feel free to private message me at any point
+15:38 iqubic: That's boring alright. 
+15:38 ski: crucify_me : an equation `A -> B  =  X -> Y' can be simplified to the two equations (simultaneous equation system) `A = X' and `B = Y'
+15:38 Tuplanolla: You can ignore my aside, crucify_me.
+15:39 ski: (i prefer writing `=' to `~')
+15:40 fishythefish: (me too, honestly. i just wanna keep consistent notation)
+15:40 lkolstad has left IRC (Ping timeout: 248 seconds)
+15:40 iqubic: ski: however, you are fine using a backtick and an apostrophe  at the same time?
+15:41 fishythefish: iqubic: welcome to \LaTeX
+15:41 iqubic: I don't LaTeX
+15:41 sigmundv has joined (~sigmundv@178.62.72.87)
+15:41 connrs has left IRC (Ping timeout: 240 seconds)
+15:42 filthy_causual2_ has left IRC (Quit: Connection closed for inactivity)
+15:42 d6e has left IRC (Quit: WeeChat 1.9.1)
+15:42 crucify_me: chat lines 158 -165      this is what I'd like to discuss if anyone has time
+15:43 alex`` has left IRC (Ping timeout: 246 seconds)
+15:43 crucify_me: http://lpaste.net/7044319382796763136
+15:43 emilypi has joined (~emilypi@12.11.109.225)
+15:43 lkolstad has joined (~ljk@c-24-16-12-195.hsd1.wa.comcast.net)
+15:44 fishythefish: sure
+15:44 crucify_me: for starters anyway :)
+15:44 dan_f has joined (~dan@24.148.32.207)
+15:44 crucify_me: so this is wrong b -> b ~ a -> (a -> a)
+15:45 Shatnerz has joined (~Shatnerz@2601:151:c302:ed90:9fd:1340:d8de:19cc)
+15:45 iqubic: Correct.
+15:45 tnecniv has joined (~textual@unaffiliated/jimihendrix)
+15:45 sigmundv has left IRC (Client Quit)
+15:45 desperek has left IRC (Read error: Connection reset by peer)
+15:46 crucify_me: we cannot unify these because of an infinite set of values, ie , I believe , a ~ a -> a means that a -> a is bigger than a
+15:46 Enigmagic has left IRC (Quit: https://lice.muppetz.com)
+15:47 crucify_me: so in   a ~ a -> a     ,     a -> a is bigger than a . meaning the input set is bigger than itself. 
+15:47 tnecniv has left IRC (Client Quit)
+15:47 fishythefish: mmm, I wouldn't bother introducing values here
+15:47 fishythefish: just look what happens when you try to find a closed form for a:
+15:47 fishythefish: a = a -> a = (a -> a) -> (a -> a) = ...
+15:47 fishythefish: the type itself is infinite
+15:48 tnecniv has joined (~textual@unaffiliated/jimihendrix)
+15:48 stoopkid__ has joined (uid137696@gateway/web/irccloud.com/x-xpohalqepeouvynl)
+15:49 augur has joined (~augur@noisebridge130.static.monkeybrains.net)
+15:49 crucify_me: so what comes after b -> b -> a -> (a -> a)    , logically ?
+15:49 fishythefish: do you mean b -> b ~ a -> (a -> a)?
+15:49 crucify_me: correction, yes : so what comes after b -> b ~ a -> (a -> a)    , logically ?
+15:50 fishythefish: we can deconstruct that into the two simultaneous equations b ~ a and b ~ (a -> a)
+15:50 crucify_me: right, so there is our problem
+15:50 Enigmagic has joined (~enigmo@unaffiliated/enigmagic)
+15:50 shangxiao has joined (~shangxiao@202.161.22.78)
+15:50 augur_ has joined (~augur@noisebridge130.static.monkeybrains.net)
+15:50 crucify_me: so the problem can be written like this
+15:50 crucify_me: :
+15:51 crobbins has left IRC (Remote host closed the connection)
+15:51 crucify_me: um
+15:52 crucify_me: sorry, I lost my train of thought
+15:52 Deidde has left IRC (Quit: Seeee yaaaa)
+15:52 fishythefish: no worries
+15:52 Achylles has joined (~Achylles@152.254.242.58)
+15:52 fishythefish: continuing, we can apply transitivity to get a ~ (a -> a)
+15:52 crucify_me: back to lines 158-162 @
+15:52 tnecniv has left IRC (Read error: Connection reset by peer)
+15:53 fishythefish: sure
+15:53 augur has left IRC (Ping timeout: 240 seconds)
+15:53 crucify_me: right ok so its transitive fishythefish
+15:54 crucify_me: so a ~ (a -> a)
+15:54 crucify_me: that itself results in an infinite ... what?
+15:54 fishythefish: type
+15:54 fishythefish: a is an infinite type
+15:54 crucify_me: ok if we could discuss that 
+15:54 crucify_me: so the program is looking for (b -> b)
+15:54 t7 has left IRC (Remote host closed the connection)
+15:54 augur_ has left IRC (Ping timeout: 248 seconds)
+15:55 fishythefish: yup
+15:55 crucify_me: after an attempt to unify, ghc
+15:55 crucify_me: ...
+15:55 RGamma has left IRC (Ping timeout: 240 seconds)
+15:55 crucify_me: gives us the false unification
+15:55 connrs has joined (~connrs@conners.plus.com)
+15:55 Lord_of_Life has joined (Elite12246@gateway/shell/elitebnc/x-gknpvzexrwludncr)
+15:55 fishythefish: i wouldn't call this a false unification
+15:56 fishythefish: the unification fails, actually, because we can't have infinite types
+15:56 Darwin226 has left IRC (Quit: Page closed)
+15:56 fishythefish: basically, in its effort to unify a -> a -> a with b -> b, the typechecker concludes that a ~ (a -> a)
+15:56 crucify_me: ok yeah I knew that was off
+15:56 fishythefish: since such a type a is disallowed, we can conclude that a -> a -> a cannot be unified with b -> b
+15:56 iqubic has left IRC (Ping timeout: 260 seconds)
+15:57 crucify_me: ok thank you so ... 
+15:57 inhortte has left IRC (Remote host closed the connection)
+15:57 crucify_me: how does a ~ (a -> a) represent a set that is infinitely large, and larger than a itself?
+15:58 crucify_me: I merely don't understand the notation fully
+15:58 fishythefish: ah, i think i see the misunderstanding
+15:58 fishythefish: an infinite type doesn't mean that its underlying set of values is infinite
+15:58 hpc: it's not that the type has infinite members
+15:58 fishythefish: Integer is an "infinite type" in that sense
+15:58 hpc: it's that to write the type you need infinite ink
+15:58 fishythefish: what hpc said :)
+15:58 crucify_me: nice !
+15:58 hpc: Integer is a good example of a type that has infinite members
+15:58 ertes has joined (~ertes@haskell/developer/ertes)
+15:58 eacameron has left IRC (Read error: Connection reset by peer)
+15:58 crucify_me: ok got that hpc  thanks ...
+15:59 fishythefish: crucify_me: if a ~ (a -> a) seems confusing, consider trying to solve a ~ [a]
+15:59 eacameron has joined (~eacameron@cpe-74-137-151-17.kya.res.rr.com)
+15:59 fishythefish: a ~ [a] ~ [[a]] ~ [[[a]]] ~ ...
+15:59 fishythefish: i.e. a would be the type of infinitely nested lists
+15:59 crucify_me: so just symbolically, we are 'relating' a with a -> a   ..     ok that is helpful fishythefish  one sec
+16:00 connrs has left IRC (Ping timeout: 248 seconds)
+16:01 nighty-- has left IRC (Quit: Disappears in a puff of smoke)
+16:01 crucify_me: so if you see a ~ a -> a   , you instantly know its wrong
+16:01 fishythefish: yup
+16:01 fishythefish: ~ isn't just any relation, it's really type equality
+16:01 fizbin has left IRC (Quit: Leaving.)
+16:01 fishythefish: i.e. a ~ b means that you should be able to substitute b for a and vice versa
+16:01 hpc: for extra credit, you can write something resembling a type quality constraint using ordinary data types
+16:01 Gurkenglas has left IRC (Ping timeout: 248 seconds)
+16:01 hpc: the constraint (a ~ a) can be written as data Identity a = a
+16:02 fishythefish: if we have a ~ (a -> a), then we should always be able to substitute a -> a for a
+16:02 cdg_ has joined (~cdg@c-69-94-206-50.hs.gigamonster.net)
+16:02 fishythefish: but doing that repeatedly in its own definition results in an infinite expression
+16:02 crucify_me: ok so a ~ [a]  tells you that nesting is involved. 
+16:02 crucify_me: how?
+16:02 hpc: and the constraint (a ~ (a -> a)) can be written as data Whatever a = Something (Whatever a -> Whatever a)
+16:03 crucify_me: ok so a = [a]   which is false
+16:03 fishythefish: a ~ [a] is disallowed for the same reason a ~ (a -> a) is
+16:03 ski: . o O ( occurs-check )
+16:03 ski: hpc : warning : `a' is unused
+16:03 hpc: usually this is used to express (a ~ f a), for certain interesting classes of f
+16:04 crucify_me: so if a \= [a]  how would that imply nesting  ? I don't see that.
+16:04 hpc: ski: eh?
+16:04 ski: hpc : similar to `foo x = foo x ++ foo x'. `x' is only passed to recursive calls, never actually used
+16:04 fishythefish: crucify_me: not sure what you mean by "imply", but here is why a ~ [a] is problematic
+16:04 fishythefish: suppose you have something of type a
+16:05 hpc: ski: oh, that it is
+16:05 shae has left IRC (Ping timeout: 248 seconds)
+16:05 fishythefish: since a ~ [a], it also has type [a]
+16:05 fishythefish: but that means it also has type [[a]] since we can substitute once more
+16:05 crucify_me: ok got that
+16:05 fishythefish: we can continue this substitution infinitely
+16:05 cdg has left IRC (Ping timeout: 248 seconds)
+16:05 twandy has left IRC (Ping timeout: 248 seconds)
+16:05 hpc: ski: phantom type parameter for illustrative purposes only ;)
+16:05 soniku has left IRC (Remote host closed the connection)
+16:06 soniku has joined (~soniku@S01061cabc0a5aeb3.ed.shawcable.net)
+16:06 fishythefish: in general, unification of a type variable a with any structure containing a will fail
+16:06 fishythefish: this is known as the "occurs check"
+16:06 crucify_me: ok now we're getting there. please bear with me.
+16:06 hpc: oh, i just got why it's called that
+16:07 hpc: (a ~ b) fails if a /occurs/ in b
+16:07 fishythefish: hpc: yup :)
+16:07 ski: @type let x = In [x] in x
+16:07 lambdabot: Mu []
+16:07 fishythefish: the trivial a ~ a notwithstanding
+16:07 ski: > let x = In [x] in x
+16:07 lambdabot:  In [In [In [In [In [In [In [In [In [In [In [In [In [In [In [In [In [In [In [...
+16:07 hpc: @src Mu
+16:07 lambdabot: newtype Mu f = In { out :: f (Mu f) }
+16:08 ski: (if you ignore the `In's, that is what a value of type `[[[[...]]]]', resulting from `a = [a]', could look like)
+16:08 beanbagula has joined (~bean_bag@2a00:23c5:4b04:9200:5c05:f1c1:6000:6316)
+16:08 Zialus has left IRC (Quit: i'm out!)
+16:08 crucify_me: "unification of a type variable a with any structure containing a will fail"
+16:08 ski: > In []
+16:08 lambdabot:  In []
+16:08 hpc: learning to ignore data constructors when convenient is a useful thing to train your eyes for
+16:08 crucify_me: ok I'm focusing on that. I need to powder my nose one moment
+16:08 tnecniv has joined (~textual@unaffiliated/jimihendrix)
+16:08 BaNzoun3t has joined (~alex@82-132-216-50.dab.02.net)
+16:11 crobbins has joined (~crobbins@2602:30a:c08e:19e0:9d90:6296:ce0:7ba1)
+16:12 Zialus has joined (~RMF@174.203.60.94.rev.vodafone.pt)
+16:12 beanbagula has left IRC (Ping timeout: 240 seconds)
+16:12 crucify_me: ski what's that In   you're using
+16:12 crucify_me: ?
+16:12 hpc: it's the data constructor for the Mu type
+16:12 ski: data constructor of `Mu', see above
+16:12 hpc: @src Mu
+16:12 lambdabot: newtype Mu f = In { out :: f (Mu f) }
+16:13 pera has left IRC (Quit: leaving)
+16:13 fishythefish: f-algebras and fixed points, always a fun topic :)
+16:13 ski: a simpler version of the same would be
+16:13 crucify_me: fishythefish:     ...
+16:13 ski:   newtype Mu f = In (f (Mu f))
+16:13 crucify_me: so looking at a ~ [a]  and   a ~ (a -> a)
+16:13 ski: proposes we change the subject to `g'-algebras instead
+16:14 crucify_me: the (a -> a) is a function right?
+16:14 ski: no, it's a function type
+16:14 fishythefish: ski: class Gunctor g where ...
+16:14 fishythefish: function type
+16:14 ski: smiles
+16:14 emilypi has left IRC (Read error: Connection reset by peer)
+16:14 crucify_me: right it is a function that takes one input
+16:14 ski: no
+16:14 ski: it's a type
+16:14 fishythefish: the type of a function
+16:14 hpc: ski: no no no, you run F algebra on a G machine
+16:14 fishythefish: a function would be a value of that type
+16:14 ski: the type of functions which take an input of type `a', and return a result of type `a'
+16:14 crucify_me: right ok yes I'm with that
+16:15 crucify_me: so its a structure so to speak in the way that [] is a structure
+16:15 WorldControl has left IRC (Remote host closed the connection)
+16:15 crucify_me: or [a]
+16:15 ski: hpc : oh, but if i happen to have an H machine, what will you do then ? huh ?
+16:16 fishythefish: yeah, by "structure", I just mean "type"
+16:16 fishythefish: a -> a is a type containing a, as is [a]
+16:16 crucify_me: ok, bear with me thanks!    .....
+16:16 hpc: ski: it has to be named something different
+16:16 hpc: like... preparation h :P
+16:16 ski: (no, not the preparations !)
+16:16 fishythefish: shifts uncomfortably
+16:17 ski: controls shiftedly
+16:17 crucify_me: << gets firm pillow
+16:17 hpc: alts superlatively
+16:17 fishythefish: verbs adverbially
+16:17 crucify_me: how do you do the bullet thing?
+16:17 hpc: this is getting pretty noun
+16:17 ski: resets back to the prompt, restarts the condition
+16:17 fishythefish: slash me crucify_me 
+16:18 ski: promptly slashes fishythefish
+16:18 crucify_me: wha?
+16:18 fishythefish: can't unify ski ~ crucify_me 
+16:18 okuu has joined (~pyon@unaffiliated/pyon)
+16:18 fishythefish: (perhaps we should get back to types)
+16:19 moet has joined (~moet@d-173-44-92-193.cpe.metrocast.net)
+16:19 ski: .. ok -- if you insist
+16:19 crucify_me: ok so look this is very helpful I would love to keep you guys here
+16:19 crucify_me: so its nested [[a]]  ... [[[a]]]
+16:20 crucify_me: does that mean a is related to an empty list []   ?
+16:20 fishythefish: crucify_me: sorta. think of it like this
+16:20 ski: > let x = "[" ++ x ++ "]" in x
+16:20 fishythefish: a ~ [a] is a recursive definition for the type a
+16:20 lambdabot:  "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[...
+16:20 Sampuka has left IRC (Ping timeout: 240 seconds)
+16:20 fishythefish: in an attempt to find a closed form for it, we repeatedly substitute [a] for a
+16:21 fishythefish: unfortunately, that results in the infinite type [[[[[[...]]]]]]
+16:21 crucify_me: ok
+16:21 fishythefish: to use hpc's wonderful phrasing, writing that out would take infinite ink
+16:21 ski: (after waiting a countable infinite time, it will print "]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]")
+16:21 tlaxkit has joined (~hexchat@92.189.36.210)
+16:21 rickerbh has left IRC (Quit: My MacBook has gone to sleep. ZZZzzz…)
+16:22 soniku has left IRC (Remote host closed the connection)
+16:22 crucify_me: and good japanese ink is expensive
+16:22 hpc: this is why haskellers use single-character type variables
+16:22 ski: idly notices that you can color a trumpet with infinite area, using a finite volume of ink
+16:22 crucify_me: so wait this :   a ~ [a] is a recursive definition for the type a
+16:23 fishythefish: "definition" might not be the right word
+16:23 ski: it's a recurrence, a recursive equation
+16:23 fishythefish: let's just call it a recursive type equality
+16:23 ski: in Haskell, it has no solution
+16:23 ski: (on the nose)
+16:23 fishythefish: wonders why we have to bring torricelli into this
+16:24 mniip: but but but
+16:24 mniip: axiom schemes
+16:24 crobbins has left IRC (Ping timeout: 258 seconds)
+16:24 fishythefish: sorry, this is the channel for axiom haskells
+16:24 vuto has joined (~vuto@42.116.160.153)
+16:24 yellowj has left IRC (Ping timeout: 258 seconds)
+16:25 crucify_me: so a ~ (a -> a)   is also a recursive equation
+16:25 fishythefish: yes
+16:26 crucify_me: the [a] illustration is a bit easier for me right now. how to illustrate ^
+16:26 fishythefish: absolutely. we can stick with [a]
+16:27 crucify_me: ok , member said this all has to do with really understand currying
+16:27 ski: . o O ( <https://upload.wikimedia.org/wikipedia/commons/a/ae/Vittoria_della_Rovere_by_G._A._Torricelli_%28Kremlin_exhibition%2C_Moscow_2011%29_02_by_shakko.jpg> )
+16:27 fishythefish: in a way, yes, but we already used currying before
+16:27 dfeuer has left IRC (Ping timeout: 240 seconds)
+16:27 fishythefish: remember when we said a -> a -> a was the same as a -> (a -> a)?
+16:27 crucify_me: yes
+16:27 fishythefish: currying
+16:27 ski: curried style
+16:28 fishythefish: more generally, a -> b -> c is the same as a -> (b -> c)
+16:28 ski: (currying is the process of turning something into curried style)
+16:28 fishythefish: a "two-argument" function of type a -> b -> c is really a unary function taking an argument of type a and spitting out a function of type b -> c
+16:29 vuto has left IRC (Ping timeout: 240 seconds)
+16:29 crucify_me: right got that..
+16:29 quobo has left IRC (Quit: Connection closed for inactivity)
+16:29 `Guest00000 has left IRC (Ping timeout: 240 seconds)
+16:29 crucify_me: right a becomes "ab" -> c
+16:29 fishythefish: whoa, hold on
+16:29 fishythefish: a doesn't become anything
+16:30 fishythefish: also "ab" is a string
+16:30 rickerbh has joined (~rickerbh@14-203-105-198.static.tpgi.com.au)
+16:30 `Guest00000 has joined (~user@37.113.172.43)
+16:30 crucify_me: no I meant it resolves to a partially resolved function and is applied to c
+16:30 fishythefish: applied to b
+16:30 fishythefish: c is the output
+16:31 crucify_me: ok actually I meant pretty much that sorry bad wc
+16:31 yellowj has joined (~yellowj@epm56.neoplus.adsl.tpnet.pl)
+16:31 crucify_me: but fishythefish  ...
+16:32 crucify_me: when member gets into (`asTypeOf` id ) f
+16:32 crucify_me: on line  , er ...
+16:32 BaNzoun3t has left IRC (Ping timeout: 240 seconds)
+16:33 crucify_me: 158
+16:33 crucify_me: 159
+16:34 fishythefish: mhm
+16:34 crucify_me: (+) `asTypeOf` id  they say it means that (+) must have the same type as id
+16:35 crucify_me: so perhaps you can see why I glazed over . I wasn't following this
+16:35 fishythefish: crucify_me: asTypeOf is the same as const with a slight difference
+16:35 fishythefish: :t const
+16:35 lambdabot: a -> b -> a
+16:35 fishythefish: :t asTypeOf
+16:35 lambdabot: a -> a -> a
+16:35 fishythefish: both functions will just return the first argument, but asTypeOf forces both arguments to have the same type
+16:36 boogalooga has joined (c6fb3a40@gateway/web/freenode/ip.198.251.58.64)
+16:36 Guest26 has left IRC (Quit: My MacBook has gone to sleep. ZZZzzz…)
+16:37 crucify_me: so in light of the chat yesterday, what was member saying about this ?
+16:37 c_my_nick has left IRC (Quit: c_my_nick)
+16:37 fishythefish: well, he was trying to demonstrate what happens if you try to force (+) to have type b -> b
+16:37 fishythefish: :t (+) :: b -> b
+16:38 lambdabot: error:
+16:38 lambdabot:     • Couldn't match type ‘b1’ with ‘b1 -> b1’
+16:38 lambdabot:       ‘b1’ is a rigid type variable bound by
+16:38 fishythefish: however, you can see that doing what I just did results in a different type error than before
+16:38 moet has left IRC (Quit: leaving)
+16:38 fishythefish: :t id
+16:38 lambdabot: a -> a
+16:38 fishythefish: note that id has the type b -> b (or a -> a), so we can instead do this
+16:38 fishythefish: :t (+) `asTypeOf` id
+16:39 lambdabot: error:
+16:39 lambdabot:     • Occurs check: cannot construct the infinite type: a ~ a -> a
+16:39 lambdabot:       Expected type: a -> a -> a
+16:39 fishythefish: and now we get the infinite type error from before
+16:39 nakal has left IRC (Disconnected by services)
+16:39 nakal_ has joined (~nakal@port-92-201-93-186.dynamic.qsc.de)
+16:39 jedws has joined (~jedws@14-203-105-198.static.tpgi.com.au)
+16:39 crucify_me: got it ! yes because in the type checker you are getting the same result as if you ran it with 5 (+) 5   !
+16:40 theDon_ has joined (~td@i5E86366A.versanet.de)
+16:40 JeanCarloMachado has left IRC (Remote host closed the connection)
+16:40 fishythefish: 5 (+) 5 doesn't make sense, and i'm not quite sure what you're saying :)
+16:40 Guest26 has joined (~textual@104.193.14.42)
+16:40 OnkelTem has left IRC (Quit: WeeChat 1.7)
+16:41 crucify_me: I meant in the original failure, correction : applyTimes 5 (+ 1) 5
+16:41 fishythefish: right
+16:41 fishythefish: ignoring typeclass constraints
+16:42 crucify_me: its the same error as forcing it (+) to conform to id or to b -> b 
+16:42 ziyourenxiang has joined (~ziyourenx@unaffiliated/ziyourenxiang)
+16:42 shangxiao has left IRC (Ping timeout: 240 seconds)
+16:42 fishythefish: to the type of id, which is b -> b, yes
+16:42 JeanCarloMachado has joined (~jean@186.222.6.65)
+16:43 theDon has left IRC (Ping timeout: 240 seconds)
+16:43 theDon_ is now known as theDon
+16:43 crucify_me: right so although those inputs are both identity, they yield different errors. ok I got this fishythefish that is awesome thank you !
+16:43 fishythefish: no problem :)
+16:44 crucify_me: I learned a *shitload* about types in 48 hours !
+16:46 ski: fishythefish : .. yeah, i tend to say that there's two main ways of *encoding* multiple-argument functions in Haskell. curried style and tupled style
+16:46 bennofs has left IRC (Ping timeout: 246 seconds)
+16:46 ski: (there also happens to be two main ways of encoding existential quantification)
+16:47 crucify_me: ski thanks for your help as well !
+16:47 ski: oh, yw
+16:47 ski: is sleepy
+16:47 fishythefish: ski: oh, i agree with your terminology there
+16:48 fishythefish: i guess i think about "currying" in terms of mental models rather than the curry function itself
+16:48 fishythefish: converting a -> b -> c to a -> (b -> c) is "currying" to me if you read the former type as a binary function type
+16:49 acarrico has joined (~acarrico@pppoe-68-142-58-22.gmavt.net)
+16:49 fishythefish: even though the types are equal in haskell
+16:51 markus1199 has joined (~markus118@p4FDC0ACE.dip0.t-ipconnect.de)
+16:52 jb55 has left IRC (Ping timeout: 248 seconds)
+16:53 eacameron has left IRC (Read error: Connection reset by peer)
+16:54 eacameron has joined (~eacameron@cpe-74-137-151-17.kya.res.rr.com)
+16:54 jmelesky has left IRC (Quit: Textual IRC Client: www.textualapp.com)
+16:55 markus1189 has left IRC (Ping timeout: 260 seconds)
+16:56 raichoo has left IRC (Remote host closed the connection)
+16:56 dan_f has left IRC (Quit: dan_f)
+16:56 theelous3_ has left IRC (Ping timeout: 258 seconds)
+16:57 Guest26 has left IRC (Quit: My MacBook has gone to sleep. ZZZzzz…)
+16:57 Disconnected
