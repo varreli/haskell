@@ -5,7 +5,10 @@ is of type 'c'
 
 (f a) is of type (b -> c)
 
-Normally with monomorphic types this would just be a type mismatch , however, 'c' is a fully polymorphic type, so the compiler is thinking:  "hmm, maybe i can choose 'c' such that it works"
+Normally with monomorphic types this would just be a 
+type mismatch , however, 'c' is a fully polymorphic 
+type, so the compiler is thinking:  "hmm, maybe I can 
+choose 'c' such that it works"
 
 so it chooses:  c = b -> c
 
@@ -15,14 +18,19 @@ but if c = b -> c, then b -> c = b -> (b -> c)
 
 = b -> (b -> (b -> (b -> c))
 
-Hi, I'm f. If you use me, feel free to pick any types you like for 'a', 'b' and 'c' ...  I don't care what they are, I will work regardless"
+Hi, I'm f. If you use me, feel free to pick any types 
+you like for 'a', 'b' and 'c' ...  I don't care what 
+they are, I will work regardless"
 
-Particularly 'c' is also fully polymorphic, and that's the result type.
+Particularly 'c' is also fully polymorphic, and that's 
+the result type.
 
-f x y = f x  -- now you write this ...  you write a 
-(b -> c) where a 'c' was expected. This is *not* a 
-type mismatch, because f is using itself, and as we 
-know it promises to work for arbitrary choices of 'c'
+f x y = f x   -- f :: (a -> b -> c)     i.e.   f a b = c
+
+but this results in a (b -> c) where a 'c' was expected. 
+This is *not* a type mismatch, because f is using itself, 
+and as we know it promises to work for arbitrary choices 
+of 'c' .
 
 So we have    c ~ (b -> c)    and we get an infinite
 type.
