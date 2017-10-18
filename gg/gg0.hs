@@ -23,11 +23,3 @@ Prelude> flip const 6 5
 5
 
 -- const id == flip const
-
--- const id seems a terrible way to express 
--- the concept, flip const is easier to 
--- understand.
-
-
-
-
