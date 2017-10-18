@@ -24,6 +24,9 @@ f x y = f x  -- now you write this ...  you write a
 type mismatch, because f is using itself, and as we 
 know it promises to work for arbitrary choices of 'c'
 
+So we have    c ~ (b -> c)    and we get an infinite
+type.
+
 The type of `gg f x y` need not be the same as the 
 type of `f x y`.
 
