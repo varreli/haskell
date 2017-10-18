@@ -20,11 +20,12 @@ Hi, I'm f. If you use me, feel free to pick any types you like for 'a', 'b' and 
 Particularly 'c' is also fully polymorphic, and that's the result type.
 
 f x y = f x  -- now you write this ...  you write a 
-(b -> c) where a 'c' was expected.
+(b -> c) where a 'c' was expected. This is *not* a 
+type mismatch, because f is using itself, and as we 
+know it promises to work for arbitrary choices of 'c'
 
-the type of `gg f x y` need not be the same as the 
-type of `f x y`, so the previous argument doesn't 
-apply.
+The type of `gg f x y` need not be the same as the 
+type of `f x y`.
 
 gg :: (a -> b) -> a -> c -> b
 
