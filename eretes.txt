@@ -1,0 +1,38 @@
+f :: a -> b -> c;  f a c = f a
+
+whatever is on the right hand side of "=" 
+is of type 'c'
+
+(f a) is of type (b -> c)
+
+Normally with monomorphic types this would just be a type mismatch , however, 'c' is a fully polymorphic type, so the compiler is thinking:  "hmm, maybe i can choose 'c' such that it works"
+
+so it chooses:  c = b -> c
+
+but if c = b -> c, then b -> c = b -> (b -> c)
+
+= b -> (b -> (b -> c))
+
+= b -> (b -> (b -> (b -> c))
+
+Hi, I'm f. If you use me, feel free to pick any types you like for 'a', 'b' and 'c' ...  I don't care what they are, I will work regardless"
+
+Particularly 'c' is also fully polymorphic, and that's the result type.
+
+f x y = f x  -- now you write this ...  you write a 
+(b -> c) where a 'c' was expected.
+
+the type of `gg f x y` need not be the same as the 
+type of `f x y`, so the previous argument doesn't 
+apply.
+
+gg :: (a -> b) -> a -> c -> b
+
+gg f x y = _  -- (f :: a -> b), (x :: a), (y :: c), (_ :: b)
+
+gg f x y = f _  -- (f _ :: b), (_ :: a)
+
+gg f x y = f x  -- check
+
+
+-- perhaps `const` is a useful talking point here
