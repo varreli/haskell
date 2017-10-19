@@ -47,4 +47,4 @@ gg f x y = f _  -- (f _ :: b), (_ :: a)
 gg f x y = f x  -- check
 
 
--- perhaps `const` is a useful talking point here
+-- compare to const 
