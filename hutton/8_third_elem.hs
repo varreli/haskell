@@ -5,8 +5,10 @@ third :: [a] -> a
 third list = head . tail $ drop 1 list 
 
 -- $ is needed here since (.) can only compose functions.
--- drop 1 list has all its parameters supplied. Its not a 
--- function, but a list.    There is no -> in the type :
+-- drop 1 list has all its parameters supplied. So its 
+-- not a function, but a list.    
+-- There is no -> in the type :
+
 
 -- > :t drop 1 [1..10]
 -- drop 1 [1..10] :: (Enum a, Num a) => [a]
@@ -20,7 +22,12 @@ thirrd :: [a] -> a
 thirrd = head . tail . drop 1
 
 thirdd :: [a] -> a
-thirdd = head . drop 2   -- note eta reduction here and ^
+thirdd = head . drop 2   -- note both have eta reduction
 
--- thirdd :: [a] -> a
--- thirdd list = 
+-- list indexing:
+
+getThird :: [a] -> a
+getThird xs = xs !! 2
+
+third_elem :: [a] -> a
+third_elem (x:xa:xb:xs) = xb
