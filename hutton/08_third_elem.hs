@@ -1,5 +1,4 @@
-
--- function that returns the third element:
+-- functionis that returns the third element:
 
 third :: [a] -> a
 third list = head . tail $ drop 1 list 
@@ -24,10 +23,21 @@ thirrd = head . tail . drop 1
 thirdd :: [a] -> a
 thirdd = head . drop 2   -- note both have eta reduction
 
+
+
 -- list indexing:
 
 getThird :: [a] -> a
-getThird xs = xs !! 2
+getThird xs = xs !! 2     -- cannot eta reduce
+                        
+get_third :: [a] -> a
+get_third = (!! 2)        -- eta reduce with a section.
+
+getThirdd :: [a] -> a
+getThirdd = flip (!!) 2   -- change order of arguments
+                          -- to allow eta reduction
+
+-- pattern match:
 
 third_elem :: [a] -> a
 third_elem (x:xa:xb:xs) = xb
