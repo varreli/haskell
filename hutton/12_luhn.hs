@@ -5,10 +5,13 @@ luhn x
 
 
 luhn4 :: Int -> Int -> Int -> Int -> Bool
-luhn4 i j k l
+luhn4 i j k l 
   | mod (luhn i + j + luhn k + l) 10 == 0 = True
   | otherwise = False
  
 
 -- λ > luhn4 4 5 6 1
 -- False
+
+-- λ > luhn4 1 7 8 4    -- 4 is unknown checksum
+-- True
