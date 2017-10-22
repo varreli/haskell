@@ -4,10 +4,11 @@ luhn x
   | otherwise = x * 2
 
 
-luhn4 :: [Int] -> [Int] -> [Int]
-luhn4 (x:x1:x2:x3) list
+luhn4 :: Int -> Int -> Int -> Int -> Bool
+luhn4 i j k l
+  | mod (luhn i + j + luhn k + l) 10 == 0 = True
+  | otherwise = False
+ 
 
-  | x2 * 2 > 9 = (:) (luhn x2) list
-  | x1 * 2 > 9 = (:) (luhn x1) list
-  | x  * 2 > 9 = (:) (luhn  x) list
-  | otherwise = list
+-- λ > luhn4 4 5 6 1
+-- False
