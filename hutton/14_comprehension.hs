@@ -15,6 +15,13 @@ sorted xs = and [ x <= y | (x, y) <- pairs xs]
 -- and [True,True,True]
 -- True
 
-
 --  λ > sorted [2,3,4,5,6]
 --  True 
+
+-- sorted also works under lazy evaluation.
+
+positions :: Eq a => a -> [a] -> [Int]
+positions x ls = [i | (elem, i) <- zip ls [0..], elem == x]
+
+-- note infinite list against length of ls. Lazy
+-- evaluation - no need to declare it explicitly
