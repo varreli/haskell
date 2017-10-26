@@ -16,6 +16,7 @@ encode n xs = [shift n x | x <- xs]
 
 
 
+
 percent :: Int -> Int -> Float
 percent m n = (fromIntegral m / fromIntegral n) * 100
 
@@ -28,3 +29,7 @@ count char xs = length [ x | x <- xs , x == char]
 freqs :: [Char] -> [Float]
 freqs xs = [ percent (count x xs) n | x <- ['a'..'z'] ]
   where n = lowers xs
+
+rotate :: Int -> [Int] -> [Int]
+rotate x xs = drop x xs ++ take x xs
+
