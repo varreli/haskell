@@ -30,9 +30,17 @@ freqs :: [Char] -> [Float]
 freqs xs = [ percent (count x xs) n | x <- ['a'..'z'] ]
   where n = lowers xs
 
-rotate :: Int -> [Int] -> [Int]
+rotate :: Int -> [a] -> [a]
 rotate x xs = drop x xs ++ take x xs
 
 chisqr :: [Float] -> [Float] -> Float
 chisqr os es = sum [((o - e)^2)/e | (o,e) <- zip os es]
 
+positions :: Eq a => a -> [a] -> [Int]
+positions x xs = [i | (elem, i) <- zip xs [0..], elem == x] 
+
+crack :: String -> String
+crack xs = encode (- factor) xs 
+  where factor = head (positions (minimum chitab) chitab) 
+        chitab = [chisqr (rotate n tableaux) table | n <- [0..25]]
+        tableaux = freqs xs
