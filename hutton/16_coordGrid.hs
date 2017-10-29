@@ -20,8 +20,3 @@ sqrND n = filter (uncurry (/=)) $ grid n n
 -- uncurry (/=) :: Eq a => (a, a) -> Bool
 -- note: uncurry (/=)  ==   \(x,y) -> x /= y 
 
-repplicate :: Int -> a -> [a]
-repplicate i elem = [ elem | _ <- [0..i]] -- like prelude length :            
-
-llength :: [a] -> Int
-llength xs = sum [1 | _ <- xs]
