@@ -29,7 +29,7 @@ prime :: Int -> Bool
 prime n = factors n == [1, n]    
 
 
--- λ > prime 15    -- lazy evaluation returnss only 3 => False
+-- λ > prime 15    -- lazy evaluation returns only 3 => False
 -- False
 
 primes_to :: Int -> [Int]
