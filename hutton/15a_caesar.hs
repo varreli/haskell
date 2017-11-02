@@ -60,5 +60,5 @@ rotate x xs = drop x xs ++ take x xs
 crack :: String -> String
 crack xs = encode (- factor) xs 
   where factor = head (positions (minimum chitab) chitab) 
-        chitab = [chisqr (rotate n tableaux) table | n <- [0..25]]
-        tableaux = freqs xs
+        chitab = [chisqr (rotate n tableau) table | n <- [0..25]]
+        tableau = freqs xs
