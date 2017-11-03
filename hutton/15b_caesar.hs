@@ -10,7 +10,8 @@ int2let n = chr (ord 'A' + n)
 -- shift a character c by n slots to the right:
 shift :: Int -> Char -> Char
 shift n c 
-  | ifLower c || isUpper c || c == '[' || c == ']' || c == '^' || c == '_' || c == '`' = int2let (mod (let2cases c + n) 58)
+  | isLower c || isUpper c || c == '[' || c == ']' || c == '^' || c == '_' || c == '`' = int2let (mod (let2cases c + n) 58)
+  | otherwise = c
 
 
 -- top-level string encoding function:
@@ -59,5 +60,5 @@ rotate x xs = drop x xs ++ take x xs
 crack :: String -> String
 crack xs = encode (- factor) xs 
   where factor = head (positions (minimum chitab) chitab) 
-        chitab = [chisqr (rotate n tableaux) table | n <- [0..25]]
-        tableaux = freqs xs
+        chitab = [chisqr (rotate n tableau) table | n <- [0..25]]
+        tableau = freqs xs

@@ -21,8 +21,7 @@ encode n xs = [shift n x | x <- xs]
 
 -- table of frequencies of English alphabet:
 table :: [Float]
-table = [8.1, 1.5, 2.8, 4.2, 12.7, 2.2, 2.0, 6.1, 7.0, 0.2, 0.8, 4.0, 
-2.4, 6.7, 7.5, 1.9, 0.1, 6.0, 6.3, 9.0, 2.8, 1.0, 2.4, 0.2, 2.0, 0.1]
+table = [8.1, 1.5, 2.8, 4.2, 12.7, 2.2, 2.0, 6.1, 7.0, 0.2, 0.8, 4.0, 2.4, 6.7, 7.5, 1.9, 0.1, 6.0, 6.3, 9.0, 2.8, 1.0, 2.4, 0.2, 2.0, 0.1]
 
 
 percent :: Int -> Int -> Float
@@ -61,5 +60,5 @@ rotate x xs = drop x xs ++ take x xs
 crack :: String -> String
 crack xs = encode (- factor) xs 
   where factor = head (positions (minimum chitab) chitab) 
-        chitab = [chisqr (rotate n tableaux) table | n <- [0..25]]
-        tableaux = freqs xs
+        chitab = [chisqr (rotate n tableau) table | n <- [0..25]]
+        tableau = freqs xs
