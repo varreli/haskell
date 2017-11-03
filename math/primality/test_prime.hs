@@ -15,3 +15,4 @@ primeO n    | n < 1    = error "not a positive integer"
             | otherwise  = ld n == n
 
 main = print $ map primeO [3,55,11,131] -- use of map
+
