@@ -1,3 +1,4 @@
+qsort :: Ord a => [a] -> [a]
 qsort [] = []
 qsort (x:xs) = qsort smaller ++ [x] ++ qsort larger
              where
@@ -10,7 +11,7 @@ qsort (x:xs) = qsort smaller ++ [x] ++ qsort larger
 
 qsortt [] = []
 qsortt (x:xs) = qsortt smaller ++ [x] ++ qsortt larger
-             where
+              where
                      smaller = [ a | a <- xs, a < x ]
                      larger  = [ b | b <- xs, b > x ]
 
