@@ -14,5 +14,5 @@ primeO n    | n < 1    = error "not a positive integer"
             | n == 1   = False
             | otherwise  = ld n == n
 
-main = print $ map primeO [3,55,11,131] -- use of map
+main = print $ map primeO [7,13,19,25,31,37,43,49,55,61,67,73,79,85,91,97] -- use of map
 
