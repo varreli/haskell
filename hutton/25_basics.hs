@@ -10,3 +10,10 @@ facct :: Int -> Int
 facct 0 = 1
 facct x | x > 0 = x * facct (x - 1)
         | otherwise = 0 
+
+
+sumdown :: Int -> Int
+sumdown n
+  | n < 0 = 0
+  | otherwise = n + sumdown (n - 1) 
+
