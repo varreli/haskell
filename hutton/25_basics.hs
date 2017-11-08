@@ -17,3 +17,8 @@ sumdown n
   | n < 0 = 0
   | otherwise = n + sumdown (n - 1) 
 
+expon :: Int -> Int -> Int
+expon n raise
+  | raise == 0 = 1
+  | n < 0 = 0
+  | otherwise = n * expon n (raise - 1) 
