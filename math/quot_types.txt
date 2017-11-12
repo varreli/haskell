@@ -1,0 +1,24 @@
+
+the type of integers mod n is represented by the quotient 
+type ℤ/nℤ. The idea is that the values of ℤ/nℤ are integers 
+except that we agree that any two integers a and b are 
+treated as equal if a − b = kn for some integer k.
+
+
+
+quotient types are about the possible redundancy in representation, 
+that is why they are used to describe Int mod n . The 3 is redundant
+in the arithmetic progressions of Int mod 3 :
+
+For ℤ/3ℤ :
+
+... −6 = −3 = 0 = 3 = 6 = ...
+
+and 
+
+... = −5 = −2 = 1 = 4 = 7 = ...
+
+
+If an implementation wanted to, it should be able to 
+(silently) replace one representation , say 3 , with another equivalent 
+representation , say 6 , at run-time.
