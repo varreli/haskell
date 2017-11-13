@@ -16,3 +16,5 @@ primeO n    | n < 1    = error "not a positive integer"
 
 main = print $ map primeO [2011, 2013, 2015, 2017, 2019, 2021, 2023] -- use of map
 
+-- no need to use = in k^2 >= n = n  .  divides k n = k 
+-- covers k ^ 2 = n , since k AND k^2 would both divide n.
