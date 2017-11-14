@@ -8,9 +8,27 @@ andd (x:xs)
   | not x = False
   | otherwise = andd xs
 
+
+
 annd :: [Bool] -> Bool
-annd xs = all xs
+annd = all (== True)   
+
+aand :: [Bool] -> Bool
+aand = and . map (== True) 
+
+andH :: [Bool] -> Bool
+andH = and              -- completes the conjunction of list
 
 
--- all p = and . map p     
--- can be read as    all p xs = and (map p xs)
+
+
+-- same for tuples:
+
+pairTrue :: (Bool,Bool) -> Bool
+pairTrue (x,y) = x && y
+
+pairsAllTrue :: [(Bool,Bool)] -> Bool
+pairsAllTrue = all pairTrue
+
+pairsAllTrue2 :: [(Bool,Bool)] -> Bool
+pairsAllTrue2 = all (\(x,y) -> x && y)
