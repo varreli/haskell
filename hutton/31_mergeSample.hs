@@ -6,5 +6,15 @@
 
 = 0:1:[]
 
--- example of lazy evaluation. merger only
--- operates until take is satisfied.
+-- above is an example of lazy evaluation. 
+-- the merger operates until take is 0.
+
+
+-- reverse is not lazy though:
+
+> take 2 (reverse (2:3:4:5:[]))
+= take 2 (5:4:3:2:reverse [])
+
+> take 2 (reverse [2,3,4,5]
+[5,4]
+
