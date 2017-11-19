@@ -13,5 +13,5 @@ merger (x:xs) (y:ys)
 
 
 
--- study base case, one empties first and 
+-- study base case, one empties first and the
 -- other matches. study next sample 31 > .
