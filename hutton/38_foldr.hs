@@ -1,5 +1,7 @@
--- simple recursive pattern on lists :
+-- Cale study : https://imgur.com/a/CbkR5
+-- also  https://en.wikibooks.org/wiki/Haskell/Lists_III#foldr
 
+-- simple recursive pattern on lists :
 
 -- f [] = value
 -- f (x:xs) = x # f xs  -- # is the operator applied
@@ -27,5 +29,5 @@ foldrr :: (a -> b -> b) -> b -> [a] -> b
 foldrr f v [] = v
 foldrr f v (x:xs) = f x (foldr f v xs)
 
--- behavior is non-recursive: it replaces cons operator with
--- function f, and empty list at end with v.
+-- behavior is non-recursive: it replaces cons operator
+-- with function f, and empty list at end with v.
