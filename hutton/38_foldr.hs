@@ -31,3 +31,4 @@ foldrr f v (x:xs) = f x (foldr f v xs)
 
 -- behavior is non-recursive: it replaces cons operator
 -- with function f, and empty list at end with v.
+

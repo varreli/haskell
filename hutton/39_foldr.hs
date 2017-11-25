@@ -18,3 +18,23 @@ lengtth = foldrr (\_ n -> n + 1) 0
 foldrr :: (a -> b -> b) -> b -> [a] -> b
 foldrr f v [] = v
 foldrr f v (x:xs) = f x (foldr f v xs)
+
+-- note: we don't need \x since x is not used:
+
+lengthh = foldrr (\_ n -> n + 1) 0
+
+-- but we need it here:
+
+mathy = foldrr (\x y -> x + y / 2) 54 
+
+
+
+
+-- note signature difference, ' t a '   : 
+
+-- foldrr :: (a -> b -> b) -> b -> [a] -> b
+-- foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
+
+-- too general; it won't compile; there's no type for 
+-- list [a] : 
+matthy = foldr (\x y -> x + y / 2) 54 
