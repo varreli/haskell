@@ -1,40 +1,34 @@
-lengtth :: [a] -> Int 
-lengtth = foldrr (\_ n -> n + 1) 0
+-- Cale study : https://imgur.com/a/CbkR5
+-- also  https://en.wikibooks.org/wiki/Haskell/Lists_III#foldr
 
--- foldr iterates over a foldable structure one 
--- element at a time:   \_   is the 1st element
--- and n is the accumulator.
+-- simple recursive pattern on lists :
+
+-- f [] = value
+-- f (x:xs) = x # f xs  -- # is the operator applied
+                     -- to the head of the list.
+                     -- Followed by a recursive
+                     -- process on tail.
 
 
--- It takes an accumulator function where the first 
--- parameter is an element from your Foldable 
--- structure (like a List), and the second parameter 
--- is your accumulator value.
+-- foldr encapsulates this simple recursive pattern 
+-- with # and value as arguments :
 
--- We call f with two arguments: x (of type 'a') and 
--- either v for the empty list case or (foldr f v xs) 
--- for the non-empty case (both of which are of type 'b') :
+summ :: Num a => [a] -> a
+summ = foldr (+) 0
+
+orr :: [Bool] -> Bool
+orr = foldr (||) False
+
+andd :: [Bool] -> Bool
+andd = foldr (&&) True
+
+
+-- foldr defined recursively :
 
 foldrr :: (a -> b -> b) -> b -> [a] -> b
 foldrr f v [] = v
 foldrr f v (x:xs) = f x (foldr f v xs)
 
--- note: we don't need \x since x is not used:
+-- behavior is non-recursive: it replaces cons operator
+-- with function f, and empty list at end with v.
 
-lengthh = foldrr (\_ n -> n + 1) 0
-
--- but we need it here:
-
-mathy = foldrr (\x y -> x + y / 2) 54 
-
-
-
-
--- note signature difference, ' t a '   : 
-
--- foldrr :: (a -> b -> b) -> b -> [a] -> b
--- foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
-
--- too general; it won't compile; there's no type for 
--- list [a] : 
-matthy = foldr (\x y -> x + y / 2) 54 

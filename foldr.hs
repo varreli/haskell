@@ -10,40 +10,28 @@
 Prelude > foldr (\x y -> x + y / 2) 54 [12, 4, 10, 6]
 -- 20.625 
 
-
 foldr :: (a -> b -> b) -> b -> [a] -> b
 
-foldr _ z []     =  z
-foldr f z (x:xs) =  f x (foldr f z xs)
+foldr _ val []     =  val
+foldr f val (x:xs) =  f x (foldr f val xs)
 
 
-(*) -- has both right and left identity: (1*) (*1)
-(+) -- has both right and left identity: (y+) (+y)
+λ > foldr (/) 64 [4,2,4] 
+0.125
 
-(-) -- has only right identity
-(/) -- has only right identity: /1
+λ > foldr (-) 54 [10,11] 
+53
 
-(^) -- has only right identity
-
-(:) -- takes two arguments not of the same type.
-
-
--- λ > foldr (/) 64 [4,2,4] 
--- 0.125
-
--- λ > foldr (-) 54 [10,11] 
--- 53
---
---  λ > foldr (*) 10 [2,3,4]
---  240
+λ > foldr (*) 10 [2,3,4]
+240
 
 
---  λ > scanr (*) 10 [2,3,4]
---  [240,120,40,10]
+λ > scanr (*) 10 [2,3,4]
+[240,120,40,10]
 
 
--- λ > head (scanr (*) 10 [2,3,4]) == foldr (*) 10 [2,3,4]
--- True
+λ > head (scanr (*) 10 [2,3,4]) == foldr (*) 10 [2,3,4]
+True
 
 
 
