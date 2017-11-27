@@ -1,39 +1,51 @@
+<<<<<<< HEAD
 -- > foldr (:) [5,6,7] [1,2,3,4]
 -- [1,2,3,4,5,6,7]  
 -- ( evaluates to 1 : 2 : 3 : 4 : [5,6,7] )
+=======
+lengtth :: [a] -> Int 
+lengtth = foldrr (\_ n -> n + 1) 0
 
-Prelude > foldr (\x y -> x + y / 2) 54 [12, 4, 10, 6]
--- 20.625 
+-- foldr iterates over a foldable structure one 
+-- element at a time:   \_   is the 1st element
+-- and n is the accumulator.
+>>>>>>> 7485ea4645fd3f90cc47afad7714e1fbc94a1149
 
 
+-- It takes an accumulator function where the first 
+-- parameter is an element from your Foldable 
+-- structure (like a List), and the second parameter 
+-- is your accumulator value.
+
+<<<<<<< HEAD
 (*) -- has both right and left identity: (1*) (*1)
 (+) -- has both right and left identity: (y+) (+y)
+=======
+-- We call f with two arguments: x (of type 'a') and 
+-- either v for the empty list case or (foldr f v xs) 
+-- for the non-empty case (both of which are of type 'b') :
 
-(-) -- has only right identity
-(/) -- has only right identity: /1
+foldrr :: (a -> b -> b) -> b -> [a] -> b
+foldrr f v [] = v
+foldrr f v (x:xs) = f x (foldr f v xs)
 
-(^) -- has only right identity
+-- note: we don't need \x since x is not used:
 
-(:) -- takes two arguments not of the same type.
+lengthh = foldrr (\_ n -> n + 1) 0
+>>>>>>> 7485ea4645fd3f90cc47afad7714e1fbc94a1149
 
+-- but we need it here:
 
--- λ > foldr (/) 64 [4,2,4] 
--- 0.125
-
--- λ > foldr (-) 54 [10,11] 
--- 53
---
---  λ > foldr (*) 10 [2,3,4]
---  240
-
-
---  λ > scanr (*) 10 [2,3,4]
---  [240,120,40,10]
-
-
--- λ > head (scanr (*) 10 [2,3,4]) == foldr (*) 10 [2,3,4]
--- True
+mathy = foldrr (\x y -> x + y / 2) 54 
 
 
 
--- http://www.cantab.net/users/antoni.diller/haskell/units/unit06.html
+
+-- note signature difference, ' t a '   : 
+
+-- foldrr :: (a -> b -> b) -> b -> [a] -> b
+-- foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
+
+-- too general; it won't compile; there's no type for 
+-- list [a] : 
+matthy = foldr (\x y -> x + y / 2) 54 
