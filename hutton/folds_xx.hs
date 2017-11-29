@@ -8,36 +8,26 @@
 6
 
 > scanr (/) 20 [2,3,4]
-[0.13333333333333333,15.0,0.2,20.0]
 
-λ > foldr (:) ["cat","dog"] ["goat", "sheep"]
-["goat","sheep","cat","dog"]
+-- basic pattern of foldr is:
 
+f [] = v
+f (x:xs) = x # f xs
 
-λ > scanr (:) ["cat","dog"] ["goat", "sheep"]
-[["goat","sheep","cat","dog"],["sheep","cat","dog"],["cat","dog"]]
-
+> lenggth = foldr (\_ n -> n + 1) 0
 
 -- foldl uses operator that is assumed to
--- associates to the left :
-
-> foldl (*) 2 [5,6,7]
-420
-
--- results in :
--- (((2 * 5) * 6) * 7) []
+-- associates to the left (using scanl) :
 
 > scanl (*) 2 [5,6,7]
 [2,10,60,420]
 
-λ > foldl (/) 12 [2,4]
-1.5
+-- results in :
+-- (((2 * 5) * 6) * 7) []
 
-λ > scanl (/) 12 [2,4]
-[12.0,6.0,1.5]
+-- basic pattern of foldl is:
 
-λ > foldl (-) 22 [4,5]
-13
+f v [] = v
+f v (x:xs) = f (v # x) xs
 
-λ > scanl (-) 22 [4,5]
-[22,18,13]
+> lengtth = foldl (\n _ -> n + 1) 0
