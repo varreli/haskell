@@ -1,0 +1,15 @@
+-- basic pattern of foldr is:
+
+f [] = v
+f (x:xs) = x # f xs
+
+> lenggth = foldr (\_ n -> n + 1) 0
+
+
+-- basic pattern of foldl is:
+
+f v [] = v
+f v (x:xs) = f (v # x) xs
+
+> lengtth = foldl (\n _ -> n + 1) 0
+

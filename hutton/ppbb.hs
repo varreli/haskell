@@ -1,1 +1,0 @@
-ff = foldr . id
