@@ -11,7 +11,7 @@ a -> a
 
 > :t flip id
 b -> (b -> c) -> c  
--- (b -> c) is a unary since all functions in
+-- (b -> c) is unary since all functions in
 -- haskell are unary. but the ghc is polymorphic
 -- so this function can take n arguments.
 

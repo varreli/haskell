@@ -3,7 +3,7 @@
 -- to combine an element into your accumulator:
 
 λ > :t foldr
-foldr :: Foldable t :: (a -> b -> b) b -> t a -> b
+foldr :: Foldable t :: (a -> b -> b) -> b -> t a -> b
 
 λ > :t (.)
 (b -> c) -> (a -> b) -> a -> c
@@ -34,3 +34,5 @@ foldr g z [a,b,...,n] = g a (g b (... (g n z) ...))
 -- id takes the role of `z` :
 
 foldr (.) id [a,b,...,n] = a . b .  ...  . n . id
+
+-- (a -> b) is like (a, b). Would this all look easier if you were seeing what you could conclude from setting (c, c) = (q, (r, s))? (c, c) == (c -> c)
