@@ -11,5 +11,5 @@ f (x:xs) = x # f xs
 f v [] = v
 f v (x:xs) = f (v # x) xs
 
-> lengtth = foldl (\n _ -> n + 1) 0
+> lengtth = foldl (\acc _ -> acc + 1) 0
 
