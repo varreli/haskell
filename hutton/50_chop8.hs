@@ -21,3 +21,7 @@ take n (x:xs)          = x : take (n-1) xs
 --     [1,2]
 
 -- -}
+
+drop n xs    | n <= 0   = xs
+drop _ []               = []
+drop n (_:xs)           = drop (n-1) xs

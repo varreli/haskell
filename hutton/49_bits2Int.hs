@@ -28,3 +28,14 @@ chop8 bits = take 8 bits : chop8 (drop 8 bits)
 
 -- chop8 (drop 8 bits) sets up a new patt match
 
+decode :: [Bit] -> String
+decode = map (chr . bitss2Int) . chop8
+
+transmit :: String -> String
+transmit = decode . channel . encode
+
+channel :: [Bit] -> [Bit]
+channel = id 
+
+transmmit :: String -> String
+transmmit = decode . id . encode
