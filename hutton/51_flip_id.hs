@@ -32,6 +32,12 @@ flip id 4 (/) 2 :: Fractional b => b
 -- flip ($) 4 (/) 2
 
 
+-- id is gone after you apply flip to it:
+
+-- > flip id 4 (/) 3
+-- > flip 4 (/) 3
+-- > (/) 4 3
+-- 1.33333
 
 -- study : http://evan-tech.livejournal.com/240180.html
 

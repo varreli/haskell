@@ -11,8 +11,11 @@ foldr :: Foldable t :: (a -> b -> b) -> b -> t a -> b
  λ > :t foldr (.)
 foldr (.) :: Foldable t => (a -> b) -> t (b -> b) -> a -> b
 
-We now have: a ~ b' -> c', b ~ a' -> b', and b ~ a' -> c'
-The last two imply that b' ~ c'
+-- We now have: 
+a ~ b' -> c', b ~ a' -> b', and  b ~ a' -> c'
+
+-- The last two imply that:
+b' ~ c'
 
 We ultimately get a ~ b' -> b' and b ~ a' -> b'  : 
 foldr (.) :: (a' -> b') -> t (b' -> b') -> a' -> b'
@@ -35,4 +38,16 @@ foldr g z [a,b,...,n] = g a (g b (... (g n z) ...))
 
 foldr (.) id [a,b,...,n] = a . b .  ...  . n . id
 
--- (a -> b) is like (a, b). Would this all look easier if you were seeing what you could conclude from setting (c, c) = (q, (r, s))? (c, c) == (c -> c)
+-- (a -> b) is like (a, b)
+
+-- set (c, c) = (q, (r, s)) :
+
+
+-- q -> r -> s
+-- c ~ q
+-- c ~ (r -> s)
+
+
+
+
+
