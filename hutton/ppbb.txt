@@ -3,7 +3,7 @@
 f [] = v
 f (x:xs) = x # f xs
 
-> lenggth = foldr (\_ n -> n + 1) 0
+> lenggth = foldr (\_ acc -> acc + 1) 0
 
 
 -- basic pattern of foldl is:
