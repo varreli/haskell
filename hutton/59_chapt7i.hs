@@ -1,6 +1,5 @@
 
 unfold :: (d -> Bool) -> (d -> f) -> (d -> d) -> d -> [f]
-
 unfold p h t x
   | p x       = []
   | otherwise = h x : unfold p h t (t x)
@@ -9,14 +8,15 @@ unfold p h t x
 int2bbin :: Integer -> [Integer] 
 int2bbin = unfold (== 0) (`mod` 2) (`div` 2)
 
--- in an array, it's more natural to write 10 as 
+-- This returns an array.
+-- In an array, it's more natural to write 10 as 
 
 -- [0,1,0,1] 
 
--- because the array indices correspond 
+-- because the array elements correspond to
+-- coefficients. indices correspond 
 -- to the powers of two; and 1010b is for human
--- processing. Array indices correspond to 
--- coefficients.
+-- processing.
 
-unfoldMap :: (a -> b) -> [a] -> [b]
-unfoldMap f = unfold null (f . head) tail
+-- coefficients c_i in the following: 
+-- c_0*2^0 + c_1*2^1 + ... c_n*2^n

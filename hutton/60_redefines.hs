@@ -11,7 +11,10 @@ chop8 :: [Bit] -> [[Bit]]
 chop8 [] = []
 chop8 bits = take 8 bits : chop8 (drop 8 bits)
 
--- chopp8 uses unfoldo :
+-- chopp8 using unfoldo :
 
 chopp8 :: [Bit] -> [[Bit]]
 chopp8 = unfoldo (== []) (take 8) (drop 8)
+
+unfoldMap :: (a -> b) -> [a] -> [b]
+unfoldMap f = unfoldo null (f . head) tail
