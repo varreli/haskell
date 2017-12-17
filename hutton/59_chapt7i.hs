@@ -7,7 +7,7 @@ unfold p h t x
 
 
 int2bbin :: Integer -> [Integer] 
-int2bbin = reverse . unfold (== 0) (`mod` 2) (`div` 2)
+int2bbin = unfold (== 0) (`mod` 2) (`div` 2)
 
 -- in an array, it's more natural to write 10 as 
 
