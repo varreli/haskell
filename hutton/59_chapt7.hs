@@ -1,9 +1,3 @@
--- use this with new func implementation:
-
--- unfold :: (b -> Maybe (a, b)) -> b -> [a]
-
-
-
 unfold :: (d -> Bool) -> (d -> f) -> (d -> d) -> d -> [f]
 
 unfold p h t x
@@ -35,3 +29,8 @@ int2bin :: Int -> [Bit]
 int2bin 0 = []
 int2bin n = mod n 2 : int2bin (n `div` 2)
 
+
+
+-- use this with new func implementation:
+
+-- unfold :: (b -> Maybe (a, b)) -> b -> [a]
