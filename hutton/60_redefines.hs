@@ -1,20 +1,40 @@
+unnfold :: (d -> Bool) -> (d -> f) -> (d -> d) -> d -> [f]
+
+unnfold p h t x
+  | p x       = []
+  | otherwise = h x : unnfold p h t (t x)
+
+-----------------------------------------------------------
+
 type Bit = Int
 
+unfold_chop :: [Bit] -> [[Bit]]
+unfold_chop = unnfold (== []) (take 8) (drop 8)
 
-unfoldo :: (d -> Bool) -> (d -> f) -> (d -> d) -> d -> [f]
-
-unfoldo p h t x
-  | p x       = []
-  | otherwise = h x : unfoldo p h t (t x)
 
 chop8 :: [Bit] -> [[Bit]]
 chop8 [] = []
 chop8 bits = take 8 bits : chop8 (drop 8 bits)
 
--- chopp8 using unfoldo :
 
-chopp8 :: [Bit] -> [[Bit]]
-chopp8 = unfoldo (== []) (take 8) (drop 8)
+-----------------------------------------------------------
 
 unfoldMap :: (a -> b) -> [a] -> [b]
-unfoldMap f = unfoldo null (f . head) tail
+unfoldMap f = unnfold null (f . head) tail
+
+-- core map :
+
+mapp _ []     = []
+mapp f (x:xs) = f x : mapp f xs
+
+
+-----------------------------------------------------------
+
+iterateUnfold :: (a -> a) -> a -> [a]
+iterateUnfold f = unnfold (const False) id f   -- const is a
+                                               -- function
+
+-- core iterate :
+
+itterate f x = x : itterate f (f x)
+
