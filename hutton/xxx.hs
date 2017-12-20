@@ -9,11 +9,14 @@ unnfold p h t x
 iterateUnfold :: (a -> a) -> a -> [a]
 iterateUnfold f = unnfold (const False) id f 
 
--- this should have an eta reduce.
 -- note non-terminus of function (\_ -> False) or
--- (const False)
+-- (const False) .
+-- (const False) returns a function  :
+-- const False = \_ -> False
+-- so we are essentially passing (\_ -> False)
+-- to unnfold.
                                         
-
+-- (f should be eta reduced.)
 
 
 -- ghc iterate :

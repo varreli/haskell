@@ -26,19 +26,3 @@ unfoldMap f = unnfold null (f . head) tail
 
 mapp _ []     = []
 mapp f (x:xs) = f x : mapp f xs
-
-
--------------------------------------------------------
-
-iterateUnfold :: (a -> a) -> a -> [a]
-iterateUnfold f = unnfold (const False) id f 
-                                      
--- this should have an eta reduce.
--- note non-terminus of function (\_ -> False) or
--- (const False)    Use take n
-
-
--- core iterate :
-
-itterate f x = x : itterate f (f x)
-
