@@ -4,7 +4,7 @@ unnfold p h t x
   | p x       = []
   | otherwise = h x : unnfold p h t (t x)
 
------------------------------------------------------------
+-------------------------------------------------------
 
 type Bit = Int
 
@@ -17,7 +17,7 @@ chop8 [] = []
 chop8 bits = take 8 bits : chop8 (drop 8 bits)
 
 
------------------------------------------------------------
+-------------------------------------------------------
 
 unfoldMap :: (a -> b) -> [a] -> [b]
 unfoldMap f = unnfold null (f . head) tail
@@ -28,11 +28,15 @@ mapp _ []     = []
 mapp f (x:xs) = f x : mapp f xs
 
 
------------------------------------------------------------
+-------------------------------------------------------
 
 iterateUnfold :: (a -> a) -> a -> [a]
-iterateUnfold f = unnfold (const False) id f   -- const is a
-                                               -- function
+iterateUnfold f = unnfold (const False) id f 
+                                      
+-- this should have an eta reduce.
+-- note non-terminus of function (\_ -> False) or
+-- (const False)    Use take n
+
 
 -- core iterate :
 
