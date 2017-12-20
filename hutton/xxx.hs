@@ -7,7 +7,6 @@ unnfold p h t x
 
 
 iterateUnfold :: (a -> a) -> a -> [a]
--- iterateUnfold f = unnfold (\_ -> False) id f
 iterateUnfold f = unnfold (const False) id f 
 
 -- this should have an eta reduce.
