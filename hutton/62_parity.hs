@@ -37,9 +37,6 @@ transmit = decode . channel . encode
 channel :: [Bit] -> [Bit]
 channel = id 
 
-transmmit :: String -> String
-transmmit = decode . id . encode
-
 parify :: [Int] -> [Int]
 parify [] = []
 parify xs   | even (sum xs) = xs ++ [0]
@@ -60,3 +57,17 @@ parity xs = if even (sum xs) then 0 else 1
 
 addParityBit :: [Bit] -> [Bit]
 addParityBit bs = parity bs : bs
+
+encode2 :: String -> [Bit]
+encode2 = concat . map ( addParityBit . make8 . int2bin . ord )
+
+hasValidParity :: [Bit] -> Bool
+hasValidParity bs = parity (drop 1 bs) == head bs 
+
+
+decode2 :: [Bit] -> String
+decode2 [] = [] 
+decode2 xs = case (hasValidParity encodedByte) of
+               True ->  chr (bitss2Int (tail encodedByte))  : decode2 (drop 9 xs)
+               False -> error "Parity error"
+             where encodedByte = take 9 xs 
