@@ -1,12 +1,15 @@
 import Data.Char
 
-type Bit = Int
 
+type Bit = Int
 
 unfold p h t x
   | p x = []
   | otherwise = h x : unfold p h t (t x)
-
+    
+mapUnfold :: (a -> b) -> [a] -> [b]
+mapUnfold f = unfold null (f . head) tail
+    
 iterateUnfold :: (a -> a) -> a -> [a]
 iterateUnfold f = unfold (const False) id f
 
