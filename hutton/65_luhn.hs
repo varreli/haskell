@@ -17,3 +17,7 @@ mod10is0 x = (mod x 10) == 0
 
 luhn :: [Int] -> Bool
 luhn = mod10is0 . sum . (altMap luhnDouble id)
+
+
+-- id leaves element as is, skipping, as per
+-- luhn algorithm.
