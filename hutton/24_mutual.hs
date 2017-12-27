@@ -10,7 +10,8 @@ oddd 0 = False
 oddd n = evenn (n - 1)
 
 
--- mutual recursion, returns evens/odds of a list:
+-- mutual recursion, returns elements at even or 
+-- odd postions of a list:
 
 evens :: [a] -> [a]
 evens [] = []
