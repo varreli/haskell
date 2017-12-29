@@ -1,0 +1,7 @@
+-- Functional programming is a paradigm that forces us 
+-- to make the complex parts of our system explicit.
+
+-- Pattern matching is used in lieu of assignment and 
+-- conditional logic.
+
+-- Abstract Syntax Tree (AST)  from Erlang and Elixer.
