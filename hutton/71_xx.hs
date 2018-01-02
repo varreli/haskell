@@ -1,6 +1,9 @@
 -- here, Node' a [Tree' a] could have [0..]
 -- Tree instances. If [], Node' a is the 
--- only value. this is wrong, see below error:
+-- only value, so Leaf is not needed really,
+-- since Node' a [] will play that role. 
+
+-- Still, this is wrong, see below error:
 
 data Tree' a = Leaf' a | Node' a [Tree' a]
 
