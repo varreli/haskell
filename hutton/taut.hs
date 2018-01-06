@@ -6,6 +6,11 @@
 
 
 type Assoc k v = [(k,v)]
+
+find :: Eq k   => k -> Assoc k v -> v
+find k v       = head [v | (k', v) <- v, k == k']
+
+
 type Subst = Assoc Char Bool
 
 data Prop = Const Bool
@@ -17,7 +22,6 @@ data Prop = Const Bool
 
 -- Const True is a tautology, since:
 -- \x -> True is what Const True returns.
-
 
 -- Truth Tables can be represented as :
 
