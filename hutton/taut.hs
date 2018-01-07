@@ -19,6 +19,12 @@ data Prop = Const Bool
           | And Prop Prop
           | Imply Prop Prop
 
+eval :: Subst -> Prop -> Bool
+eval _ (Const b)   = b
+eval s (Var x)     = find x s
+eval s (Not p)     = not (eval s p)
+eval s (And p q)   = eval s p && eval s q
+eval s (Imply p q) = eval s p <= eval s q
 
 -- Const True is a tautology, since:
 -- \x -> True is what Const True returns.
