@@ -38,3 +38,5 @@ p4 :: Prop
 p4 = Imply (And (Var 'A') (Imply (Var 'A') (Var 'B'))) (Var 'B')
 
 
+-- To stay in sane territory, only pass types 
+-- to :k and values to :t

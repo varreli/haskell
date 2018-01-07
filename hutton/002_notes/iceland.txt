@@ -1,0 +1,60 @@
+There are only two implementations for:
+
+f :: a -> a -> a
+
+They are:
+
+one :: a -> a -> a
+one x _ = x
+
+two :: a -> a -> a
+two _ y = y
+
+More explicitly : one :: forall a. a -> a -> a
+                  two :: forall a. a -> a -> a
+
+Also Bool has same # of elements:
+                  Bool :: forall a. a -> a -> a
+
+Bool is in fact isomorphic to forall a. a -> a -> a
+
+
+const is a more general form of one :: a -> a -> a   :
+
+const :: a -> b -> a
+const a _ = a
+
+
+This is like fst, snd, if we uncurry it:
+
+uncurry :: (a -> b -> c) -> ((a,b) -> c)
+
+uncurry one :: (a, a) -> a
+uncurry two :: (a, a) -> a
+
+-----------------------------------------------------
+
+{- More important is an actual categorical 
+functor, than dependent types, HFunctor, MFunctor, Profunctor, Bifunctor, Contravariant, Functor ..
+it's getting ridiculous and obscures this simple 
+concept. Working in the direction of hask should 
+be our goal.
+-}
+
+-- Iceland_jack
+
+-- Papers to read on haskell:
+
+Hutton - Meijer : papers on monadic parser combinators.
+Hutton - universality of fold
+
+Wadler, Monads for FP:
+
+homepages.inf.ed.ac.uk/wadler/papers
+
+(also Wadler, A Prettier Printer)
+
+Yorgey Monoids: theme and variations :
+
+https://repository.upenn.edu/cgi/viewcontent.cgi?article=1773&context=cis_papers
+
