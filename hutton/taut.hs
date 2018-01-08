@@ -43,6 +43,12 @@ p3 = Imply (Var 'A') (And (Var 'A') (Var 'B'))
 p4 :: Prop
 p4 = Imply (And (Var 'A') (Imply (Var 'A') (Var 'B'))) (Var 'B')
 
+vars :: Prop -> [Char]
+vars (Const _)   = []
+vars (Var x)     = [x]
+vars (Not p)     = vars p
+vars (And p q)   = vars p ++ vars q
+vars (Imply p q) = vars p ++ vars q
 
 -- To stay in sane territory, only pass types 
 -- to :k and values to :t
