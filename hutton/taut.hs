@@ -65,5 +65,5 @@ bools n = map (reverse . map conv . make n . int2bit) range
       conv 0    = False                   -- convert 0 to False
       conv 1    = True                    -- convert 1 to True
 
--- To stay in sane territory, only pass types 
--- to :k and values to :t
+
+-- Only pass types to :k , and values to :t
