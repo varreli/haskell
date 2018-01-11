@@ -1,14 +1,8 @@
--- The first step towards deciding if a 
--- proposition is a tautology is to declare
--- a type for propositions, with one
--- constructor for each of the 5 possible 
--- forms of propositions:
-
 
 type Assoc k v = [(k,v)]
 
-find :: Eq k   => k -> Assoc k v -> v
-find k v       = head [v | (k', v) <- v, k == k']
+find :: Eq k => k -> Assoc k v -> v
+find k t = head [v | (k', v) <- t , k == k']
 
 
 type Subst = Assoc Char Bool
@@ -49,6 +43,27 @@ vars (Var x)     = [x]
 vars (Not p)     = vars p
 vars (And p q)   = vars p ++ vars q
 vars (Imply p q) = vars p ++ vars q
+
+-- -- -- --
+
+type Bit = Int
+
+int2bit :: Int -> [Bit]
+int2bit = unfold (== 0) (`mod` 2) (`div` 2)
+
+unfold p h t x
+  | p x = []
+  | otherwise = h x : unfold p h t (t x)
+
+-- -- -- --
+
+bools :: Int -> [[Bool]]
+bools n = map (reverse . map conv . make n . int2bit) range
+    where
+      range     = [0..(2^n)-1]
+      make n bs = take n (bs ++ repeat 0)
+      conv 0    = False
+      conv 1    = True
 
 -- To stay in sane territory, only pass types 
 -- to :k and values to :t
