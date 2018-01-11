@@ -62,8 +62,8 @@ bools n = map (reverse . map conv . make n . int2bit) range
     where
       range     = [0..(2^n)-1]
       make n bs = take n (bs ++ repeat 0)
-      conv 0    = False
-      conv 1    = True
+      conv 0    = False                   -- convert 0 to False
+      conv 1    = True                    -- convert 1 to True
 
 -- To stay in sane territory, only pass types 
 -- to :k and values to :t
