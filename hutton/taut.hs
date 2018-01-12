@@ -65,5 +65,12 @@ bools n = map (reverse . map conv . make n . int2bit) range
       conv 0    = False                   -- convert 0 to False
       conv 1    = True                    -- convert 1 to True
 
+-- recursive bool converter:
+
+boolsR :: Int -> [[Bool]]
+boolsR 0 = [[]]
+boolsR n = map (False:) bss ++ map (True:) bss
+    where bss = boolsR (n - 1)
 
 -- Only pass types to :k , and values to :t
+
