@@ -1,0 +1,27 @@
+The -> between (a -> b) and [a] is the same as the 
+one between [a] -> [b] , and it is right-associative. 
+The type of map can be explicitly parenthesized as
+
+map :: (a -> b) -> ([a] -> [b])
+
+and suddenly it seems much less interesting that you 
+might give only one argument (the function) to map 
+and get back a new function of type [a] -> [b]. That 
+is all partial function application is: taking 
+advantage of the fact that all functions are curried.
+
+We never give more than one argument to a function. 
+To go along with -> being right-associative, function 
+application is left-associative, meaning a multi
+argument call:
+
+map f [1,2,3]
+
+is really two function applications, which becomes 
+clearer if we parenthesize it:
+
+(map f) [1,2,3]
+
+map is first "partially" applied to one argument f, 
+which returns a new function. This function is then 
+applied to [1,2,3] to get the final result.
