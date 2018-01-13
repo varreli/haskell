@@ -1,3 +1,4 @@
+import Debug.Trace
 
 type Assoc k v = [(k,v)]
 
@@ -67,8 +68,11 @@ bools n = map (reverse . map conv . make n . int2bit) range
 
 -- recursive bool converter:
 
+
 boolsR :: Int -> [[Bool]]
+boolsR n | traceShow (n) False = undefined
 boolsR 0 = [[]]
+
 boolsR n = map (False:) bss ++ map (True:) bss
     where bss = boolsR (n - 1)
 

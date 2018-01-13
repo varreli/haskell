@@ -1,0 +1,1 @@
+-- The truth table for "=>" is what defines "=>".
