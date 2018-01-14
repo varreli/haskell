@@ -6,6 +6,27 @@ find :: Eq k => k -> Assoc k v -> v
 find k t = head [v | (k', v) <- t , k == k']
 
 
+-- remove duplicates from 53_voter.hs :
+
+rmdups :: Eq a => [a] -> [a]
+rmdups [] = []
+rmdups (x:xs) = x : filter (/= x) (rmdups xs)
+
+
+------ int2bit converter (integer to binary) :
+
+
+unfold p h t x
+  | p x = []
+  | otherwise = h x : unfold p h t (t x)
+
+type Bit = Int
+
+int2bit :: Int -> [Bit]
+int2bit = unfold (== 0) (`mod` 2) (`div` 2)
+
+---------------------------------------------
+
 type Subst = Assoc Char Bool
 
 data Prop = Const Bool
@@ -45,18 +66,7 @@ vars (Not p)     = vars p
 vars (And p q)   = vars p ++ vars q
 vars (Imply p q) = vars p ++ vars q
 
--- -- -- --
-
-type Bit = Int
-
-int2bit :: Int -> [Bit]
-int2bit = unfold (== 0) (`mod` 2) (`div` 2)
-
-unfold p h t x
-  | p x = []
-  | otherwise = h x : unfold p h t (t x)
-
--- -- -- --
+-----------------------------------------------------
 
 bools :: Int -> [[Bool]]
 bools n = map (reverse . map conv . make n . int2bit) range
@@ -76,5 +86,13 @@ boolsR 0 = [[]]
 boolsR n = map (False:) bss ++ map (True:) bss
     where bss = boolsR (n - 1)
 
--- Only pass types to :k , and values to :t
+------------------------------------------------------
+
+substs :: Prop -> [Subst]
+substs p = map (zip vs) (boolsR (length vs))
+    where vs = rmdups (vars p)
+
+isTaut :: Prop -> Bool
+isTaut p = and [eval s p | s <- substs p]
+
 
