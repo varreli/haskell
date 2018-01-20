@@ -1,10 +1,7 @@
-P ∨ (Q ∧ R) ≡ (P ∨ Q) ∧ (P ∨ R)
+P ⟹  Q ≡ ¬P ∨ Q ≡ ¬(¬Q)∨ ¬P ≡ ¬ Q ⟹  ¬P
 
-True, use distributive.
+¬(¬Q) is just Q. We are doing this manipulation to show 
+a formal way to prove that P ⟹  Q ≡ ¬ Q ⟹  ¬P. By 
+substituting ¬Q as P and ¬P as Q,  we have 
 
- (Q ^ R) doesn't matter on the left because if P is true, 
- both parts on the right are true so the  ∧  is true.
-
- If P is false, then on the left Q and R both must be true 
- in order for P ∨ (Q ∧ R) to be true, so on the right its the 
- same.
+¬(¬Q) ∨ ¬ P ≡ ¬ Q ⟹  ¬ P.
