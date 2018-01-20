@@ -16,11 +16,9 @@ primeO n | n < 1    = error "not a positive integer"
 main = print $ map primeO [3,6,13,91,131,140]  -- use of map
 
 
--- PROPOSITION:
-
 -- Is (n^2 + n + 41) prime for all Naturals n ?
 
--- False, Euclid found this to be True up to 39 :
+-- No, Euclid found this to be True up to 39 :
 
 -- (41^2 + 41 + 41) = 41(42) + 41 = 42 * 42    -- not prime
 
@@ -28,4 +26,5 @@ main = print $ map primeO [3,6,13,91,131,140]  -- use of map
 
 -- (40^2 + 40 + 41) = 40(41) + 41 = 41 * 41    -- not prime
 
+-- So, (n^2 + n + 41) is prime for all n is :         False
 
