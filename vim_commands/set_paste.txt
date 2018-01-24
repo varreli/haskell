@@ -1,0 +1,4 @@
+
+:set paste
+
+use cntl(shift) v on mac (linux).
