@@ -18,4 +18,4 @@ eval (Add x y) c = eval x (EVAL y : c)
 value :: Expr -> Int
 value e = eval e []
 
-main = print $ value (Add (Add (Val 4) (Val 1)) (Val 10))
+-- main = print $ value (Add (Add (Val 4) (Val 1)) (Val 10))
