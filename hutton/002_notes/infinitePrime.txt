@@ -1,0 +1,46 @@
+Suppose there are finitely many primes. Then we can 
+enumerate them as a set
+
+{p1, p2, p3 ... pn}.
+
+The number 
+
+P = { p1 * p2 ... pn } + 1 
+
+is either prime or composite. If it is prime, then 
+we have found a prime that is not among the finite set
+
+{ p1, p2 ... pn} 
+
+of primes we assumed to comprise the collection of 
+all primes. 
+
+If it is composite, then it is divisible by a prime. 
+But it cannot be divisible by any of { p1, p2 ... pn } 
+for upon dividing P by any of these primes, it leaves 
+a remainder of 1. Therefore, P is divisible by a prime 
+that again is not in the presumed set of all primes. 
+
+In either case, a contradiction is obtained in which 
+the assumption that there are finitely many primes is 
+violated.
+
+***  HOWEVER
+
+Euclid’s proof differs from the modern conception, which is
+that it used contradiction.
+
+He said this :
+
+Take any finite set of primes. Any. It could be {2, 7, 31} 
+or {5, 11, 13}.
+
+Multiply them and add 1. Then show (and this part *was* done 
+by contradiction) that the prime factors of the resulting 
+number are not in the finite set you started with. 
+
+So 5 * 11 * 13 (+1) = 716. 716 has prime factors: 2, 179 or
+(2 * 2 * 179).
+
+Thus every finite set of primes can be extended to a larger 
+finite set of primes.
