@@ -1,5 +1,4 @@
 
-
 data Nat = Zero | Succ Nat deriving Show
 
 add :: Nat -> Nat -> Nat
