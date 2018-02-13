@@ -7,3 +7,18 @@ occursT x (Node l y r) =
     EQ -> True
     LT -> occursT x l
     GT -> occursT x r
+
+-- t = Node (Node (Leaf 1) 3 (Leaf 4)) 5 (Node (Leaf 6) 7 (Node (Leaf 9) 22 (Leaf 19)))
+
+-- Prelude> occursT 19 t
+-- False
+
+
+
+-- Must be in ascending order:
+
+-- t = Node (Node (Leaf 1) 3 (Leaf 4)) 5 (Node (Leaf 6) 7 (Node (Leaf 9) 19 (Leaf 22)))
+
+-- Prelude> occursT 19 t
+-- True
+
