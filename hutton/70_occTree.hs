@@ -9,19 +9,18 @@ occursT x (Node l y r) =
     GT -> occursT x r
 
 
--- t = Node (Node (Leaf 1) 3 (Leaf 4)) 5 (Node (Leaf 6) 7 (Node (Leaf 9) 22 (Leaf 19)))
+t = Node (Node (Leaf 1) 3 (Leaf 4)) 5 (Node (Leaf 6) 7 (Node (Leaf 9) 22 (Leaf 19)))
 
 -- Prelude> occursT 19 t
 -- False
 
--- compare 19 22 -> occursT 19 9 => False
+-- ( since last compare 11 (Leaf 19) => False ) 
 
--- Must be in ascending order:
+-- So it must be in ascending order:
 
--- t = Node (Node (Leaf 1) 3 (Leaf 4)) 5 (Node (Leaf 6) 7 (Node (Leaf 9) 11 (Leaf 19)))
+tt = Node (Node (Leaf 1) 3 (Leaf 4)) 5 (Node (Leaf 6) 7 (Node (Leaf 9) 11 (Leaf 19)))
 
 -- Prelude> occursT 19 t
--- True
+-- True                     
 
--- compare 19 (Leaf 19) => True
 
