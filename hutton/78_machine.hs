@@ -19,7 +19,8 @@ value e = eval e []
 
 -- main = print $ value (Add (Add (Val 4) (Val 1)) (Val 10))
 
-
+-- main = print $ value (Val 5) 
+-- main = print $ eval (Val 6) []
 -- Cont represents a stack of things to do (aka a continuation)
 -- after evaluating a subexpression.
 
