@@ -1,4 +1,3 @@
-
 -- the evaluation order is now explicit:
 
 -- value (Add (Add (Val 4) (Val 1)) (Val 10))
@@ -13,3 +12,13 @@
 -- exec [ADD 5] 10
 -- exec [] 15
 -- => 15
+
+
+-- Cont represents a stack of things to do (aka a continuation)
+-- after evaluating a subexpression.
+
+-- EVAL and ADD are data constructors.
+
+-- Op and Expr are type constructors.
+
+-- this is called a proof using constructive induction.
