@@ -14,8 +14,9 @@
 -- => 15
 
 
--- Cont represents a stack of things to do (aka a continuation)
--- after evaluating a subexpression.
+-- Cont represents a stack of things to do 
+-- (aka a continuation) after evaluating a 
+-- subexpression.
 
 -- EVAL and ADD are data constructors.
 
