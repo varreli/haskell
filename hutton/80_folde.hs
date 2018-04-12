@@ -3,7 +3,7 @@
 -- the function `f`, and each `Add` constructor by the 
 -- function `g`.
 
-data Expr = Val Int | Add Expr Expr
+data Expr = Val Int | Add Expr Expr deriving Show 
 
 folde :: (Int -> a) -> (a -> a -> a) -> Expr -> a
 
@@ -20,3 +20,8 @@ eval = folde (+ 0) (+)
 size :: Expr -> Int
 size = folde (\_ -> 1) (+)
 
+depth :: Expr -> Int
+depth = folde (const 0) (\d1 d2 -> 1 + max d1 d2)
+
+flipExpr :: Expr -> Expr
+flipExpr = folde Val (flip Add)

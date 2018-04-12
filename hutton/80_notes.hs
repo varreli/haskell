@@ -5,7 +5,7 @@
 -- out the structure.
 -- we could write it like:
 
-data Expr = Val Int | Add Expr Expr
+data Expr = Val Int | Add Expr Expr deriving Show
 
 folde :: (Int -> a) -> (a -> a -> a) -> Expr -> a
 
