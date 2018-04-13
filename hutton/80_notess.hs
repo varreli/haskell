@@ -7,7 +7,6 @@
 data Expr = Val Int | Add Expr Expr deriving Show
 
 folde :: (Int -> a) -> (a -> a -> a) -> Expr -> a
-<<<<<<< HEAD
 
 folde f g (Val x) = f x
 folde f g (Add x y) = g (folde f g x) (folde f g y)
@@ -16,15 +15,6 @@ folde2 val add = f
 	where f (Val x)   = val x
               f (Add x y) = add (f x) (f y)
 
-=======
-
-folde f g (Val x) = f x
-folde f g (Add x y) = g (folde f g x) (folde f g y)
-
-folde2 val add = f
-    where f (Val x) = val x
-          f (Add x y) = add (f x) (f y)
->>>>>>> 838690ba56623476622393d81e70197626404be7
 
 -- The idea is to replace each Add with add and each Val 
 -- with val throughout the entire structure.
