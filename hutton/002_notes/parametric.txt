@@ -1,0 +1,11 @@
+polymorphism
+
+The first type is parametric and is more general : 
+
+a function is parametrically polymorphic if it behaves uniformly for all types, in at least one of its type parameters.
+
+The function length is parametric polymorphism -- it returns the length of a list, no matter what type is stored in its list:
+
+length :: [a] -> Int
+
+The polymorphism is indicated by a lower case type variable.
