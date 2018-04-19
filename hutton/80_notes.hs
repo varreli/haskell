@@ -12,8 +12,8 @@ folde f g (Val x) = f x
 folde f g (Add x y) = g (folde f g x) (folde f g y)
 
 folde2 val add = f
-	where f (Val x)   = val x
-              f (Add x y) = add (f x) (f y)
+    where f (Val x)   = val x
+          f (Add x y) = add (f x) (f y)
 
 
 -- The idea is to replace each Add with add and each Val 

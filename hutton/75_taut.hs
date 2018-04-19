@@ -38,7 +38,6 @@ data Prop = Const Bool
           | Eqiv Prop Prop
           deriving Show
 
-
 eval :: Subst -> Prop -> Bool
 eval _ (Const b)   = b
 eval s (Var x)     = find x s
@@ -47,6 +46,7 @@ eval s (And p q)   = eval s p && eval s q
 eval s (Imply p q) = eval s p <= eval s q
 eval s (Or p q)    = eval s p || eval s q
 eval s (Eqiv p q)  = eval s p == eval s q
+
 
 -- Const True is a tautology, since:
 -- \x -> True is what Const True returns.
@@ -73,6 +73,7 @@ vars (And p q)   = vars p ++ vars q
 vars (Imply p q) = vars p ++ vars q
 vars (Or q p)    = vars p ++ vars q
 vars (Eqiv q p)  = vars p ++ vars q
+
 -----------------------------------------------------
 
 bools :: Int -> [[Bool]]
