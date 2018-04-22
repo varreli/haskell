@@ -1,4 +1,5 @@
 import Debug.Trace
+import Propositions
 
 type Assoc k v = [(k,v)]
 
@@ -29,15 +30,6 @@ int2bit = unfold (== 0) (`mod` 2) (`div` 2)
 
 type Subst = Assoc Char Bool
 
-data Prop = Const Bool
-          | Var Char
-          | Not Prop
-          | And Prop Prop
-          | Imply Prop Prop
-          | Or Prop Prop
-          | Eqiv Prop Prop
-          deriving Show
-
 eval :: Subst -> Prop -> Bool
 eval _ (Const b)   = b
 eval s (Var x)     = find x s
@@ -45,7 +37,7 @@ eval s (Not p)     = not (eval s p)
 eval s (And p q)   = eval s p && eval s q
 eval s (Imply p q) = eval s p <= eval s q
 eval s (Or p q)    = eval s p || eval s q
-eval s (Eqiv p q)  = eval s p == eval s q
+eval s (Equiv p q)  = eval s p == eval s q
 
 
 -- Const True is a tautology, since:
@@ -72,7 +64,7 @@ vars (Not p)     = vars p
 vars (And p q)   = vars p ++ vars q
 vars (Imply p q) = vars p ++ vars q
 vars (Or p q)    = vars p ++ vars q
-vars (Eqiv p q)  = vars p ++ vars q
+vars (Equiv p q)  = vars p ++ vars q
 
 -----------------------------------------------------
 

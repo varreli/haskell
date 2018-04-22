@@ -1,13 +1,5 @@
 module TautChecker where
-
-data Prop = Const Bool
-          | Var   Char
-          | Not   Prop
-          | And   Prop Prop
-          | Or    Prop Prop
-          | Imply Prop Prop
-          | Equiv  Prop Prop
-          deriving Show
+import Propositions 
 
 type Assoc k v = [(k,v)]
 type Subst = Assoc Char Bool
