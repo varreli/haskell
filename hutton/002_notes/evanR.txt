@@ -1,0 +1,32 @@
+--  _ is the "don't care" pattern, anything matches it
+
+
+-- definition of !!
+
+(x:_)  !! 0         = x               -- case 1
+(_:xs) !! n         = xs !! (n-1)     -- case 2
+
+
+evaluate this: [5,6,7,8] !! 2
+
+>> (5:6:7:8:[]) !! 2       -- case 2 is first to match, namely (_:6:7:8:[]) !! 2, which equals
+>> (6:7:8:[]) !! (2-1)     -- 2-1 must be evaluated to see which case matches
+>> (6:7:8:[]) !! 1         -- case 2 is first to match, namely (_:7:8:[]) !! 1, which equals
+>> (7:8:9:[]) !! (1-1)     -- 1-1 must be evaluated to see which case matches
+>> (7:8:9:[]) !! 0         -- case 1 is first to match, namely (7:_) !! 0, which equals
+>> 7
+
+evaluate this: [5..] !! 2
+
+>> enumFrom 5     !! 2         -- enumFrom 5 must be evaluated some to see which matches
+>> (5:enumFrom 6) !! 2     -- case 2 is first to match, namely (_:enumFrom 6) !! 2, which equals
+>> enumFrom 6     !! (2-1)     -- enumFrom 6 and 2-1 must be evaluated to see which case matches
+>> (6:enumFrom 7) !! 1     -- case 2 is first to match, namely (_:enumFrom 7) !! 1, which equals
+>> enumFrom 7     !! (1-1)     -- enumFrom 7 and 1-1 must be evaluated to see which case matches
+>> (7:enumFrom 8) !! 0     -- case 1 is first to match, namely (7:_) !! 0, which equals
+>> 7
+
+([5..] desugars to `enumFrom 5`, where enumFrom is a normal function)
+
+
+-- http://lpaste.net/365152
