@@ -32,6 +32,4 @@ value e = eval e []
 -- main = print $ value (Val 5)
 
 -- multiply:
--- main = print $ value (Mult (Add (Val 3) (Val 2)) (Add (Val 10) (Val 1)))
-
- 
+main = print $ value (Mult (Add (Val 3) (Val 2)) (Mult (Val 10) (Val 2)))
