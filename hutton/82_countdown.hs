@@ -38,9 +38,9 @@ eval (App o l r) = [apply o x y | x <- eval l,
                                   valid o x y]
 
 
--- Prelude > eval (App Add (Val (-15)) (Val 10))
+-- main = print $ eval (App Add (Val (-15)) (Val 10))
 -- []
 -- note (Val (-15)) will eventually call eval (-15))
 -- and return the empty list.
 
--- Prelude > eval (App Sub (Val 5) (Val 6))
+main = print $ eval (App Sub (Val 5) (Val 6))
