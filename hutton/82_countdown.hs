@@ -27,3 +27,20 @@ instance Show Expr where
             brak (Val n) = show n
             brak e       = "(" ++ show e ++ ")"
 
+values :: Expr -> [Int]
+values (Val n) = [n]
+values (App _ l r) = values l ++ values r
+
+eval :: Expr -> [Int]
+eval (Val n)     = [n | n > 0]
+eval (App o l r) = [apply o x y | x <- eval l,
+                                  y <- eval r,
+                                  valid o x y]
+
+
+-- Prelude > eval (App Add (Val (-15)) (Val 10))
+-- []
+-- note (Val (-15)) will eventually call eval (-15))
+-- and return the empty list.
+
+-- Prelude > eval (App Sub (Val 5) (Val 6))
