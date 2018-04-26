@@ -37,10 +37,3 @@ eval (App o l r) = [apply o x y | x <- eval l,
                                   y <- eval r,
                                   valid o x y]
 
-
--- main = print $ eval (App Add (Val (-15)) (Val 10))
--- []
--- note (Val (-15)) will eventually call eval (-15))
--- and return the empty list.
-
-main = print $ eval (App Sub (Val 5) (Val 6))
