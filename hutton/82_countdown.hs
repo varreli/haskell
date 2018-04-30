@@ -42,8 +42,13 @@ subs []     = [[]]
 subs (x:xs) = yss ++ map (x:) yss
   where yss = subs xs
 
+-- alternative :
 
--- written with nonEmptySubsequences : 
+subseqs :: [a] -> [[a]]
+subseqs [] = [[]]
+subseqs (x:xs) = (subseqs xs) ++ map (x:) (subseqs xs)
+
+-- GHI written with nonEmptySubsequences : 
 
 subsequences xs =  [] : neSubs xs
 
@@ -51,3 +56,4 @@ neSubs :: [a] -> [[a]]
 neSubs []      =  []
 neSubs (x:xs)  =  [x] : foldr f [] (neSubs xs)
   where f ys r = ys : (x : ys) : r
+
