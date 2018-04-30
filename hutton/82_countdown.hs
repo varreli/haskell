@@ -37,3 +37,17 @@ eval (App o l r) = [apply o x y | x <- eval l,
                                   y <- eval r,
                                   valid o x y]
 
+subs :: [a] -> [[a]]
+subs []     = [[]]
+subs (x:xs) = yss ++ map (x:) yss
+  where yss = subs xs
+
+
+-- written with nonEmptySubsequences : 
+
+subsequences xs =  [] : neSubs xs
+
+neSubs :: [a] -> [[a]]
+neSubs []      =  []
+neSubs (x:xs)  =  [x] : foldr f [] (neSubs xs)
+  where f ys r = ys : (x : ys) : r
