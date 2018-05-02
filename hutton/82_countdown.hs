@@ -42,13 +42,17 @@ subs []     = [[]]
 subs (x:xs) = yss ++ map (x:) yss
   where yss = subs xs
 
--- alternative :
+interleave :: a -> [a] -> [[a]]
+interleave x []     = [[x]]
+interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
+
+-- alternative to subs :
 
 subseqs :: [a] -> [[a]]
 subseqs [] = [[]]
 subseqs (x:xs) = (subseqs xs) ++ map (x:) (subseqs xs)
 
--- GHI written with nonEmptySubsequences : 
+-- subs in GHI , written with nonEmptySubsequences : 
 
 subsequences xs =  [] : neSubs xs
 
