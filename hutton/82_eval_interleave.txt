@@ -1,0 +1,24 @@
+interleave :: a -> [a] -> [[a]]
+interleave x []     = [[x]]
+interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
+
+
+
+Prelude> interleave 5 [1,2,3]
+
+evaluation order :
+
+interleave 5 [1,2,3] = (5:1:[2,3])
+                     = 5: [1,2,3]      : map (1:) (interleave 5 [2,3])
+
+interleave 5 [2,3]   = (5:2:[3])  
+                     = 1: [5,2,3]      : map (2:) (interleave 5 [3]  )
+                               
+interleave 5 [3]     = (5:3:[ ])
+                     = 1:2: [5,3]      : map (3:) (interleave 5 [ ]  )
+
+interleave 5 [ ]     = (5:[])
+                     = [1:2:3:[5]]
+
+>> [[5,1,2,3],[1,5,2,3],[1,2,5,3],[1,2,3,5]]
+
