@@ -3,7 +3,6 @@ interleave x []     = [[x]]
 interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
 
 
-
 Prelude> interleave 5 [1,2,3]
 
 evaluation order :
@@ -21,23 +20,3 @@ interleave 5 [ ]     = (5:[])
                      = [1:2:3:[5]]
 
 >> [[5,1,2,3],[1,5,2,3],[1,2,5,3],[1,2,3,5]]
-
-
-
--- [exa] wrote :
-
-import Debug.Trace
-
-interleave x []     = trace ("Finishing step!, returning " ++ show [[x]]) [[x]]
-interleave x (y:ys) = let
-  leftPart = (x:y:ys)
-  interPart = interleave x ys
-  rightPart = map (y:) interPart
-  in leftPart `seq` rightPart `seq`
-     trace "Recursive step!" $
-     trace (" on the left: " ++ show leftPart) $
-     trace (" on the right, first: " ++ show interPart) $
-     trace ("   ... and then: " ++ show rightPart) $
-     trace (" result: " ++ show (leftPart : rightPart)) $			
-     leftPart : rightPart  --actual result
-
