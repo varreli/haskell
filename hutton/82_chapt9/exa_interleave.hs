@@ -17,6 +17,5 @@ interleave x (y:ys) = let
 
 
 
--- on line 10 comment out after 'in' like this:
-
---         in -- leftPart `seq` rightPart `seq`
+-- to see actual ghc evaluation order, comment out after 'in' 
+-- statement on line 10.
