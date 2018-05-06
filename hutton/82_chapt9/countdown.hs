@@ -1,4 +1,4 @@
-import ShowExpressions
+import ShowExpression
 
 
 subs :: [a] -> [[a]]
@@ -48,3 +48,7 @@ exprs ns  = [ e | (ls, rs) <- split ns,
                   l        <- exprs ls,
                   r        <- exprs rs,
                   e        <- combine l r] 
+
+solutions :: [Int] -> Int -> [Expr]
+solutions ns n =
+        [e | ns' <- choices ns, e <- exprs ns', eval e == [n]]
