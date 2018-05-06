@@ -51,23 +51,14 @@ perms []     = [[]]
 perms (x:xs) = concat (map (interleave x) (perms xs))
 
 choices :: [a] -> [[a]]
-choices = concat . map perms . subseqs
+choices = concat . map perms . subs
 
--- choices xs = concat . map perms . subseqs $ xs
+-- choices xs = concat . map perms . subs $ xs
 
+solution :: Expr -> [Int] -> Int -> Bool
+solution e nums n = elem (values e) (choices nums) 
+                  && eval e == [n] 
 
--- alternative to subs :
-
-subseqs :: [a] -> [[a]]
-subseqs [] = [[]]
-subseqs (x:xs) = (subseqs xs) ++ map (x:) (subseqs xs)
-
--- subs in GHI , written with nonEmptySubsequences : 
-
-subsequences xs =  [] : neSubs xs
-
-neSubs :: [a] -> [[a]]
-neSubs []      =  []
-neSubs (x:xs)  =  [x] : foldr f [] (neSubs xs)
-  where f ys r = ys : (x : ys) : r
+-- λ > solution (App Mul (App Add (Val 50) (Val 1)) (App Sub (Val 25) (Val 10))) [1,3,7,10,25,50] 765
+-- True
 
