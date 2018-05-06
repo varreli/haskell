@@ -53,6 +53,9 @@ perms (x:xs) = concat (map (interleave x) (perms xs))
 choices :: [a] -> [[a]]
 choices = concat . map perms . subseqs
 
+-- choices xs = concat . map perms . subseqs $ xs
+
+
 -- alternative to subs :
 
 subseqs :: [a] -> [[a]]
