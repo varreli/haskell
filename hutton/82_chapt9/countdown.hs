@@ -15,7 +15,7 @@ perms []     = [[]]
 perms (x:xs) = concat (map (interleave x) (perms xs))
 
 choices :: [a] -> [[a]]
-choices = concat . map perms . subs
+choices = concat . map perms . subs -- do perms $ [[list]]
 
 -- choices xs = concat . map perms . subs $ xs
 
