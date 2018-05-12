@@ -1,6 +1,5 @@
 import ShowExpression
 
-
 subs :: [a] -> [[a]]
 subs []     = [[]]
 subs (x:xs) = yss ++ map (x:) yss
@@ -52,3 +51,8 @@ exprs ns  = [ e | (ls, rs) <- split ns,
 solutions :: [Int] -> Int -> [Expr]
 solutions ns n =
         [e | ns' <- choices ns, e <- exprs ns', eval e == [n]]
+
+main :: IO ()
+main = print (solutions [1,3,7,10,25,50] 765)
+
+-- load > stack ghc -O2 filename.hs (not 0: zero) after adding ghc-options: -O2 to the .cabal file
