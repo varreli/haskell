@@ -52,7 +52,27 @@ solutions :: [Int] -> Int -> [Expr]
 solutions ns n =
         [e | ns' <- choices ns, e <- exprs ns', eval e == [n]]
 
-main :: IO ()
-main = print (solutions [1,3,7,10,25,50] 765)
+-- auxiliary function for results ----------------
 
--- load > stack ghc -O2 filename.hs (not 0: zero) after adding ghc-options: -O2 to the .cabal file
+combine' :: Result -> Result -> [Result]
+combine' (l, x) (r, y) =
+  [(App o l r, apply o x y) | o <- ops, valid o x y]
+
+--------------------------------------------------
+
+type Result = (Expr, Int)
+
+results :: [Int] -> [Result]
+results []  = []
+results [n] = [(Val n, n) | n > 0]
+results ns  = [res | (ls,rs) <- split ns,
+                      lx     <- results ls,
+                      ry     <- results rs,
+                      res    <- combine' lx ry]
+
+main :: IO ()
+main = print (results [1, 3, 7])
+
+-- > stack ghc filename.hs
+
+
