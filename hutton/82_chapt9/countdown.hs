@@ -53,15 +53,18 @@ solutions :: [Int] -> Int -> [Expr]
 solutions ns n =
         [e | ns' <- choices ns, e <- exprs ns', eval e == [n]]
 
--- auxiliary function for results ----------------
+-- auxiliary function for results ------------------------
+
+type Result = (Expr, Int)
 
 combine' :: Result -> Result -> [Result]
 combine' (l, x) (r, y) =
   [(App o l r, apply o x y) | o <- ops, valid o x y]
 
---------------------------------------------------
+-- Prelude> combine' (App Add (Val 2) (Val 2), 4) (App Mul (Val 3) (Val 1), 3)
 
-type Result = (Expr, Int)
+----------------------------------------------------------
+
 
 results :: [Int] -> [Result]
 results []  = []
@@ -74,3 +77,5 @@ results ns  = [res | (ls,rs) <- split ns,
 
 main :: IO ()
 main = print (results [1, 3, 7])
+
+-- for function defs see :   http://hackage.haskell.org/package/base-4.0.0.0
