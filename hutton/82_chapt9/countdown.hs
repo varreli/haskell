@@ -78,4 +78,3 @@ results ns  = [res | (ls,rs) <- split ns,
 main :: IO ()
 main = print (results [1, 3, 7])
 
--- for function defs see :   http://hackage.haskell.org/package/base-4.0.0.0
