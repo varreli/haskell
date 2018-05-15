@@ -1,0 +1,12 @@
+To find function source code, go to:
+
+https://hoogle.haskell.org/?hoogle=iterate 
+
+then click on the link that looks right (in this case 
+the first) and click on “source” link at the right
+
+
+member prefers older base :
+http://hackage.haskell.org/package/base-4.0.0.0
+
+
