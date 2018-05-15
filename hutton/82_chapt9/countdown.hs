@@ -1,5 +1,6 @@
 import ShowExpression
 
+
 subs :: [a] -> [[a]]
 subs []     = [[]]
 subs (x:xs) = yss ++ map (x:) yss
@@ -70,9 +71,6 @@ results ns  = [res | (ls,rs) <- split ns,
                       ry     <- results rs,
                       res    <- combine' lx ry]
 
+
 main :: IO ()
 main = print (results [1, 3, 7])
-
--- > stack ghc filename.hs
-
-
