@@ -72,5 +72,5 @@ results ns  = [res | (ls,rs) <- split ns,
                       res    <- combine' lx ry]
 
 
-main :: IO ()
-main = print (results [1, 3, 7])
+-- main :: IO ()
+main = print (results [1, 3, 7, 10, 25, 50], 765)
