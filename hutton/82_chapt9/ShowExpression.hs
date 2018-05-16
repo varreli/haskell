@@ -14,11 +14,14 @@ instance Show Op where
 -- valid Mul _ _ = True
 -- valid Div x y = mod x y == 0
 
-valid :: Op -> Int -> Int ->Bool
+valid :: Op -> Int -> Int -> Bool
 valid Add x y = x <= y
-valid Sub x y = x > y
-valid Mul x y = x <= y && x /= 1 && y /= 1
-valid Div x y = y /= 1 && (mod x y == 0)
+valid Sub x y = x > y 
+valid Mul x y = x <= y && x /= 1 && y /= 1 
+valid Div x y = y /= 1 && (mod x y == 0) 
+
+-- upgraded above with communicative and identity 
+-- properties
 
 apply :: Op -> Int -> Int -> Int
 apply Add x y = x + y
