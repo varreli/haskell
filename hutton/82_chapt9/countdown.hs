@@ -65,7 +65,6 @@ combine' (l, x) (r, y) =
 
 ----------------------------------------------------------
 
-
 results :: [Int] -> [Result]
 results []  = []
 results [n] = [(Val n, n) | n > 0]
@@ -74,12 +73,8 @@ results ns  = [res | (ls,rs) <- split ns,
                       ry     <- results rs,
                       res    <- combine' lx ry]
 
+solutions' ns n =
+  [e | ns' <- choices ns, (e, m) <- results ns', m == n]
 
-<<<<<<< HEAD
--- main :: IO ()
-main = print (results [1, 3, 7, 10, 25, 50], 765)
-=======
 main :: IO ()
-main = print (results [1, 3, 7])
-
->>>>>>> 87c087c1a3afcb75cfc5e60a31e208e17c02595d
+main = print (results [1, 3, 7, 10, 25, 50], 765)
