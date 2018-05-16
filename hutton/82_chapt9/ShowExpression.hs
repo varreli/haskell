@@ -8,11 +8,17 @@ instance Show Op where
   show Mul = "*"
   show Div = "/"
 
-valid :: Op -> Int -> Int -> Bool
-valid Add _ _ = True
+-- valid :: Op -> Int -> Int -> Bool
+-- valid Add _ _ = True
+-- valid Sub x y = x > y
+-- valid Mul _ _ = True
+-- valid Div x y = mod x y == 0
+
+valid :: Op -> Int -> Int ->Bool
+valid Add x y = x <= y
 valid Sub x y = x > y
-valid Mul _ _ = True
-valid Div x y = mod x y == 0
+valid Mul x y = x <= y && x /= 1 && y /= 1
+valid Div x y = y /= 1 && (mod x y == 0)
 
 apply :: Op -> Int -> Int -> Int
 apply Add x y = x + y
