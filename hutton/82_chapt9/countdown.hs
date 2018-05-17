@@ -1,3 +1,5 @@
+import Debug.Trace
+
 import ShowExpression
 
 
@@ -10,14 +12,22 @@ interleave :: a -> [a] -> [[a]]
 interleave x []     = [[x]]
 interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
 
-perms :: [a] -> [[a]]
-perms []     = [[]]
-perms (x:xs) = concat (map (interleave x) (perms xs))
+
+perms :: [a] -> [[a]]  -- perms [2,3] won't terminate without trace
+
+perms []     = [[]] 
+perms (x:xs) = trace "it terminates" concat (map (interleave x) (perms xs))
+
 
 choices :: [a] -> [[a]]
-choices = concat . map perms . subs -- do perms $ [[list]]
+choices xs = [ list | yss <- subs xs,
+                      list <- perms yss ]
 
--- choices xs = concat . map perms . subs $ xs
+
+-- choices :: [a] -> [[a]]
+-- choices = concat . map perms . subs 
+
+-- choices xs = concat . map perms . subs $ xs  -- variation with $
 
 solution :: Expr -> [Int] -> Int -> Bool
 solution e nums n = elem (values e) (choices nums) 
@@ -73,8 +83,8 @@ results ns  = [res | (ls,rs) <- split ns,
                       ry     <- results rs,
                       res    <- combine' lx ry]
 
-solutions' ns n =
+bestSolve ns n =
   [e | ns' <- choices ns, (e, m) <- results ns', m == n]
 
 main :: IO ()
-main = print (solutions' [1, 3, 7, 10, 25, 50] 765)
+main = print (bestSolve [1, 3, 7, 10, 25, 50] 765)
