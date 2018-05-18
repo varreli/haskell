@@ -1,0 +1,29 @@
+interleave :: a -> [a] -> [[a]]
+interleave x []     = [[x]]
+interleave x (y:ys) = (x:y:ys) : map (y:) (interleave x ys)
+ 
+perms :: [a] -> [[a]]
+perms []     = [[]]
+perms (x:xs) = concat (map (interleave x) (perms xs))
+
+
+-- evaluation order :
+
+
+-- perms [1,2,3]  = concat (map (interleave 1) (perms [2,3]))
+-- perms [2,3]    = concat (map (interleave 2) (perms [3]  ))
+-- perms [3]      = concat (map (interleave 3) (perms [ ]  ))
+
+-- perms [3]      = concat (map (interleave 3) ([[]])
+--                = concat [[[3]]]
+--                = [[3]]
+
+-- perms [2,3]    = concat (map (interleave 2) (perms [3]  ))
+--                = concat (map (interleave 2) ( [[3]] ) 
+--                = concat [[[2,3],[3,2]]]
+--                = [[2,3],[3,2]]
+
+-- perms [1,2,3]  = concat (map (interleave 1) (perms [2,3]))
+--                = concat (map (interleave 1) ([[2,3],[3,2]])
+--                = concat ([[[1,2,3],[2,1,3],[2,3,1]],[[1,3,2],[3,1,2],[3,2,1]]])
+--                = [[1,2,3],[2,1,3],[2,3,1],[1,3,2],[3,1,2],[3,2,1]]
