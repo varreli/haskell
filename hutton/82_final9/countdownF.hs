@@ -28,7 +28,7 @@ choices = concat . map perms . subs
 
 split :: [a] -> [([a], [a])]
 split []     = []
-split [_]    = []
+-- split [_]    = []
 split (x:xs) = ([x], xs) : [(x:ls, rs) | (ls, rs) <- split xs]
 
 -- auxillary function combine in exprs:
@@ -60,8 +60,8 @@ results ns  = [res | (ls,rs) <- split ns,
 solve ns n =
   [e | ns' <- choices ns, (e, m) <- results ns', m == n]
 
-main :: IO ()
-main = print (solve [1, 3, 7, 10, 25, 50] 765)
+-- main :: IO ()
+-- main = print (solve [1, 3, 7, 10, 25, 50] 765)
 
 ----------------------------------------------------------
 
