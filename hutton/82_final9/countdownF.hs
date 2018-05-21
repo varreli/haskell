@@ -34,6 +34,13 @@ split (x:xs) = ([x], xs) : [(x:ls, rs) | (ls, rs) <- split xs]
 -- split [1,2,3] = ([1],[2,3]) : (1:[2], [3]) : [(1:2:3[], [])]
 --                 [([1],[2,3]), ([1,2], [3]), ([1,2,3], []) ]
 
+exprs :: [Int] -> [Expr]
+exprs []  = []
+exprs [n] = [Val n]
+exprs ns = [e | (ls, rs) <- split ns,
+                l        <- exprs ls,
+                r        <- exprs rs,
+                e        <- combine l r]
 
 -- auxillary function combine in exprs:
 
@@ -64,8 +71,8 @@ results ns  = [res | (ls,rs) <- split ns,
 solve ns n =
   [e | ns' <- choices ns, (e, m) <- results ns', m == n]
 
--- main :: IO ()
--- main = print (solve [1, 3, 7, 10, 25, 50] 765)
+main :: IO ()
+main = print (totalSuccessful [1, 3, 7, 10, 25, 50])
 
 ----------------------------------------------------------
 
@@ -85,7 +92,7 @@ possibleExprs :: [Int] -> [Expr]
 possibleExprs = concat . map exprs . choices
 
 successfulExprs :: [Int] -> [[Int]]
-successfulExprs = filter (/= null) . map eval . possibleExprs
+successfulExprs = filter (not . null) . map eval . possibleExprs
 
 totalPossible :: [Int] -> Int
 totalPossible = length . possibleExprs
