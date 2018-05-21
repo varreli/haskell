@@ -28,8 +28,12 @@ choices = concat . map perms . subs
 
 split :: [a] -> [([a], [a])]
 split []     = []
--- split [_]    = []
+split [_]    = []                                              -- hangs without thisG
 split (x:xs) = ([x], xs) : [(x:ls, rs) | (ls, rs) <- split xs]
+
+-- split [1,2,3] = ([1],[2,3]) : (1:[2], [3]) : [(1:2:3[], [])]
+--                 [([1],[2,3]), ([1,2], [3]), ([1,2,3], []) ]
+
 
 -- auxillary function combine in exprs:
 
@@ -77,4 +81,15 @@ isChoice (x:xs) ys = elem x ys && isChoice xs (removeFirst x ys)
 
 ----------------------------------------------------------
 
+possibleExprs :: [Int] -> [Expr]
+possibleExprs = concat . map exprs . choices
 
+successfulExprs :: [Int] -> [[Int]]
+successfulExprs = filter (/= null) . map eval . possibleExprs
+
+totalPossible :: [Int] -> Int
+totalPossible = length . possibleExprs
+
+totalSuccessful :: [Int] -> Int
+totalSuccessful = length . successfulExprs
+-----------------------------------------------------------
