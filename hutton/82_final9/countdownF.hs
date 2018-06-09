@@ -92,13 +92,13 @@ isChoice (x:xs) ys = elem x ys && isChoice xs (removeFirst x ys)
 
 -- possibleExprs :: [Int] -> [Expr]
 -- possibleExprs = concat . map exprs . choices
--- 
+--  
 -- successfulExprs :: [Int] -> [[Int]]
 -- successfulExprs = filter (not . null) . map eval . possibleExprs
--- 
+--  
 -- totalPossible :: [Int] -> Int
 -- totalPossible = length . possibleExprs
--- 
+--  
 -- totalSuccessful :: [Int] -> Int
 -- totalSuccessful = length . successfulExprs
 -----------------------------------------------------------
