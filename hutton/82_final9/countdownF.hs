@@ -23,12 +23,16 @@ perms (x:xs) = concat (map (interleave x) (perms xs))
 choices :: [a] -> [[a]]
 choices = concat . map perms . subs 
 
+-- variation with $ : 
 -- choices xs = concat . map perms . subs $ xs  
--- -- variation with $
 
 split :: [a] -> [([a], [a])]
 split []     = []
+<<<<<<< HEAD
 split [_]    = []                                              -- hangs without this
+=======
+split [_]    = []                                        --    hangs without this
+>>>>>>> 7387f4dc9c6e28749b3f372ac3bfc3935297d1a4
 split (x:xs) = ([x], xs) : [(x:ls, rs) | (ls, rs) <- split xs]
 
 -- split [1,2,3] = ([1],[2,3]) : (1:[2], [3]) : [(1:2:3[], [])]
@@ -42,6 +46,7 @@ exprs ns = [e | (ls, rs) <- split ns,
                 r        <- exprs rs,
                 e        <- combine l r]
 
+----------------------------------------------------------------
 -- auxillary function combine in exprs:
 
 combine :: Expr -> Expr -> [Expr]
@@ -50,7 +55,7 @@ combine l r = [App o l r | o <- ops]
 ops :: [Op]
 ops = [Add,Sub,Mul,Div]
 
--- auxiliary function for results ------------------------
+-- -- -- auxiliary function for results ------------------------
 
 type Result = (Expr, Int)
 
@@ -71,9 +76,10 @@ results ns  = [res | (ls,rs) <- split ns,
 solve ns n =
   [e | ns' <- choices ns, (e, m) <- results ns', m == n]
 
+-- main :: IO ()
+-- main = print (totalSuccessful [1, 3, 7, 10, 25, 50])
 main :: IO ()
-main = print (totalSuccessful [1, 3, 7, 10, 25, 50])
-
+main = print $ solve [1,3,7,10,25,50] 765
 ----------------------------------------------------------
 
 removeFirst :: Eq a => a -> [a] -> [a]
@@ -88,15 +94,15 @@ isChoice (x:xs) ys = elem x ys && isChoice xs (removeFirst x ys)
 
 ----------------------------------------------------------
 
-possibleExprs :: [Int] -> [Expr]
-possibleExprs = concat . map exprs . choices
-
-successfulExprs :: [Int] -> [[Int]]
-successfulExprs = filter (not . null) . map eval . possibleExprs
-
-totalPossible :: [Int] -> Int
-totalPossible = length . possibleExprs
-
-totalSuccessful :: [Int] -> Int
-totalSuccessful = length . successfulExprs
+-- possibleExprs :: [Int] -> [Expr]
+-- possibleExprs = concat . map exprs . choices
+--  
+-- successfulExprs :: [Int] -> [[Int]]
+-- successfulExprs = filter (not . null) . map eval . possibleExprs
+--  
+-- totalPossible :: [Int] -> Int
+-- totalPossible = length . possibleExprs
+--  
+-- totalSuccessful :: [Int] -> Int
+-- totalSuccessful = length . successfulExprs
 -----------------------------------------------------------

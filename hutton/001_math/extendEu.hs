@@ -11,3 +11,5 @@ extendEu a b = (t, s - q * t)
 
 -- all number theory algorithms ultimately come 
 -- down to Euclid's algorithm
+
+-- https://math.stackexchange.com/questions/85830/how-to-use-the-extended-euclidean-algorithm-manually

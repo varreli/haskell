@@ -1,0 +1,27 @@
+Impurity doesn't permeate entire programs. the vast majority 
+of functions do not involve interaction, which instead is 
+handled by a relatively small number of interactive functions 
+at the outermost level.
+
+Sequencing:
+
+do v1 <- a1                        -- actions yield values by the    
+   v2 <- a2                        -- use of generators
+   ...
+   vn <- an
+   return (f v1 v2 ... vn)
+
+-- if the result value vi is not required, abbreviate the notation
+-- to ai, which means the same as if using the wildcard:
+
+   _ <- ai
+
+-- Read 3 characters, discard 2nd and return 1st and 3rd as a pair:
+
+act :: IO (Char,Char)
+act = do x <- getChar getChar
+y <- getChar
+return (x,y)
+
+Prelude> act rfg
+(r,g)
