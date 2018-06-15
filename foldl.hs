@@ -39,7 +39,7 @@ foldl (flip (:)) :: Foldable g => [a] -> g a -> [a]
 λ > foldl (-) 30 [1,2] 
 λ > scanl (/) 30 [1,2] 
 
--- the first parameter (64) is a seed, or accumulator. 
+-- the first parameter (64) is the base, or seed.
 -- It isn't updated, its just replaced with a new value.
 -- Updating is mutation but this parameter is immutable.
 
