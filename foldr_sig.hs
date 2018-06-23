@@ -11,11 +11,11 @@ foldrr :: (a -> b -> b) -> b -> [a] -> b
 foldrr f z []     = z
 foldrr f z (x:xs) = f x (foldrr f z xs)
 
-lengthy :: [a] -> Int
-lengthy = foldrr (\_ acc -> acc + 1) 0
+length1 :: [a] -> Int
+length1 = foldrr (\_ seed -> seed + 1) 0
 
-lenngth :: [a] -> Int
-lenngth = foldl (\acc -> \_ -> acc + 1) 0
+length2 :: [a] -> Int
+length2 = foldl (\seed -> \_ -> seed + 1) 0
 
 
 
