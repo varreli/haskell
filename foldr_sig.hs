@@ -14,9 +14,9 @@ foldrr f z (x:xs) = f x (foldrr f z xs)
 lengthy :: [a] -> Int
 lengthy = foldrr (\_ acc -> acc + 1) 0
 
--- lenngth :: [a] -> Int
--- lenngth = foldl (\acc -> \_ -> acc + 1) 0
+lenngth :: [a] -> Int
+lenngth = foldl (\acc -> \_ -> acc + 1) 0
 
-{--
 
-foldr (:) ["take"] ["out"] = (:) ["o"] (foldr (:)    
+
+-- ff = foldr (:) ["take"] ["out"] = (:) ["o"] (foldr (:)    
