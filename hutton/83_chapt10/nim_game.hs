@@ -13,3 +13,6 @@ finished = all (== 0)
 valid :: Board -> Int -> Int -> Bool
 valid board row num = board !! (row - 1) >= num
 
+move :: Board -> Int -> Int -> Board
+move board row num = [update r n | (r,n) <- zip [1..] board]
+    where update r n = if r == row then n-num else n
