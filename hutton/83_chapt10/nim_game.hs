@@ -15,7 +15,6 @@ valid board row num = board !! (row - 1) >= num
 
 move :: Board -> Int -> Int -> Board
 move board row num = [update r n | (r,n) <- zip [1..] board]
-<<<<<<< HEAD
     where 
     update r n = if r == row then (n - num) else n   -- n-num is subtraction !
 
@@ -26,6 +25,3 @@ putRow row num = do putStr (show row)
 
 
 
-=======
-    where update r n = if r == row then n-num else n
->>>>>>> fc4f00b3ee9bdc27740d24dc4c871851298ba672
