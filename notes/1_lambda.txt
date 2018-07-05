@@ -1,0 +1,103 @@
+-- re: chapter 1 of haskellbook:
+
+-- I understand how most of these lambda expressions are reduced, 
+-- but I never really got the significance because once I began
+-- learning working programs I promptly forgot chapter 1. My 
+-- understanding is quite patchy. Anyway I have a question below.
+
+
+(λ.xyz.xz(yz)) (λmn.m) (λp.p)
+
+(λx.λy.λz.xz(yz)) (λm.λn.m) (λp.p)
+
+(λy.λz.(λm.λn.m)z(yz)) (λp.p)
+
+(λz.(λm.λn.m)z((λp.p)z)
+
+(λz.(λn.z)((λp.p)z)     -- apply binding n to ((λp.p)z)
+
+λz.z
+
+
+1)
+
+(λabc.cba)zz (λwv.w)
+(λa.λb.λc.cba)zz (λw.λv.w)
+(λb.λc.cbz)z (λw.λv.w)
+(λc.czz) (λw.λv.w)
+(λw.λv.w)zz
+(λv.z)z
+(z)
+z
+
+
+2)
+
+(λx.λy.xyy) (λa.a)b
+(λy(λa.a)yy) (b)
+(λa.a)(b)b
+(b)b
+bb
+
+
+3)
+
+(λy.y) (λx.xx) (λz.zq)
+(λx.xx)(λz.zq)
+(λz.zq)(λz.zq)
+(λz.zq) q
+(q)q
+qq
+
+
+-- For this one there is this: "hint: alpha equivalence." But there 
+-- is no use of alpha equivalence in the (given) solution. 
+-- I'm missing something here: 
+
+
+4)
+
+(λz.z) (λz.zz) (λz.zy)
+(λz.zz) (λz.zy)
+(λz.zy) (λz.zy)
+(λz.zy) (y)
+(y)y
+yy
+
+
+5) 
+
+(λx.λy.xyy) (λy.y)y
+(λy(λy.y)yy) (y)
+(λy.y)(y)y
+yy
+
+
+6)
+
+(λa.aa) (λb.ba)c
+(λb.ba) (λb.ba)c
+(λb.ba) (a)c
+(aa)c
+aac
+
+
+7)
+
+(λxyz.xz(yz))(λx.z)(λx.a)
+
+(λx.λy.λz.xz(yz))(λx.z)(λx.a)
+
+(λy.λz1(λx.z)z1(yz1)) (λx.a)
+
+(λz1.(λx.z)(z1)((λx.a)z1))   -- apply y, and its bound to (λx.a)
+
+(λz1.z((λx.a)(z1)))          -- (λx.z) is applied to (z1), tosses 
+                             -- the z1 away and returns z.
+
+(λz1.za)                     -- we reduce the inner nest ((λx.a)(z1))
+                             -- (λx.a) gets applied to z1, but tosses
+			     -- it and returns the free variable a.
+
+
+

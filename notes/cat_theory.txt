@@ -1,0 +1,2 @@
+monochrom: 
+I bet you that every time you count with natural numbers you don't think you're using category theory, despite the fact that a lot of category theory textbooks actually begin with that example (the numbers are the objects, the morphisms point from i to i+1).

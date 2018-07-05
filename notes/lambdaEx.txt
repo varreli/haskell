@@ -1,0 +1,13 @@
+(λ.xyz.xz(yz)) (λmn.m) (λp.p)
+
+(λx.λy.λz.xz(yz)) (λm.λn.m) (λp.p)
+
+(λy.λz.(λm.λn.m)z(yz)) (λp.p)
+
+(λz.(λm.λn.m)z((λp.p)z)
+
+(λz.(λn.z)((λp.p)z)     -- apply binding n to ((λp.p)z)
+
+λz.z
+
+
