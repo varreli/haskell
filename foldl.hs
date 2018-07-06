@@ -1,7 +1,7 @@
 -- flip is required because the types need to 
 -- agree with (:) . First, foldl extracts 10 :
 
-foldl (flip (:)) [1,2,3] [10,11]
+-- foldl (flip (:)) [1,2,3] [10,11]
 -- is the same as:
 (:) 10 [1,2,3]
 (:) 11 [10,1,2,3]
