@@ -28,11 +28,7 @@ choices = concat . map perms . subs
 
 split :: [a] -> [([a], [a])]
 split []     = []
-<<<<<<< HEAD
 split [_]    = []                                              -- hangs without this
-=======
-split [_]    = []                                        --    hangs without this
->>>>>>> 7387f4dc9c6e28749b3f372ac3bfc3935297d1a4
 split (x:xs) = ([x], xs) : [(x:ls, rs) | (ls, rs) <- split xs]
 
 -- split [1,2,3] = ([1],[2,3]) : (1:[2], [3]) : [(1:2:3[], [])]
