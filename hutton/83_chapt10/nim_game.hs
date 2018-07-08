@@ -13,7 +13,7 @@ play board player = do newline
                              putStr "Player "
                              putStrLn (show player)
                              row <- getDigit "Enter a row number: "
-                             num <- getDigit "Stars to remove : "
+                             num <- getDigit "Stars to remove: "
                              if valid board row num then
                                 play (move board row num) (next player)
                              else
