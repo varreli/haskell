@@ -1,6 +1,0 @@
-lambdabot command:
-
-@djinn (a, b) -> c -> (b, c) ==> f (_, a) b = (a, b)
-
--- takes a type signature and constructs a function
--- satisfying it.

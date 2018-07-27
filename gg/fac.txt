@@ -1,0 +1,85 @@
+All are combinators since there are
+no free variables :
+
+\a -> a                     id
+
+\a -> \b -> a               const 
+const :: a -> b -> a
+const :: a -> (b -> a)
+
+\f -> \a -> \b -> f b a     flip
+
+myFlip :: (x -> y -> z) -> y -> x -> z
+myFlip f = \x -> \y -> f y x
+
+
+flipps :: (x -> y -> z) -> y -> x -> z
+flipps f = g
+  where g a b = f b a
+
+------------------------------------------
+
+define const :
+\a -> \b -> a
+const x _ = x
+
+Prelude> const 6 5
+6
+
+Prelude> const (id 6) 5  
+6                     
+
+Prelude> const id 6 5     -- const id 6 = id   
+5                         -- id 5 = 5
+
+Prelude> flip const 6 5
+5
+
+const id == flip const
+
+------------------------------------------
+
+let gg :: (a -> b) -> a -> c -> b;
+
+gg f a c = f a     
+
+-- equivalent to:
+gg = \f a c -> f a
+
+------------------------------------------
+
+λ > gg (flip const) 6 7 "qq"
+"qq"                          equivalent to:
+λ > gg (const id) 3 7 "yy"
+"yy"
+
+λ > gg (+) 5 7 6
+11
+
+λ > ( (\f a c -> f a) const 1 2 "t" )
+1
+
+-- note gg and (+) unify and require a 
+third parameter :
+
+λ > ((\f a c -> f a) (+) 1 2 3 ) 
+4
+
+-- The above type unification is :
+
+λ > :t gg (+)           			-- :t checks type
+gg (+) :: Num a => a -> c -> a -> a
+
+
+-- note (not) takes one Bool argument, but gg will always 
+require an additional parameter:
+
+λ > gg (not) False "t" 
+True
+
+ 
+λ > gg 1 "t" 4 
+5
+
+λ > gg (+) 1 4 "t"
+error: No instance for (Num [Char]) arising from a use of ‘+’
