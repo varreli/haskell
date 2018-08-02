@@ -60,3 +60,6 @@ tt = head . (filter fst)
 -- 
 --  λ > head (pp [(False, 4), (True, 5)])
 -- (True, 5)
+
+
+--   https://stackoverflow.com/questions/14335704/haskell-how-to-infer-the-type-of-an-expression-manually/14336246 
