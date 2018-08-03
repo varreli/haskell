@@ -1,7 +1,7 @@
 tt :: [(Bool, t)] -> (Bool, t)
 tt = head . (filter fst) 
--- Prelude tt [(False, 3), (False, 2), (True, 1)]
-
+-- Prelude > tt [(False, 3), (False, 2), (True, 1)]
+-- (True, 1)
 -- filter :: (a -> Bool) -> [a] -> [a]
 -- fst    :: (s, t) -> s
 
@@ -41,14 +41,6 @@ tt = head . (filter fst)
 
 ---------------------------------------------------------------------------
 
---  λ >  w = head . filter fst
--- 
---  λ > :t w
--- w :: [(Bool, b)] -> (Bool, b)
--- 
---  λ > w [(False, 4), (False, 5), (True, 14)]
--- (True,5)
--- 
 -- -- The last tuple is the first one with `True` in the `fst` place.
 -- 
 -- **
