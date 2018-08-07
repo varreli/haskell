@@ -1,0 +1,9 @@
+For most people, an off-the-shelf tool is sufficient to get 
+adequate performance. So here the crucial thing is knowing 
+about the semantics of such libraries so you can glue them 
+together in an efficient way. 
+
+This is where tools like logic and abstract algebra become 
+crucial: the focus is on constructing composable interfaces 
+which are easy to reason about, rather than focusing so much 
+on absolute performance of a particular implementation.

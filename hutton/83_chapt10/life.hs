@@ -31,8 +31,19 @@ isEmpty :: Board -> Pos -> Bool
 isEmpty b p = not (isAlive b p)
 
 neighbs :: Pos -> [Pos]
-neighbs (x,y) = map wrap [(x-1, y-1), (x, y-1), (x+1, y-1), (x-1, y), (x+1, y), (x-1, y+1), (x, y+1), (x+1, y+1)]
+neighbs (x,y) = map wrap [(x-1, y-1), (x, y-1), (x+1, y-1), (x-1, y), 
+                          (x+1, y), (x-1, y+1), (x, y+1), (x+1, y+1)]
 
 wrap :: Pos -> Pos
-wrap (x,y) = ((mod (x-1) width) + 1, (mod (y-1) height) + 1)
+wrap (x,y) = ((mod (x-1) width) + 1, 
+              (mod (y-1) height) + 1)
 
+liveneighbs :: Board -> Pos -> Int 
+liveneighbs b = length . filter (isAlive b) . neighbs
+
+survivors :: Board -> [Pos]
+survivors b = [p | p <- b, elem (liveneighbs b p) [2,3]]
+
+rmdups :: Eq a => [a] -> [a]
+rmdups [] = []
+rmdups (x:xs) = x : rmdups (filter (/= x) xs)

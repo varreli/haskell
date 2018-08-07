@@ -9,8 +9,8 @@
 -- produces a list of only the primes in the output, 
 -- and encode the postcondition. We would hope the type
 -- of the output is [Prime] , but we cannot do this, so we
--- produce an output of [Int] , or use a predicate that
--- will return a Bool:
+-- first produce an output of [Int] , then use a predicate 
+-- that will return a Bool:
 
 isFactor n = [ x | x <- [1..n] , mod n x == 0]
 
@@ -23,8 +23,8 @@ primeCheck n = isFactor n == [1,n]
 -- which has an expressible type, and whenever we expect a 
 -- value from X, we instead receive a value from Y and test 
 -- it with our predicate. So instead of a type Prime, we 
--- have the type Integer + the promise that if you test the 
--- value with primeCheck, you'll get True.
+-- have the type Integer plus the promise that if you test 
+-- the value with primeCheck, you'll get True/False.
 
 -- Set X, the primes, needs to be thought of as a predicate 
 -- representation; since X is too abstracted to have a 
