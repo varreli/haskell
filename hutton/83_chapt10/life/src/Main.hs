@@ -1,3 +1,5 @@
+module Main where
+
 import Control.Concurrent
 import System.IO
 
@@ -79,5 +81,6 @@ wait n = threadDelay n
 -- wait :: Int -> IO ()
 -- wait n = sequence_ [return () | _ <- [1..n]]
 
+main :: IO ()
 main = life glider
 
