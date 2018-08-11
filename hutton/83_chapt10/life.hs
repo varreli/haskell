@@ -69,14 +69,13 @@ life :: Board -> IO ()
 life b = do cls
             showcells b
             hFlush stdout
-            wait 600000
+            wait 500000
             life (nextgen b)
 
 
 wait :: Int -> IO ()
 wait n = threadDelay n
 
--- wait :: Int -> IO ()
 -- wait n = sequence_ [return () | _ <- [1..n]]
 
 main = life glider
