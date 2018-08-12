@@ -7,7 +7,9 @@ ldf k n     | divides k n = k
             | k^2 >= n = n
             | otherwise = ldf (k+1) n
 
+
 ld n = ldf 2 n
+
 primeO :: Integer -> Bool
 primeO n | n < 1    = error "not a positive integer"
          | n == 1   = False
