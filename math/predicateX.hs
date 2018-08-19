@@ -31,6 +31,9 @@ primeCheck n = isFactor n == [1,n]
 -- viable solution in code, we use a more mundane solution 
 -- which we define as a predicate. 
 
+-- The type only guarantees that its values are integers. 
+-- If we want those integers to be prime, we have to check.
+
 -- But the above does not refer to representation theory.
 
 -- In representation theory, you study a group G or a monoid M 
