@@ -8,6 +8,8 @@ play board player = do newline
                              putStr "Player "
                              putStr (show (next player))
                              putStr " wins!!"
+                             newline
+
                        else 
                           do newline
                              putStr "Player "

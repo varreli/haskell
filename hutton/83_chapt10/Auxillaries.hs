@@ -11,6 +11,9 @@ type Board = [Int]
 initial :: Board
 initial = [5,4,3,2,1]
 
+initiall :: Board
+initiall = [9,8,7,6,5,4,3,2,1]
+
 finished :: Board -> Bool
 finished = all (== 0)
 
@@ -28,11 +31,17 @@ putRow row num = do putStr (show row)
                     putStrLn (concat (replicate num "* "))
 
 putBoard :: Board -> IO ()
-putBoard [a,b,c,d,e] = do putRow 1 a
-                          putRow 2 b
-                          putRow 3 c
-                          putRow 4 d
-                          putRow 5 e
+-- putBoard [a,b,c,d,e] = do putRow 1 a
+--                           putRow 2 b
+--                           putRow 3 c
+--                           putRow 4 d
+--                           putRow 5 e
+
+putBoard = puttBoard 1                         -- exercise 2 (variation)
+puttBoard r []     = return ()
+puttBoard r (n:ns) = do putRow r n
+                        puttBoard (r + 1) ns
+
 
 getDigit :: String -> IO Int
 getDigit prompt = do putStr prompt
