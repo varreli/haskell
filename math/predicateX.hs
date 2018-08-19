@@ -31,5 +31,12 @@ primeCheck n = isFactor n == [1,n]
 -- viable solution in code, we use a more mundane solution 
 -- which we define as a predicate. 
 
--- Question: how does this explain the Curry-Howard 
--- Isomorphism?
+-- But the above does not refer to representation theory.
+
+-- In representation theory, you study a group G or a monoid M 
+-- via homomorphisms “φ : G → Aut(X)” or “φ : M → End(X)”. But
+-- the primes do not form a group or even a monoid under any 
+-- sensible operation. " Representation " in computer science 
+-- typically means something else altogether.
+
+-- Question: how does this explain the Curry-Howard Isomorphism?
