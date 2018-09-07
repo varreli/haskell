@@ -16,3 +16,7 @@ urCar = Car Mazda (Price 20000)
 clownCar = Car Tata (Price 7000)
 myPlane = Plane Papu
 
+isCar :: Vehicle -> Bool
+
+isCar (Car _ _) = True
+isCar _         = False  
