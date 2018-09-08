@@ -1,0 +1,80 @@
+-- A monoid has multiplication, is associative and has a unit:
+-- So a Monoid with respect to product behaves such: 
+
+-- A product of two types is not symmetric:
+
+(a, b) /= (b, a)
+(Int, Bool) /= (Bool, Int) -- this will not typecheck.
+
+-- However the information is exactly the same. So they are
+-- isomorphic. The isomorphism is called swap:
+
+
+swap :: (a, b) -> (b, a)
+swap p = (snd p, fst p)  -- this is not symmetric, but a function 
+                         -- exists to enact this symmetry; so it is 
+                         -- symmetric up to isomorphism. A 
+			 -- monoid doesn't need to be symmetric.
+                         -- (read: commutative up to isomorphism)
+
+-- A monoid product is also associative. These are not the same :
+
+((a, b), c) ~ (a, (b, c)) -- since a function that takes ((a, b), c)
+                          -- cannot be called with (a, (b, c))
+
+-- But these two types contain the same information that is 
+-- just rearranged, and can be written as an isomorphism:
+
+assoc ((a, b), c) = (a, (b, c)) -- uses pattern matching here
+
+-- we need an inverse to be an isomorphism:
+
+disassoc (a, (b, c)) = ((a, b), c)
+
+-- with swap the inverse is :
+
+t = swap . swap
+t (True, "Cat")
+> (True, "Cat")
+
+-- So the multiplication of types is associative.
+-- Lastly, we need identity in the monoid. 
+
+(a, () ) -- unit is a type of one element only, otherwise the product
+         -- (number of elements), would be larger.
+
+-- Pattern matching to find the unit value :
+
+mUnit ( x, () ) = x
+mUnit_inv x = (x, () ) -- types x and () are isomorphic.
+
+-- The cartesian product of (lineCoord, () ) == line Coord : we get
+-- the same line ! 
+
+-- We can always form a pair from an 'a', by taking an element of 'a'
+-- and pairing it with Unit () .
+
+-- mUnit can be rewritten as 
+
+mUnit p = fst p  -- or just:
+mUnit   = fst    -- which is the beta reduction (point free)
+
+-- this is modularized isomorphism, ie monoid 
+
+mUnit = fst  == (a, () ) ~ a  
+
+-- or
+
+a * 1 = a -- mutiplicative identity. equals here means "up to 
+          -- isomorphism" meaning (=) connotes isomorphic.
+
+
+-- Equivalence lets us look at sets in a way which hides irrelevant 
+-- detail: a mathematical object is what it does. Algebra has
+-- isomorphisms and category theory has natural isomorphisms. These 
+-- preserve exactly the structure that can be measured when working 
+-- with the set by some particular axioms. For instance, two groups 
+-- are "the same" (equal up to isomorphism) if one cannot tell the 
+-- difference between them when composing or inverting elements. 
+
+
