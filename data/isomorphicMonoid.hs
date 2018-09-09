@@ -68,6 +68,9 @@ mUnit = fst  == (a, () ) ~ a
 a * 1 = a -- mutiplicative identity. equals here means "up to 
           -- isomorphism" meaning (=) connotes isomorphic.
 
+-- so identity in the form (a, id) is isomorphic to a, but they are
+-- not equivalent.
+
 
 -- Equivalence lets us look at sets in a way which hides irrelevant 
 -- detail: a mathematical object is what it does. Algebra has
