@@ -72,12 +72,13 @@ a * 1 = a -- mutiplicative identity. equals here means "up to
 -- not equivalent.
 
 
--- Equivalence lets us look at sets in a way which hides irrelevant 
--- detail: a mathematical object is what it does. Algebra has
--- isomorphisms and category theory has natural isomorphisms. These 
--- preserve exactly the structure that can be measured when working 
--- with the set by some particular axioms. For instance, two groups 
--- are "the same" (equal up to isomorphism) if one cannot tell the 
--- difference between them when composing or inverting elements. 
+-- Equivalence lets us look at sets in a way which hides 
+-- irrelevant detail: a mathematical object is what it 
+-- does. Algebra has isomorphisms and category theory has 
+-- natural isomorphisms. These preserve exactly the structure 
+-- that can be measured when working with the set by some 
+-- particular axioms. For instance, two groups are "the same" 
+-- (equal up to isomorphism) if one cannot tell the difference 
+-- between them when composing or inverting elements. 
 
 
