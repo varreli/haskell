@@ -1,0 +1,26 @@
+  L(a) = 1 + a * L(a)
+  L(a) - a * L(a) = 1
+  L(a) (1 - a) = 1
+  L(a) = 1 / (1 - a)
+
+-- This corresponds to the List type :
+
+  data List a = Nil | Cons a (List a)  
+  
+  -- List is a sum with 2 constructors: Nil and Cons
+  -- Cons is a product type with 2 arguments, head and tail:
+  -- (a, (List a) )
+
+  -- This leads to the summation of all Lists:
+
+  -- oo Sum n = 0  a^n = 
+  --                    1 + [singleton] + [a,a] + [a,a,a] ...
+
+  -- This is also the sum of a geometric sequence.
+
+  -- Using substitution:
+  L(a) = 1 + a * L(a)
+  L(a) = 1 + a * (1 + a * L(a) ) 
+       = 1 + a + 2a (1 + a * L(a) )
+       = 1 + a + 2a + 3a (1 + a * L(a) ... OO
+
