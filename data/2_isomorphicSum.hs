@@ -53,6 +53,9 @@ Triple a b c = Left a
 
   L(a) = 1 + a * L(a)
   L(a) - a * L(a) = 1
+  
+ (1 * L(a)) - (a * L(a)) = 1       -- factor out 1 
+  
   L(a) (1 - a) = 1
   L(a) = 1 / (1 - a)
 
