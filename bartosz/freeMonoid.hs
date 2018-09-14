@@ -25,7 +25,7 @@ M :: (m, m) -> m
 --                         ab -> h(a) -> h(b) -> h(ab)
 
 
--- (Also, monoids can be defined with F-algebras.)
+-- (Note monoids can be defined in a variety of ways, ie F-algebras.)
 
 -- So the identity function is a homomorphism, it maps monoid to
 -- monoid, unit to unit, and product to product. Composition to
