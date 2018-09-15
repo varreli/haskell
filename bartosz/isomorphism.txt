@@ -1,0 +1,11 @@
+If two data types are isomorphic, it is possible to write: 
+
+to :: a -> b 
+
+from :: b -> a 
+
+such that: 
+
+to . from = id
+
+from . to = id
