@@ -48,7 +48,7 @@ t (True, "Cat")
 mUnit ( x, () ) = x
 mUnit_inv x = (x, () ) -- types x and () are isomorphic.
 
--- The cartesian product of (lineCoord, () ) == line Coord : we get
+-- The cartesian product of (lineCoord, () ) == lineCoord : we get
 -- the same line ! 
 
 -- We can always form a pair from an 'a', by taking an element of 'a'
