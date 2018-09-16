@@ -1,10 +1,9 @@
--- foldrr :: (a -> b -> b) -> b -> [a] -> b
+foldrr :: (a -> b -> b) -> b -> [a] -> b
 
 -- b is the type of the seed; and a is the
--- element type. that function says how to
--- combine an element into the seed.
+-- element type. this function says how to
+-- combine an element into the seed :
 
-foldrr :: (a -> b -> b) -> b -> [a] -> b
 foldrr f z []     = z
 foldrr f z (x:xs) = f x (foldrr f z xs)
 

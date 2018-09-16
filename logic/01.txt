@@ -1,7 +1,12 @@
 P => Q ≡ ¬P ∨ Q ≡ ¬(¬Q) ∨ ¬P ≡ ¬ Q => ¬P
 
-¬(¬Q) is just Q. We are doing this manipulation to show 
-a formal way to prove that P => Q ≡ ¬ Q => ¬P. By 
-substituting ¬Q as P and ¬P as Q,  we have 
+¬(¬Q) is just Q. 
+
+We are doing this manipulation to show 
+a formal way to prove : 
+
+P => Q ≡ ¬ Q => ¬P. 
+
+By substituting ¬Q as P and ¬P as Q,  we have 
 
 ¬(¬Q) ∨ ¬ P ≡ ¬ Q => ¬ P.
