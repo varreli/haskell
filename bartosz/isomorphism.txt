@@ -1,11 +1,43 @@
-If two data types are isomorphic, it is possible to write: 
+-- If two data types are isomorphic, it is possible to write: 
 
 to :: a -> b 
 
 from :: b -> a 
 
-such that: 
+-- With identity, you can do one important thing, you can define
+-- isomorphisms. a pair of arrows, f and g, are isomorphic if:
 
-to . from = id
+to . from = id    -- f . g = id b
 
-from . to = id
+from . to = id    -- g . f = id a
+
+-- or:
+
+id b . f = f
+id a . g = g
+
+-- g is an inverse of f. So for every type we must have a
+-- function (id) back to this type. Whatever f did, g undid. These 2 
+-- objects have, in terms of arrows, exactly the same properties.
+-- Is isomorphism the same as equality? It's tricky.
+
+-- Composition is a binary operation, so it is associative. 
+-- compose f . g . h
+
+f :: a -> b
+
+g :: b -> c
+
+(f . g) acting on an element x of type A:   
+
+(f . g) x  == g (f x)
+
+-- or
+
+(.) :: (b -> c) -> (a -> b) -> (a -> c)
+
+--        g           f        (g  . f)
+
+-- This is a higher order function since it takes 
+-- functions as arguments.
+
