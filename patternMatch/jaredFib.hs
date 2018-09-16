@@ -1,6 +1,6 @@
 -- fibonacci using this pattern:
 
-Prelude> let x = 1 : 1 : zipWith (+) x (tail x) in x
+fibb = take 10 (let x = 1 : 1 : zipWith (+) x (tail x) in x)
 
 -- this is zipping a list with the tail of that 
 -- list using addition 
@@ -11,3 +11,6 @@ Prelude> let x = 1 : 1 : zipWith (+) x (tail x) in x
 
 -- Note: Anything that works with infinite lists, 
 -- such as fibonaccis, must be co-recursive.
+
+fibby = takeWhile (< 144) x
+  where x = 1 : 1 : zipWith (+) x (tail x)
