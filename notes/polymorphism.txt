@@ -1,0 +1,39 @@
+:t (+1)
+Num a => a -> a
+
+This is only the *inferred* type.
+
+It is not the "actual" type. It's the most general 
+possible type. Actual type is harder to define.
+
+(+1) can have type Int -> Int depending on inputs.
+
+So ghci will give you the most general type until it 
+sees what youre trying to do.
+
+In general, that's Haskell's type inference rule.
+
+> (+1) 5.0
+6.0
+
+> :t (+1) 5.0
+Fractional a => a
+
+(a -> b) 
+
+At the toplevel, (a -> b) means:
+
+Give me one of anything, and I'll give you back one of 
+anything else.
+
+So we need A -> B at the top level       (? check this) 
+
+***
+
+forall isn't part of standard Haskell, but we need it 
+to understand polymorphism.
+
+There is an implicit forall right after the :: for each 
+of the type variables:
+
+f :: forall a b. (a -> b) -> a -> b
