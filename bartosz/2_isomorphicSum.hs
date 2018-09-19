@@ -81,3 +81,5 @@ Triple a b c = Left a
        = 1 + a + 2a + 3a (1 + a * L(a) ... OO
 
 -- Note this can be formalized in a fixed point combinator.
+
+
