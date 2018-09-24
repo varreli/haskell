@@ -1,0 +1,1 @@
+Before learning monad in the abstract, learn concrete monads first: Reader,Writer, State, IO, List.
