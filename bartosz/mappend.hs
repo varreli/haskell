@@ -18,6 +18,7 @@ main = do
     putStrLn "\nThese are equal:"
     print $ "Hello there!" <>  mempty <> " Monoids are"  <> " neat!" <> mempty
     print $ "Hello there!" <> (mempty <> " Monoids are") <> " neat!" <> mempty
+    print $ foldr (<>) mempty ["Hello, ", "Monoids are ", mempty, "Cool"] 
 
 ff = flip (++)
 tt = (<>) (Just "Peace") (Just " Out")  -- (<>) is mappend
