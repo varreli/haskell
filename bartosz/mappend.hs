@@ -20,5 +20,9 @@ main = do
     print $ "Hello there!" <> (mempty <> " Monoids are") <> " neat!" <> mempty
 
 ff = flip (++)
-tt = (++) (Just "Peace") (Just " Out")
+tt = (<>) (Just "Peace") (Just " Out")  -- (<>) is mappend
 
+-- note:
+
+-- > tt <> mempty <> Nothing <> Just " Dude"
+-- Just "Peace Out Dude"
