@@ -17,3 +17,7 @@ aa = print . mconcat $ map First vals
 bb = print . mconcat $ map Last  vals
 
 cc = print . mconcat $ map First values
+
+valls :: [Maybe Int]
+valls = [readMay "3", readMay "ignored" , readMay "7"]
+dd = print . mconcat $ map Sum valls
