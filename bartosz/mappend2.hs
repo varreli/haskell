@@ -34,3 +34,7 @@ vallues = [False,False,True]
 
 ff = print . mconcat $ map All vallues
 gg = print . mconcat $ map Any vallues
+
+--
+
+
