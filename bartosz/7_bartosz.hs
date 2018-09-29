@@ -13,5 +13,6 @@ v3 = length . gh
 
 main = do
     print $ v1 "a\n\nb\nc"
-    print $ v2 "a\n\nb\ncxxx"
+    print $ v2 "a\n\nb\nc"
     print $ v3 "a\n\nb\nc"
+
