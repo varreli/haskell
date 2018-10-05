@@ -1,9 +1,11 @@
+-- List as algebraic data type:
+
   L(a) = 1 + a * L(a)
   L(a) - a * L(a) = 1
   L(a) (1 - a) = 1
   L(a) = 1 / (1 - a)
 
--- This corresponds to the List type :
+-- This corresponds to the haskell List type :
 
   data List a = Nil | Cons a (List a)  
   
@@ -23,4 +25,3 @@
   L(a) = 1 + a * (1 + a * L(a) ) 
        = 1 + a + 2a (1 + a * L(a) )
        = 1 + a + 2a + 3a (1 + a * L(a) ... OO
-

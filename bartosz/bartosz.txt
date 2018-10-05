@@ -60,4 +60,50 @@ look at only its morphisms (its interface),
 to find its nature. This is the ultimate in
 abstraction and data hiding.
 
-end video 2
+--------------------------------------------
+
+A pure, or total function between sets is a
+function that is defined for all its arguments,
+not just some arguments. This is a mathematical
+function. In programming functions can be
+partial, which fail with some arguments. A pure
+function is defined for some type, i.e. Integers,
+which means *all* Integers.
+
+Decomposition brings us to the blocks at the
+lowest level, the pure functions (atoms).
+On top of these, we can build more complex
+objects, data types, procedures, or IO.
+
+We look at functions as morphisms between sets.
+In two sets there are relations between pairs
+of elements. A set of pairs forms a cartesian
+product. A subset of a cartesian product is a
+relation. Relations have no directionality, but
+functions have directionality. (Domain to Codomain.)
+The subset in the Codomain, to which the entire
+Domain is mapped, is called the image of the
+function. Mapping in this way has a directionality.
+This is a key intuition. Mapping between categories
+are called functors. Mappings between functors are
+called natural transformations.
+
+Is the mapping invertible, ie can we go back? In
+most cases no. But to illustrate inversion:
+
+f :: a -> b             a and b are sets, or types.
+the inverse is:
+g :: b -> a
+
+When a function is invertible
+we have the definition of isomorphism :
+
+[ g . f = id.a ]    -- g after f, identity on a
+[ f . g = id.b ]    -- f after g. identity on b
+
+This is isomorphism in any category - not just in
+sets, because its expressed in terms of composition
+and identity, nothing else.
+
+
+
