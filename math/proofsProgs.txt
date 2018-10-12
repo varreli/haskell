@@ -1,0 +1,29 @@
+Propositions as Types
+
+The relation between Proofs and Propostions
+
+   Proofs
+------------   
+Propositions    --   =
+
+
+ Programs
+----------
+  Types
+
+
+Proofs justify propositions
+Programs justify types
+
+Prop = Bool         -- doesn't work in CS
+
+Prop = Type         -- The evidence of a proposition
+                    -- is the Type of its proof
+
+P ^ (Q v R) -> P ^ Q  v  P ^ R
+
+To prove this is a tautology, with Prop as Bool
+we would draw a truth table.
+
+With Prop as Types, 
+
