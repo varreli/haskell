@@ -1,0 +1,83 @@
+Propositions as Types
+
+The relation between Proofs and Propostions
+
+   Proofs             Programs
+------------    =    ----------   
+Propositions           Types
+
+
+Proofs justify propositions
+Programs justify types
+
+Prop = Bool         -- doesn't work in CS
+
+Prop = Type         -- The evidence of a proposition
+                    -- is the Type of its proof
+
+P ^ (Q v R) -> P ^ Q  v  P ^ R
+
+To prove this is a tautology, with Prop as Bool
+we would draw a truthtable.
+
+--------------------------------------------------------
+
+With Prop as Types, the evidence for P ^ Q is a pair
+(the evidence for P and the evidence for Q). This is
+denoted as   P * Q   the cartisian product of types.
+This corresponds to constructing records.
+
+P ^ Q         P * Q
+
+x : P         y : Q
+-----         -----
+(x,y)    :    P * Q    -- we translate conjunction as 
+                       -- product.
+
+-------------------------------------------------------
+                       
+    P v Q           P + Q
+
+
+    x : P            y : Q
+------------     -------------
+left x : P+Q     right y : P+Q
+
+-------------------------------------------------------
+
+P -> Q          f : P -> Q     
+
+We translate implication as functions. F takes
+evidence of P and returns evidence of Q.
+
+
+P ^ (Q v R) -> P ^ Q  v  P ^ R    -- this translates to:
+
+P * (Q + R) -> P * Q + P * R
+
+So to prove this is a tautology, we need a function that
+whenever it takes this input:
+
+f : P * (P + Q)                   -- this is f x
+
+it will return:
+
+                -> P * Q + P * R  -- this is the output.
+
+So we have the full translation:
+
+f : P * (Q + R) -> P * Q + P * R
+
+f x = ?
+
+These two lines analyze each element of the input:
+
+f (x, left y)   =  left  (x, y)
+f (x, right z)  =  right (x, z)
+
+This is a simple program in the functional style that
+inhabits the type :
+
+P * (Q + R) -> P * Q + P * R
+
+
