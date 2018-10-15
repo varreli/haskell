@@ -1,0 +1,32 @@
+Consider Haskell, which is Turing Complete. Basically, 
+it allows for general recursion by having an 
+axiomatically defined fixed-point operator of type 
+
+(α→α)→α(α→α)→α. 
+
+Basically, it allows you to write a function taking a 
+"self" argument, and create a new function which 
+receives itself as the "self" argument.
+
+This can be done with something like the Y-combinator, 
+but there's no way to properly type such a function. 
+So, there's an axiom that asserts that this fixpoint 
+function is well typed.
+
+The problem is, this now allows you to write programs 
+that don't halt. When you use Curry-Howard, this allows 
+you to prove False theorems.
+
+Look at the type of that function as a proposition. 
+
+(P⟹P)⟹P(P⟹P)⟹P 
+
+as an axiom lets you prove anything, since every 
+proposition implies itself. There's a result called the 
+Recursion Theorem that basically says you can always 
+find such a function in a Turing-Complete language.
+
+Allowing for non-halting programs is what makes Turing 
+Machines powerful, and is at the heart of the 
+Church-Turing thesis. But as soon as you allow that, any 
+meaningful relation to logic is lost.
