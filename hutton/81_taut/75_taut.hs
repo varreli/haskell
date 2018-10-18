@@ -43,19 +43,6 @@ eval s (Equiv p q)  = eval s p == eval s q
 -- Const True is a tautology, since:
 -- \x -> True is what Const True returns.
 
--- Truth Tables can be represented as :
-
-p1 :: Prop
-p1 = And (Var 'A') (Not (Var 'A'))
-
-p2 :: Prop
-p2 = Imply (And (Var 'A') (Var 'B')) (Var 'A')
-
-p3 :: Prop
-p3 = Imply (Var 'A') (And (Var 'A') (Var 'B'))
-
-p4 :: Prop
-p4 = Imply (And (Var 'A') (Imply (Var 'A') (Var 'B'))) (Var 'B')
 
 vars :: Prop -> [Char]
 vars (Const _)   = []

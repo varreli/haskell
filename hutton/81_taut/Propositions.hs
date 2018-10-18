@@ -22,3 +22,11 @@ p3 = Imply (Var 'A') (And (Var 'A') (Var 'B'))
 
 p4 :: Prop
 p4 = Imply (And (Var 'A') (Imply (Var 'A') (Var 'B'))) (Var 'B')
+
+p5 :: Prop
+p5 = Imply (And (Var 'A') (Or (Var 'B') (Var 'C'))) (Or (And (Var 'A') (Var 'B')) (And (Var 'A') (Var 'C'))) 
+
+
+-- p5 is a tautology and is from proofsProgs.txt on computerphile video ! :
+
+-- P ^ (Q v R) -> P ^ Q  v  P ^ R
