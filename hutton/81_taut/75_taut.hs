@@ -43,6 +43,7 @@ eval s (Equiv p q)  = eval s p == eval s q
 -- Const True is a tautology, since:
 -- \x -> True is what Const True returns.
 
+
 vars :: Prop -> [Char]
 vars (Const _)   = []
 vars (Var x)     = [x]
