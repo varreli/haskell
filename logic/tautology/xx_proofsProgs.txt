@@ -80,4 +80,12 @@ inhabits the type :
 
 P * (Q + R) -> P * Q + P * R
 
+-------------------------------------------------------
 
+Predicates :
+
+Q : N -> Proposition
+
+forAll Naturals x . Qx | not Qx
+
+As in the case of Prime numbers.
