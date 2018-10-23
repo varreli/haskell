@@ -1,0 +1,42 @@
+P -> Q          f : P -> Q     
+
+We translate implication as functions. F takes
+evidence of P and returns evidence of Q.
+
+
+P ^ (Q v R) -> P ^ Q  v  P ^ R    -- this translates to:
+
+P * (Q + R) -> P * Q + P * R
+
+So to prove this is a tautology, we need a function that
+whenever it takes this input:
+
+f : P * (P + Q)                   -- this is f x
+
+it will return:
+
+                -> P * Q + P * R  -- this is the output.
+
+So we have the full translation:
+
+f : P * (Q + R) -> P * Q + P * R
+
+f x = ?
+
+These two lines analyze each element of the input:
+
+f (x, left y)   =  left  (x, y)
+f (x, right z)  =  right (x, z)
+
+This is a simple program in the functional style that
+inhabits the type :
+
+P * (Q + R) -> P * Q + P * R
+-------------------------------------------------------
+Predicates :
+
+Q : N -> Proposition
+
+forAll Naturals x . Qx | not Qx
+
+As in the case of Prime numbers.

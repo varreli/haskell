@@ -1,0 +1,44 @@
+Propositions as Types
+
+The relation between Proofs and Propostions
+
+   Proofs             Programs
+------------    =    ----------   
+Propositions           Types
+
+
+Proofs justify propositions
+Programs justify types
+
+Prop = Bool         -- doesn't work in CS
+
+Prop = Type         -- The evidence of a proposition
+                    -- is the Type of its proof
+
+P ^ (Q v R) -> P ^ Q  v  P ^ R
+
+To prove this is a tautology, with Prop as Bool
+we would draw a truthtable.
+
+--------------------------------------------------------
+
+With Prop as Types, the evidence for P ^ Q is a pair
+(the evidence for P and the evidence for Q). This is
+denoted as   P * Q   the cartisian product of types.
+This corresponds to constructing records.
+
+P ^ Q         P * Q
+
+x : P         y : Q
+-----         -----
+(x,y)    :    P * Q    -- we translate conjunction as 
+                       -- product.
+
+-------------------------------------------------------
+                       
+    P v Q           P + Q
+
+
+    x : P            y : Q
+------------     -------------
+left x : P+Q     right y : P+Q
