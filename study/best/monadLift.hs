@@ -3,15 +3,15 @@
 -- (x,y) for each element x in xs and each 
 -- element y in ys. Use a list comprehension:
 
-cartProd xs ys = [(x,y) | x <- xs, y <- ys]
 
+-- cartProd xs ys = [(x,y) | x <- xs, y <- ys]
 
--- -- -- ------------------------------------
+----------------------------------------------- OR:
 
--- import Control.Monad (liftM2)
+import Control.Monad (liftM2)
 
--- cartProd :: [a] -> [b] -> [(a, b)]
--- cartProd = liftM2 (,)
+cartProd :: [a] -> [b] -> [(a, b)]
+cartProd = liftM2 (,)
 
 -- You probably wouldn't ever want to 
 -- write this in real code, but the basic 
