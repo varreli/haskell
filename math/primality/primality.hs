@@ -28,5 +28,5 @@ main = print $ map primeO [3,6,13,91,131,140]  -- use of map
 
 -- (40^2 + 40 + 41) = 40(41) + 41 = 41 * 41    -- not prime
 
--- So, that  (n^2 + n + 41)  is prime for all n is :  False
+-- So, (n^2 + n + 41) is prime for all n is :         False
 
