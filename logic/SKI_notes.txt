@@ -1,0 +1,28 @@
+All operations in lambda calculus can be encoded via 
+abstraction elimination into the SKI calculus as binary 
+trees whose leaves are one of the three symbols S, K, 
+and I (called combinators).
+
+Although the most formal representation of the objects 
+in this system requires binary trees, they are usually 
+represented, for typesetability, as parenthesized 
+expressions, either with all the subtrees parenthesized, 
+or only the right-side children subtrees parenthesized. 
+So, the tree whose left subtree is the tree KS and whose 
+right subtree is the tree SK is usually typed as ((KS)(SK)), 
+or more simply as KS(SK), instead of being fully drawn as 
+a tree (as formality and readability would require). 
+Parenthesizing only the right subtree makes this notation 
+left-associative: ISK means ((IS)K).
+
+I is redundant, as it behaves the same as SKK, but is 
+included for convenience.
+
+The choice of reduction strategy determines which terms diverge:
+normal order vs. applicative order.
+
+The SKI calculus is called synthetic (a theory) versus analytic
+(a model).
+
+
+
