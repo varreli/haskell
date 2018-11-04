@@ -56,11 +56,11 @@ P ^ (Q v R) -> P ^ Q  v  P ^ R    -- this translates to:
 P * (Q + R) -> P * Q + P * R
 
 So to prove this is a tautology, we need a function that
-whenever it takes this input:
+whenever it takes this input (f x) :
 
-f : P * (P + Q)    -- this is f x .
-                   -- it returns the output of an 
-		   -- addition of two pairs:
+f : P * (P + Q)   
+
+it returns the output of an addition of two pairs:
 
 -> P * Q + P * R 
 
