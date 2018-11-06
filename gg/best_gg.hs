@@ -10,7 +10,7 @@ const id :: (c -> c) -> b -> (c -> c) -- unified
 
 > const const id 5 "goofy" -- const applied to const id is
                            -- const 5 "goofy"
-			   -- 5
+                           -- 5
 
 
 -- :t const const id is :: a -> b -> a 
