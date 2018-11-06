@@ -1,0 +1,24 @@
+A combinator is a term. A closure is a (term, context) pair. 
+
+Suppose we are in a context where x = 2
+
+Then: 
+
+\y -> y + 2   and   \y -> y + x 
+
+*denote* the same function in this context.
+
+
+term1 = \y -> y + 2
+term2 = \y -> y + x
+
+Note that term1 and term2 are *terms*, not functions. In principle, 
+the same term may denote different things in different contexts.
+
+
+This is a closure:
+
+(  \y -> y + x   ,   x = 2  )
+
+       term        context 
+
