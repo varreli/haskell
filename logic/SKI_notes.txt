@@ -15,14 +15,18 @@ a tree (as formality and readability would require).
 Parenthesizing only the right subtree makes this notation 
 left-associative: ISK means ((IS)K).
 
-I is redundant, as it behaves the same as SKK, but is 
-included for convenience.
+I is redundant, as it behaves the same as SKK. specifically: 
+SKxy reduces to y, so SKx === I
+
+So these are all equivalent: SKK, SKS, SK(SSSSSS) .
 
 The choice of reduction strategy determines which terms diverge:
 normal order vs. applicative order.
 
 The SKI calculus is called synthetic (a theory) versus analytic
-(a model).
+(a model). Theoretic means you've derived / proved it from 
+logic fundamentals. Analytic means its fitted to existing 
+data of some kind.
 
 
 
