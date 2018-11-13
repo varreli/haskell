@@ -29,4 +29,11 @@ logic fundamentals. Analytic means its fitted to existing
 data of some kind.
 
 
+-- study:
+1)
 
+https://cs.stackexchange.com/questions/55441/what-is-the-purpose-of-the-ski-combinator-calculusor-even-lambda-calculus-wha/55444
+
+2)
+
+https://blog.ngzhian.com/ski.html
