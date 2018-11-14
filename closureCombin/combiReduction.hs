@@ -2,7 +2,7 @@
 
 -- The anonymous function with formal parameter x and
 -- body e is applied to value y. This is equivalent to
---  return e with each appearance of x replaced by y.
+-- return e with each appearance of x replaced by y.
 
 
 

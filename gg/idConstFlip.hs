@@ -6,9 +6,17 @@
 -- \f -> \a -> \b -> f b a     flip
 
 
+-- define flip : flips the expectation of the argument order.
+
+-- fllp :: (a -> b -> c) -> b -> a -> c 
+-- fllp = \f x y -> f y x 
+
+
 -- define const :
+
 -- \a -> \b -> a
 -- const x _ = x
+
 
 Prelude> const 6 5
 6
