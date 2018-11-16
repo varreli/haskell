@@ -6,5 +6,8 @@ s f g h = f h (g h)
 k f g   = f
 i f     = f
 
-compose = s (s (k s) k) i
+c = (s (k s) k)   -- c is composition:  (.)  
+
+two = s c i 
+
 
