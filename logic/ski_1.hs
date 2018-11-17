@@ -11,12 +11,10 @@ c = (s (k s) k)   -- c is composition:  (.)
 
 two = s c i 
 
-
 -- λ > two Succ Zero
 -- Succ (Succ Zero)
--- 
--- -- compare s type to <*> :
--- 
--- s   :: (t2 -> t1 -> t) -> (t2 -> t1) -> t2 -> t
--- 
--- (<*>) :: Applicative f => f (a -> b) -> f a -> f b
+
+-- compare s type to <*> :
+
+--    s   :: (t2 -> t1 -> t) -> (t2 -> t1) -> t2 -> t
+--  (<*>) :: Applicative f => f (a -> b) -> f a -> f b
