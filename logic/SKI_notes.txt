@@ -28,6 +28,21 @@ The SKI calculus is called synthetic (a theory) versus analytic
 logic fundamentals. Analytic means its fitted to existing 
 data of some kind.
 
+Const (K) enables point-free (no parameters) notation. Its a 
+function that takes a value and returns a function that takes a
+second value, but returns the first value:
+
+\x -> \y -> x
+
+In lambda calculus \x -> \x -> x , the returned x is from the 
+second function (the middle term).
+
+With (S) you can write it 2 ways:
+
+S f g h =  f h  (g h)
+        = (f h) (g h)
+
+--------------------------------------------------------------
 
 -- study:
 1)
