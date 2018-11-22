@@ -9,3 +9,6 @@ tx = (<$>) length
 -- constraints on the element type originating from 
 -- length, namely Foldable)
 
+-- Functor wants a type constructor that takes one type 
+-- and not a concrete type:
+
