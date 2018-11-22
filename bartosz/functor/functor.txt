@@ -1,0 +1,11 @@
+
+Functor wants a type constructor that takes one type 
+and not a concrete type:
+
+[]         -- [a] makes it concrete
+Maybe
+Either a   --   b makes it concrete
+Tree
+
+Use fmap to map any function over functor once the
+functor instance is defined.
