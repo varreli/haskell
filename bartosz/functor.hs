@@ -18,4 +18,3 @@ tx = (<$>) length
 -- Tree
 
 
-
