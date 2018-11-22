@@ -12,3 +12,10 @@ tx = (<$>) length
 -- Functor wants a type constructor that takes one type 
 -- and not a concrete type:
 
+-- a : []
+-- Maybe
+-- Either a   -- b makes it concrete
+-- Tree
+
+
+
