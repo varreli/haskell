@@ -17,3 +17,14 @@ b = (<$>) length
 -- Either a   -- b makes it concrete
 -- Tree
 
+myError = (<$>) (replicate 3) (Left "Error message following")
+
+-- note Either Left is implemented as the failure case; w/o Left.
+-- fmap also would not apply the function to Nothing:
+
+myNothing = (<$>) (replicate 3) (Nothing)
+ 
+
+
+
+
