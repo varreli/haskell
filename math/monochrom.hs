@@ -22,3 +22,9 @@ hick ([]) = 0
 --  hick is not building up a list. hick is 
 --  consuming a list and crunching numbers
 --  (the list is xs here.)
+
+
+hickk (x:xs) = x * hickk (xs)
+hickk [] = 1
+
+-- The base case, [] = 1, is identity for (*).

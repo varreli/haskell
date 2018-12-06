@@ -31,12 +31,12 @@ int2bit = unfold (== 0) (`mod` 2) (`div` 2)
 type Subst = Assoc Char Bool
 
 eval :: Subst -> Prop -> Bool
-eval _ (Const b)   = b
-eval s (Var x)     = find x s
-eval s (Not p)     = not (eval s p)
-eval s (And p q)   = eval s p && eval s q
-eval s (Imply p q) = eval s p <= eval s q
-eval s (Or p q)    = eval s p || eval s q
+eval _ (Const b)    = b
+eval s (Var x)      = find x s
+eval s (Not p)      = not (eval s p)
+eval s (And p q)    = eval s p && eval s q
+eval s (Imply p q)  = eval s p <= eval s q
+eval s (Or p q)     = eval s p || eval s q
 eval s (Equiv p q)  = eval s p == eval s q
 
 
