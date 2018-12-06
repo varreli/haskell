@@ -19,8 +19,11 @@ seriesUp = seriesUp' 0
 -- non-recursive:
 
 f = concatMap rr . rr 
-  where rr n = [1..n]
+    where rr n = [1..n ] 
+
 -- note: f n = concatMap rr . rr n
+
+
 
 -- Prelude> let rr n = [1..n]
 
