@@ -11,8 +11,8 @@ ldf k n     | divides k n = k
 ld n = ldf 2 n
 
 primeO :: Integer -> Bool
-primeO n | n < 1    = error "not a positive integer"
-         | n == 1   = False
+primeO n | n < 1      = error "not a positive integer"
+         | n == 1     = False
          | otherwise  = ld n == n
 
 main = print $ map primeO [3,6,13,91,131,140]  -- use of map
