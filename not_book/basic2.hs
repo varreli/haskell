@@ -8,3 +8,7 @@ result = isoMorph 3 4.4 'a' "bcd"
 
 result2 = fst result 
 
+addTup :: (Int, Int) -> Int
+addTup (x,y) = x + y
+
+

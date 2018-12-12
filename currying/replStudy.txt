@@ -15,7 +15,6 @@ Prelude> fst (1, 2)
 Prelude> curry fst 1 2
 1
 
-
 Prelude> :t (&&)
 Prelude> Bool -> Bool -> Bool
 
