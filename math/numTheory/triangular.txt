@@ -1,0 +1,26 @@
+For each of the following statements, fill in the blank with an 
+easy-to-check criterion:
+
+a)  M is a triangular number iff    __ 8M + 1 __    is an odd square.
+b)  N is an odd square iff  __ (N - 1 ) / 8 __  is a triangular number.
+c)  Prove that your criterion in (a) and (b) are correct.
+
+---
+
+This notes that if m = n(n + 1) / 2      (a triangular number)
+
+then 8m + 1 = (2n + 1) ^2   ,  and this last is an odd square.
+
+(   (2n + 1)   is a generic odd number , so   
+
+(2n + 1) ^2   is an odd square.  ) This is reversible.
+
+
+8m = 8[n(n+1) / 2      =
+8[(n^2 + n) / 2]       =
+4(n^2 + n)             =
+4n^2 + 4n        
+
+That + 1 = (2n + 1) ^2  ,       and is an odd square
+
+4n^2 + 4n + 1          =        (2n + 1) (2n + 1)
