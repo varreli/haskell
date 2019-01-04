@@ -1,0 +1,18 @@
+proving that 2 sides of a primitive pythagorean triangle cannot both be odd :
+
+a = 2x + 1
+b = 2y + 1
+c = 2z
+
+Substitute into a^2 + b^2 = c^2  :
+
+(2x + 1)^2 + (2y + 1)^2 = (2z)^2
+
+4x^2 + 4x + 4y^2 + 4y + 2 = 4z^2
+
+Now divide by 2 : 
+
+2x^2 + 2x + 2y^2 + 2y + 1 = 2z^2
+
+This last equation says that an odd number is equal to an even number which is impossible, so a and b
+cannot both be odd.
