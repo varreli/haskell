@@ -1,0 +1,10 @@
+λ > import Data.Set
+λ > import qualified Data.Set as Set    -- not sure if necessary
+
+λ > :set -XOverloadedLists
+
+λ > union [1,2,3] [2]
+fromList [1,2,3]
+
+ 
+
