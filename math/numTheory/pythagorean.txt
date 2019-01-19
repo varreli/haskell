@@ -1,0 +1,16 @@
+Pythagorean Triples:
+
+
+Note primative pythagorean triples have no common divisors
+
+i.e. the entries are relatively prime.
+
+
+Only two sides including the hypotenuse can be prime :
+
+(3, 4, 5)
+(5, 12, 13)
+
+2 cannot be a side of a triple. (see mod 8)
+
+https://primes.utm.edu/glossary/page.php?sort=PrmPythagTriples

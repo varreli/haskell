@@ -1,0 +1,12 @@
+You could write an application, and focus on nothing 
+but building the following habit: before you write a 
+function, stub it out as undefined and make sure the 
+type signature compiles (we'll discuss this technique 
+in more detail in part 4! It doesn't matter if you do 
+anything else right! After you've gotten into that 
+habit, you could also take another step. You could make 
+sure you always write the function’s invocation (where 
+your other code calls the function) before you implement 
+it.
+
+
