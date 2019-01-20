@@ -1,0 +1,5 @@
+In algebra, a field extension is a pair of fields 
+
+E  ⊆  F
+
+such that the operations of E are those of F restricted to E.
