@@ -1,4 +1,4 @@
--- functionis that returns the third element:
+-- function that returns the third element:
 
 third :: [a] -> a
 third list = head . tail $ drop 1 list 
