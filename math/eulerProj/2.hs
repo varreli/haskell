@@ -1,12 +1,20 @@
--- A lazy infinite sequence of fib numbers:
 
 
+-- factors n = [x | x <- [1..n] , mod n x == 0]
 
-fib = (let x = 1 : 1 : zipWith (+) x (tail x) in x)
+-- primeCheck n = factors n == [1, n]  
 
-sumFibs = sum $ filter even $ takeWhile (<= 400) fib
+-- main = print $ max $ filter (primeCheck) $ factors (600851475143 :: Int)
 
+main = putStrLn (show ans)
+ans = largestPrimeFactor (600851475143 :: Integer)
 
-productFibs = foldr (*) 1 $ takeWhile (<= 10) fib 
+largestPrimeFactor n =
+    let
+        p = smallestPrimeFactor n
+    in
+              if p == n then p
+              else largestPrimeFactor (div n p)
 
--- note seed is 1 for multiplication
+smallestPrimeFactor n = head [k | k <- [2..n], mod n k == 0]
+

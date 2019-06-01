@@ -1,20 +1,13 @@
+-- Find the sum of all the multiples of 3 and 5 below 1000. 
 
+-- Note each tail of x and y.
 
--- factors n = [x | x <- [1..n] , mod n x == 0]
+-- The function union discards duplicates.
 
--- primeCheck n = factors n == [1, n]  
+import Data.List (union)
 
--- main = print $ max $ filter (primeCheck) $ factors (600851475143 :: Int)
+x = [3,6..999]
+y = [5,10..995]
 
-main = putStrLn (show ans)
-ans = largestPrimeFactor (600851475143 :: Integer)
-
-largestPrimeFactor n =
-    let
-        p = smallestPrimeFactor n
-    in
-              if p == n then p
-              else largestPrimeFactor (div n p)
-
-smallestPrimeFactor n = head [k | k <- [2..n], mod n k == 0]
-
+union' = union x y
+summa  = print $ foldr (+) 0 union'
