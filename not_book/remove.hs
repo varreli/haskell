@@ -7,5 +7,5 @@ sorter :: [Int] -> [Int]
 sorter [] = []
 sorter xs = m : (sorter (removeFst m xs)) where m = minimum xs
 
--- main = print $ sorter [7,2,3,8,1,0,4]
-main = print $ removeFst 4 [2,4,17,5,4,10]
+main = print $ sorter [7,2,3,8,1,0,4]
+-- main = print $ removeFst 4 [2,4,17,5,4,10]
