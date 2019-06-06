@@ -1,20 +1,16 @@
-factor :: Integer -> [Integer]
+-- 2 elegant ways to calculate Euler's totient function phi(m).
 
-factor 1 = []
-factor n = let divisors = dropWhile ((/= 0) . mod n) [2 .. ceiling $ sqrt $ fromIntegral n]
-           in let prime = if null divisors then n else head divisors
-              in (prime :) $ factor $ div n prime
+-- Euler's totient function phi(m) is defined
+-- as the number of positive integers 
+
+-- r (1 <= r < m) 
+
+--that are coprime to m.
 
 
-totient n = round $ (fromIntegral n) * (product $ map (\x -> 1 - 1/(fromIntegral x)) (factor n))
+totient 1 = 1
+totient n = length $ filter (coprime n) [1..(n-1)]
+ where coprime a b = gcd a b == 1
 
-
--- factor :: Integer -> [Integer]
--- 
--- factor 1 = []
--- factor n = let divisors = dropWhile ((/= 0) . mod n) [2 .. ceiling $ sqrt $ fromIntegral n]
---            in let prime = if null divisors then n else head divisors
---               in (prime :) $ factor $ div n prime
--- 
--- 
--- totient n = round $ (fromIntegral n) * (product $ map (\x -> 1 - 1/(fromIntegral x)) (factor n))
+totient' n = length [x | x <- [1..n], coprime x n]
+  where coprime a b = gcd a b == 1
