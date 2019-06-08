@@ -1,3 +1,6 @@
+-- DO NOT RUN - All number theory algorithms 
+-- ultimately come down to Euclid's algorithm
+
 import Debug.Trace
 
 extendEu :: Integer -> Integer -> (Integer, Integer)
@@ -7,6 +10,7 @@ extendEu a 0 = (1, 0)
 extendEu a b = (t, s - q * t)
   where (q, r) = quotRem a b
         (s, t) = extendEu b r
+
 
 
 -- we remove where clauses when we substitute the variables they define.
@@ -63,3 +67,7 @@ extendEu 80 62 = (t, s - 3 * t) where (s, t) = extendEu 62 18
 extendEu 80 62 = (t, s - 1 * t) where (s, t) = (-2, 7)
 extendEu 80 62 = (7, -2 - 1 * 7)
 extendEu 80 62 = (7, -9)
+
+
+
+-- https://math.stackexchange.com/questions/85830/how-to-use-the-extended-euclidean-algorithm-manually
