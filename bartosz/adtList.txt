@@ -25,3 +25,19 @@
   L(a) = 1 + a * (1 + a * L(a) ) 
        = 1 + a + 2a (1 + a * L(a) )
        = 1 + a + 2a + 3a (1 + a * L(a) ... OO
+
+  -- data Unit = Unit  
+  -- has the cardinality of 1, it's singular value is Unit 
+
+  -- data Bool = False | True 
+  -- has the cardinalty of 2, values False and True
+
+  -- data Maybe a = Nothing | Just a  
+  -- has whatever is the cardinality of a 
+  
+  -- data Maybe Bool 
+  -- has the cardinality of 3: Nothing | Just False | Just True
+
+  -- data List a = Nil | Cons (List a)
+  -- has the cardinality of Nil ([]) + a^n
+  -- This is a^0 (1) + a^n
