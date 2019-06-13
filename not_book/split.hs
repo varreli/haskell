@@ -6,7 +6,7 @@ split x (y:ys)
   | otherwise   = (less, y:greater)
                 where (less, greater) = split x ys
 
-		-- the where clause is a pattern
+                -- the where clause is a pattern
 		-- match on the 2 tuple and the
 		-- recursion, split x ys. Finally
 		-- we will see split x [] . after

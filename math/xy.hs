@@ -2,4 +2,4 @@ nums x =
   case compare x 0 of
     LT -> "neg"
     GT -> "pos" 
-    EQ -> 0
+    EQ -> "0"

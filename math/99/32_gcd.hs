@@ -1,12 +1,24 @@
+-- Determine the gcd of two positive integer numbers. 
+-- Use Euclid's algorithm.
+
+import Debug.Trace
+
+gcd' 0 y = y
+gcd' x y = gcd' (y `mod` x) x
+myGCD x y | x < 0     = myGCD (-x) y
+          | y < 0     = myGCD x (-y)
+          | y < x     = gcd' y x
+          | otherwise = gcd' x y
+
+
 -- euclids finds the GCD greatest common divisor 
 -- (greatest common factor)
 
-import Debug.Trace
 
 euclid :: Int -> Int -> Int
 euclid s t | traceShow (s, t) False = undefined
 euclid s t
-| s <= 0 || <= 0 = error "Works for positive numbers only" 
+  | s <= 0, t <= 0 = 0
   | s == t = s
   | s < t = euclid s ( t - s )
   | s > t = euclid ( s - t ) t

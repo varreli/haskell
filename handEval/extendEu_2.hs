@@ -8,6 +8,7 @@ extendEu a b = (t, s - q * t)
   where (q, r) = quotRem a b
         (s, t) = extendEu b r
 
+execute = print $ extendEu 80 62
 
 -- all number theory algorithms ultimately come 
 -- down to Euclid's algorithm
