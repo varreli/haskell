@@ -9,35 +9,30 @@
 
   data List a = Nil | Cons a (List a)  
   
-  -- List is a sum with 2 constructors: Nil and Cons
-  -- Cons is a product type with 2 arguments, head and tail:
-  -- (a, (List a) )
+-- List is a sum with 2 constructors: Nil and Cons
+-- Cons is a product type with 2 arguments, head and tail:
+-- (a, (List a) )
 
-  -- This leads to the summation of all Lists:
+-- note on cardinality :
 
-  -- oo Sum n = 0  a^n = 
-  --                    1 + [singleton] + [a,a] + [a,a,a] ...
+-- n=0  ==  a^0  ==  1  ==  []  ==  Nil :
+--         so it has the cardinality of 1 + a^n
 
-  -- This is also the sum of a geometric sequence.
 
-  -- Using substitution:
+-- This leads to the summation of all Lists:
+
+--     oo 
+--     Sum  a^n
+--     n=0       =       
+  
+--     1 + [singleton] + [a,a] + [a,a,a] ...
+
+
+-- This is also the sum of a geometric sequence.
+
+-- Using substitution:
+
   L(a) = 1 + a * L(a)
   L(a) = 1 + a * (1 + a * L(a) ) 
        = 1 + a + 2a (1 + a * L(a) )
        = 1 + a + 2a + 3a (1 + a * L(a) ... OO
-
-  -- data Unit = Unit  
-  -- has the cardinality of 1, it's singular value is Unit 
-
-  -- data Bool = False | True 
-  -- has the cardinalty of 2, values False and True
-
-  -- data Maybe a = Nothing | Just a  
-  -- has whatever is the cardinality of a 
-  
-  -- data Maybe Bool 
-  -- has the cardinality of 3: Nothing | Just False | Just True
-
-  -- data List a = Nil | Cons (List a)
-  -- has the cardinality of Nil ([]) + a^n
-  -- This is a^0 (1) + a^n
