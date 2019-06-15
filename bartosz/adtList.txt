@@ -11,7 +11,8 @@
   
 -- List is a sum with 2 constructors: Nil and Cons
 -- Cons is a product type with 2 arguments, head and tail:
--- (a, (List a) )
+-- (a, (List a) ). 2 things are happening: an outer sum 
+-- of inner products.
 
 -- note on cardinality :
 
