@@ -1,4 +1,5 @@
 unfold :: (d -> Bool) -> (d -> f) -> (d -> d) -> d -> [f]
+
 unfold p h t x
   | p x       = []
   | otherwise = h x : unfold p h t (t x)
@@ -10,7 +11,7 @@ int2bbin = unfold (== 0) (`mod` 2) (`div` 2)
 -- start with:
 -- unfold :: a -> b -> c -> d -> e
 -- you can get this type just looking at the 
--- first line. Note that    a ~ unfold
+-- first line.
 
 -- then from the second line, you know a few things:
 
