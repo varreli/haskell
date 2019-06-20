@@ -6,6 +6,7 @@ all_1 :: (a -> Bool) -> [a] -> Bool
 all_1 _ [] = True
 all_1 p (x:xs) = p x && all_1 p xs
 
+
 -- x is not visible outside of the definition but is
 -- bound to a value and introduced as an argument to
 -- the function in the predicate, for example \n :
