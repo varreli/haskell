@@ -5,8 +5,8 @@ unfold p h t x
   | otherwise = h x : unfold p h t (t x)
 
 
-int2bbin :: Integer -> [Integer] 
-int2bbin = unfold (== 0) (`mod` 2) (`div` 2)
+int2Bin :: Integer -> [Integer] 
+int2Bin = unfold (== 0) (`mod` 2) (`div` 2)
 
 -- start with:
 -- unfold :: a -> b -> c -> d -> e
