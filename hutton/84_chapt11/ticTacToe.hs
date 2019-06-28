@@ -42,3 +42,6 @@ wins p g = any line (rows ++ cols ++ dias)
 
 diag :: Grid -> [Player]
 diag g = [ g !! n !! n | n <- [0..size-1]]
+
+won :: Grid -> Bool
+won g = wins O g || wins X g
