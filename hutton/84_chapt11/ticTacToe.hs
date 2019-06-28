@@ -21,8 +21,8 @@ empty = replicate size (replicate size B)
 full :: Grid -> Bool
 full = all (/= B) . concat
 
-whoseTurn :: Grid -> Player
-whoseTurn g = if os <= xs then O else X
+turn :: Grid -> Player
+turn g = if os <= xs then O else X
   where
     os = length (filter (== O) ps)
     xs = length (filter (== X) ps)
