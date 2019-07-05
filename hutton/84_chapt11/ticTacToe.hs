@@ -120,3 +120,15 @@ run' g p | wins O g = putStrLn "Player O wins!\n"
 
 prompt :: Player -> String
 prompt p = "Player " ++ show p ++ ", enter your move: "
+
+data Tree a = Node a [Tree a]
+              deriving Show
+
+gametree :: Grid -> Player -> Tree Grid
+gametree g p = Node g [gametree g' (next p) | g' <- moves g p]
+
+moves :: Grid -> Player -> [Grid]
+moves g p
+    | won g     = []
+    | full g    = []
+    | otherwise = concat [move g i p | i <- [0..((size^2)-1)] ]
