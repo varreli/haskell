@@ -78,14 +78,20 @@ chop :: Int -> [a] -> [[a]]
 chop n [] = []
 chop n xs = take n xs : chop n (drop n xs)
 
+
+prompt :: Player -> String
+prompt p = "Player " ++ show p ++ ", enter your move: "
+
 getNat :: String -> IO Int
 getNat prompt = do putStr prompt
                    xs <- getLine
-                   if xs /= [] && all isDigit xs then
-                      return (read xs)
+                   if not (null xs) && all isDigit xs then -- OR  xs /= [] 
+                     return (read xs)     
                    else
                       do putStrLn "ERROR: Invalid number"
                          getNat prompt
+
+-- ^ note : 
 
 -- > map isDigit "-99"
 -- [False,True,True]
@@ -118,8 +124,6 @@ run' g p | wins O g = putStrLn "Player O wins!\n"
                                       run' g p
                              [g'] -> run g' (next p)
 
-prompt :: Player -> String
-prompt p = "Player " ++ show p ++ ", enter your move: "
 
 ------------------------------------------------------- machine game :
 
