@@ -141,13 +141,28 @@ moves g p
     | full g    = []
     | otherwise = concat [move g i p | i <- [0..((size^2)-1)] ]
 
-prune :: Integer -> Tree a -> Tree a
+prune :: Int -> Tree a -> Tree a
 prune 0 (Node x _) = Node x []
 prune n (Node x ts) = Node x [prune (n-1) t | t <- ts]
+
+-- note:
+-- Node is a constructor, prune is traversing a Tree recursively 
+-- and reconstructing another tree that looks to be only so deep 
 
 depth :: Int
 depth = 9
 
+minimax :: Tree Grid -> Tree (Grid,Player)
+minimax (Node g [])
+   | wins O g  = Node (g,O) []
+   | wins X g  = Node (g,X) []
+   | otherwise = Node (g,B) []
+minimax (Node g ts)
+   | turn g == O = Node (g, minimum ps) ts'
+   | turn g == X = Node (g, minimum ps) ts'
+                   where
+                      ts' = map minimax ts
+                      ps  = [p | Node (_,p) _ <- ts'] 
 
 
 
