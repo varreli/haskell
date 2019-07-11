@@ -159,7 +159,7 @@ minimax (Node g [])
    | otherwise = Node (g,B) []
 minimax (Node g ts)
    | turn g == O = Node (g, minimum ps) ts'
-   | turn g == X = Node (g, minimum ps) ts'
+   | turn g == X = Node (g, maximum ps) ts'
                    where
                       ts' = map minimax ts
                       ps  = [p | Node (_,p) _ <- ts'] 
