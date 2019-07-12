@@ -147,7 +147,7 @@ prune n (Node x ts) = Node x [prune (n-1) t | t <- ts]
 
 -- note:
 -- Node is a constructor, prune is traversing a Tree recursively 
--- and reconstructing another tree that at depth n 
+-- and reconstructing another tree that has depth n 
 
 depth :: Int
 depth = 9
