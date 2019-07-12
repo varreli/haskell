@@ -161,9 +161,20 @@ minimax (Node g ts)
    | turn g == O = Node (g, minimum ps) ts'
    | turn g == X = Node (g, maximum ps) ts'
                    where
-                      ts' = map minimax ts
+                      ts' = map minimax ts               -- isolated below
                       ps  = [p | Node (_,p) _ <- ts'] 
 
 
+-- Note _ignoredHead     -- line 175
+-- and  _ignoredRoot     -- line 178  (These both drop the root node) :
 
+
+--  λ > map minimax [(gametree [[O,O,B],[X,X,O],[X,O,B]] O)]
+-- [Node ([[O,O,B],[X,X,O],[X,O,B]],X) [Node ([[O,O,O],[X,X,O],[X,O,B]],O) [],Node ([[O,O,B],[X,X,O],[X,O,O]],X) [Node ([[O,O,X],[X,X,O],[X,O,O]],X) []]]]
+
+-- λ > let Node _ignoredHead ts = (gametree [[O,O,B],[X,X,O],[X,O,B]] O) in map minimax ts 
+-- [Node ([[O,O,O],[X,X,O],[X,O,B]],O) [],Node ([[O,O,B],[X,X,O],[X,O,O]],X) [Node ([[O,O,X],[X,X,O],[X,O,O]],X) []]]
+
+-- λ >  case (gametree [[O,O,B],[X,X,O],[X,O,B]] O) of Node _ignoredRoot ts -> map minimax ts
+-- [Node ([[O,O,O],[X,X,O],[X,O,B]],O) [],Node ([[O,O,B],[X,X,O],[X,O,O]],X) [Node ([[O,O,X],[X,X,O],[X,O,O]],X) []]]
 
