@@ -161,7 +161,7 @@ minimax (Node g ts)
    | turn g == O = Node (g, minimum ps) ts'
    | turn g == X = Node (g, maximum ps) ts'
                    where
-                      ts' = map minimax ts    
+                      ts' = [minimax child | child <- ts] --alt: ts' = map minimax ts    
                       ps  = [p | Node (_,p) _ <- ts'] 
 
 bestmove :: Grid -> Player -> Grid
@@ -169,3 +169,13 @@ bestmove g p = head [ g' | Node (g', p') _ <- ts, p' == best ]
                where
                   tree = prune depth (gametree g p)
                   Node (_, best) ts = minimax tree
+
+
+
+
+
+
+
+
+
+
