@@ -130,8 +130,6 @@ run' g p | wins O g = putStrLn "Player O wins!\n"
 data Tree a = Node a [Tree a]
               deriving Show
 
--- initial grid:    [[O,B,B],[X,X,O],[X,O,B]]
-
 gametree :: Grid -> Player -> Tree Grid
 gametree g p = Node g [gametree g' (next p) | g' <- moves g p]
 
@@ -171,11 +169,10 @@ bestmove g p = head [ g' | Node (g', p') _ <- ts, p' == best ]
                   Node (_, best) ts = minimax tree
 
 
+-- initial grid:    [[O,B,B],[X,X,O],[X,O,B]]
 
+-- test where statement :
 
-
-
-
-
-
-
+-- λ > let tt = [ best | Node (_, best) ts <- [minimax (gametree [[O,X,B],[X,O,O],
+-- [X,O,B]] O)]]
+-- [B]
