@@ -176,3 +176,10 @@ bestmove g p = head [ g' | Node (g', p') _ <- ts, p' == best ]
 -- λ > let tt = [ best | Node (_, best) ts <- [minimax (gametree [[O,X,B],[X,O,O],
 -- [X,O,B]] O)]]
 -- [B]
+
+
+main :: IO ()
+main = do hSetBuffering stdout
+NoBuffering
+play empty O
+
