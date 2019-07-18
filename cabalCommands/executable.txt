@@ -1,0 +1,6 @@
+$ cd project_dir           -- change filename to Main.hs (copy)
+
+$ cabal configure
+$ cabal build
+$ cabal install
+$ cabal xProjectName.cabal  -- executable is in the .cabal file

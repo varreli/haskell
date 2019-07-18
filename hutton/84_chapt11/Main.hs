@@ -1,3 +1,4 @@
+
 import Data.Char
 import Data.List
 import System.IO
@@ -184,7 +185,7 @@ play g p = do cls
               putGrid g
               play' g p
 
-play' :: Grid -> Play -> IO ()
+play' :: Grid -> Player -> IO ()
 play' g p
    | wins O g = putStrLn "Player O wins\n"
    | wins X g = putStrLn "Player X wins\n"
@@ -198,7 +199,6 @@ play' g p
                    (play $! (bestmove g p)) (next p)
 
 main :: IO ()
-main = do hSetBuffering stdout
-NoBuffering
-play empty O
-
+main = do 
+       hSetBuffering stdout NoBuffering
+       play empty O

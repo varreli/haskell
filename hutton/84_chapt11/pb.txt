@@ -1,4 +1,0 @@
- λ > map minimax [(gametree [[O,B,B],[X,X,O],[X,O,B]] O) ]
-[Node ([[O,B,B],[X,X,O],[X,O,B]],O) [Node ([[O,O,B],[X,X,O],[X,O,B]],X) [Node ([[O,O,X],[X,X,O],[X,O,B]],X) [],Node ([[O,O,B],[X,X,O],[X,O,X]],O) [Node ([[O,O,O],[X,X,O],[X,O,X]],O) []]],Node ([[O,B,O],[X,X,O],[X,O,B]],O) [Node ([[O,X,O],[X,X,O],[X,O,B]],O) [Node ([[O,X,O],[X,X,O],[X,O,O]],O) []],Node ([[O,B,O],[X,X,O],[X,O,X]],O) [Node ([[O,O,O],[X,X,O],[X,O,X]],O) []]],Node ([[O,B,B],[X,X,O],[X,O,O]],X) [Node ([[O,X,B],[X,X,O],[X,O,O]],O) [Node ([[O,X,O],[X,X,O],[X,O,O]],O) []],Node ([[O,B,X],[X,X,O],[X,O,O]],X) []]]]
- λ > 
-
