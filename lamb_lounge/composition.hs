@@ -1,6 +1,6 @@
 module Composition where
 
-compose :: (b -> c) -> (a -> b) -> a -> c
+compose :: (b -> c) -> (a -> b) -> a -> c 
 compose f g = (\x -> f (g x))
 
 

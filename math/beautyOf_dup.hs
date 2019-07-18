@@ -35,3 +35,6 @@ f = concatMap rr . rr
 
 -- Prelude> concat (map rr (rr 5))
 -- [1,1,2,1,2,3,1,2,3,4,1,2,3,4,5]
+
+
+-- https://stackoverflow.com/questions/40710055/concatmap-explanation
