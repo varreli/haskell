@@ -1,3 +1,28 @@
+euclid's extended algorithm in haskell :
+
+extendEu a 0 = (1, 0)
+extendEu a b = (t, s - q * t)
+  where (q, r) = quotRem a b
+        (s, t) = extendEu b r
+
+
+-- Solve for 2:
+
+> extendEu 80 62 
+(80,62)
+((62,18)
+(18,8)
+(8,2)
+(2,0)
+7,-9)
+
+
+-- Note: all number theory algorithms ultimately come 
+-- down to Euclid's algorithm
+
+
+-- Notes from math irc help:
+
 find n , such that (( 13 * n ) mod 17 = 1 )
 
 multiples of both inputs are calculated to combine with 
@@ -16,4 +41,18 @@ Whenever you pick a pair of coprime numbers (m,x), and you want
 to find a number y, such that ((x·y) mod m = 1), then 
 extendEu (m,x) will give you a value for y in the second component.
 
--- svartogy math irc
+the bezout that's returned from 13 17 is:
+ 
+13*4 + 17*-3 = 1
+
+that's the (4,-3) pair
+
+in row form it's    1 -3 4 
+
+re-arranging: 13*4 - 1 = 17*3
+
+which means 17 divides (13*4 - 1)
+
+which is the definition of 13*4=1 (mod 17)
+
+so 4 is 13's multiplicative inverse (mod 17)
