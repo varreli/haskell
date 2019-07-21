@@ -44,7 +44,7 @@ Triple a b c = Left a
                       
 -- This corresponds to:
 
-  data Either () a     -- Nothing ~ left () (True)
+  data Either () a     -- Nothing ~ Left () (True)
                        -- Right a ~ a
                        -- Just rename the constructors
 
