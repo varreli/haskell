@@ -44,7 +44,7 @@ Triple a b c = Left a
                       
 -- This corresponds to:
 
-  data Either () a     -- Nothing ~ Left () (True)
+  data Either () a     -- Nothing ~ Left () 
                        -- Right a ~ a
                        -- Just rename the constructors
 
@@ -82,7 +82,7 @@ Triple a b c = Left a
   -- Using substitution:
   L(a) = 1 + a * L(a)
   L(a) = 1 + a * (1 + a * L(a) ) 
-       = 1 + a + 2a (1 + a * L(a) )
-       = 1 + a + 2a + 3a (1 + a * L(a) ... OO
+       = 1 + a + a^2 (1 + a * L(a) )
+       = 1 + a + a^2 + a^3 (1 + a * L(a) ) ... a^oo 
 
 -- Note this can be formalized in a fixed point combinator.
