@@ -198,7 +198,6 @@ play' g p
                    (play $! (bestmove g p)) (next p)
 
 main :: IO ()
-main = do hSetBuffering stdout
-NoBuffering
+main = do hSetBuffering stdout NoBuffering
 play empty O
 
