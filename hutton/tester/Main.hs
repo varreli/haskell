@@ -163,8 +163,8 @@ minimax (Node g ts)
                       ts' = [minimax child | child <- ts] --alt: ts' = map minimax ts    
                       ps  = [p | Node (_,p) _ <- ts'] 
 
-bestmove :: Grid -> Player -> Grid
-bestmove g p = head [ g' | Node (g', p') _ <- ts, p' == best ]
+bestmoves :: Grid -> Player -> [Grid]
+bestmoves g p = [ g' | Node (g', p') _ <- ts, p' == best ]
                where
                   tree = prune depth (gametree g p)
                   Node (_, best) ts = minimax tree
@@ -179,10 +179,29 @@ bestmove g p = head [ g' | Node (g', p') _ <- ts, p' == best ]
 -- [B]
 
 
-howMany :: Tree a -> Int
-howMany (Node _ ts) = 1 + sum (map howMany ts)
+play :: Grid -> Player -> IO ()
+play g p = do cls
+              goto (1,1)
+              putGrid g
+              play' g p
 
-mydepth :: Tree a -> Int
-mydepth (Node _ []) = 0
-mydepth (Node _ ts) = 1 + maximum (map mydepth ts)
+play' :: Grid -> Player -> IO ()
+play' g p
+   | wins O g = putStrLn "Player O wins\n"
+   | wins X g = putStrLn "Player X wins\n"
+   | full g   = putStrLn "It's a draw\n"
+   | p == O   = do i <- getNat (prompt p)
+                   case move g i p of 
+                      [] -> do putStrLn "ERROR: Invalid move"
+                               play' g p
+                      [g'] -> play g' (next p)
+   | p == X   = do putStrLn "Player X is thinking ... "
+--                 (play $! (bestmove g p)) (next p)
+                   let gs = bestmoves g p
+                   n <- randomRIO (0, length gs - 1)
+                   play (gs !! n) (next p)
+
+main :: IO ()
+main = do hSetBuffering stdout NoBuffering
+          play empty O
 
