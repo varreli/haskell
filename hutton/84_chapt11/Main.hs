@@ -188,7 +188,7 @@ play' g p
                       [g'] -> play g' (next p)
    | p == X   = do putStrLn "Player X is thinking ... "
 --                 (play $! (bestmove g p)) (next p)
-                   let gs = bestmoves g p
+		   let gs = bestmoves g p             -- study
                    n <- randomRIO (0, length gs - 1)
                    play (gs !! n) (next p)
 
