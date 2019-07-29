@@ -10,6 +10,26 @@ instance Functor Arbor where
 -- eta reduction fails:
 
 all_caps word = fmap toUpper word 
-                                              
-mathy list = fmap ((*10) . (+5)) list
+
+pointful list = fmap ((*10) . (+ 1)) list
+
+-- eta reduction requires type declaration:
+
+pointfree :: (Num b, Functor f) => f b -> f b
+pointfree = fmap ((*10) . (+5)) 
+
+
+-- RULE 1:
+
+-- fmap    id      =      id         -- well-typed: id has
+--       a -> a       f a -> f a     -- different type on rhs
+
+
+-- RULE 2:    function composition:
+
+ff :: Functor f => (b -> c) -> (a -> b) -> f a -> f c
+ff g h = fmap (g . h)
+
+palindrome :: Functor f => f [Char] -> f [Char]
+palindrome = fmap (map toUpper . reverse)
 
