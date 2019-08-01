@@ -30,5 +30,5 @@ instance Functor List where
 -- this reverses the list Functor, which breaks the first rule of:
 -- fmap id = id :
 
--- > fmap id [1,2]
--- [2,1]
+-- > fmap id (Cons 1 (Cons 2 (Cons 3 Nil)))
+-- Cons 3 (Cons 2 (Cons 1 Nil))
