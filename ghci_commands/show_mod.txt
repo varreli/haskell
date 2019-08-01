@@ -1,0 +1,5 @@
+> :show modules
+-- displays present mod(s)
+
+> :show breaks
+-- List the active breakpoints.
