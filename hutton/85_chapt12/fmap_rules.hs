@@ -18,17 +18,19 @@
 data List a = Nil | Cons a (List a) deriving Show
 
 instance Functor List where
-	-- fmap:: (a -> b) -> List a -> List b
-	fmap _ Nil = Nil
-	fmap g (Cons x xs) = fmap g xs `app` Cons (g x) Nil
-		where
-		app :: List a -> List a -> List a
-		app Nil ys = ys
-		app (Cons x xs) ys = Cons x (xs `app` ys)
+        -- fmap:: (a -> b) -> List a -> List b
+        fmap _ Nil = Nil
+        fmap g (Cons x xs) = fmap g xs `app` Cons (g x) Nil
+                where
+                app :: List a -> List a -> List a
+                app Nil ys = ys
+                app (Cons x xs) ys = Cons x (xs `app` ys)
 
 
--- this reverses the list Functor, which breaks the first rule of:
--- fmap id = id :
+-- this fmap reverses the list Functor, which breaks the
+-- first functor law:
+
+-- fmap id = id
 
 -- > fmap id (Cons 1 (Cons 2 (Cons 3 Nil)))
 -- Cons 3 (Cons 2 (Cons 1 Nil))

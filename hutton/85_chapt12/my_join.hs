@@ -1,6 +1,11 @@
 data List a = Nil | Cons a (List a)
     deriving Show
 
+instance Functor List where
+  fmap f Nil = Nil
+  fmap f (Cons x xs) = Cons (f x) (fmap f xs)
+
+
 join :: List (List a) -> List a
 join Nil = Nil
 join (Cons xs xss) =  cat xs (join xss)
