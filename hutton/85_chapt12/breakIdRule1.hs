@@ -15,10 +15,13 @@
 
 ------------------------------------------------------------------
 
+-- we remove where clauses when we substitute the variables they define.
+-- i.e. we separate the evaluation steps and substitution steps
+
 data List a = Nil | Cons a (List a) deriving Show
 
 instance Functor List where
-        -- fmap:: (a -> b) -> List a -> List b
+--      fmap:: (a -> b) -> List a -> List b
         fmap _ Nil = Nil
         fmap g (Cons x xs) = fmap g xs `app` Cons (g x) Nil
                 where
@@ -34,3 +37,4 @@ instance Functor List where
 
 -- > fmap id (Cons 1 (Cons 2 (Cons 3 Nil)))
 -- Cons 3 (Cons 2 (Cons 1 Nil))
+
