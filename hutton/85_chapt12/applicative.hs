@@ -19,3 +19,16 @@ fmap3 g x y z = pure g <*> x <*> y <*> z
 --  (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b
 --     Nothing <*> _ = Nothing
 --     (Just g) <*> mx = fmap g mx
+
+-- > fmapp (\x y z -> x * y + z) [10,100,1000] [3,4,5] [7,8,9]
+
+-- > fmapp (\x y z -> x * y + z) (Just 10) (Just 3) (Just 7)
+
+-- > map Just $  [(+), (*), (^)] <*> [a,b] <*> [1,2,3] :: [Maybe Expr
+
+-- > [(+), (*), (^)] <*> [a,b] <*> [1,2,3] :: [Expr]
+
+-- > a:b:c:[]      -- list with 3 elements
+-- [a,b,c]
+-- > a:b:c:a+2:[]
+-- [a,b,c,a + 2]   -- list with four elements, a, b, c and a + 2
