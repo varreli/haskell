@@ -1,0 +1,9 @@
+cabal: Entering directory '/tmp/cabal-tmp-6207/simple-reflect-0.3.3'
+Configuring simple-reflect-0.3.3...
+Preprocessing library for simple-reflect-0.3.3..
+Building library for simple-reflect-0.3.3..
+[1 of 3] Compiling Debug.SimpleReflect.Expr ( Debug/SimpleReflect/Expr.hs, dist/dist-sandbox-1854f19e/build/Debug/SimpleReflect/Expr.o )
+[2 of 3] Compiling Debug.SimpleReflect.Vars ( Debug/SimpleReflect/Vars.hs, dist/dist-sandbox-1854f19e/build/Debug/SimpleReflect/Vars.o )
+[3 of 3] Compiling Debug.SimpleReflect ( Debug/SimpleReflect.hs, dist/dist-sandbox-1854f19e/build/Debug/SimpleReflect.o )
+Installing library in /home/john/haskell/hutton/85_chapt12/sandbox/.cabal-sandbox/lib/x86_64-linux-ghc-8.4.4/simple-reflect-0.3.3-9e8eO7xcHVCKrvjL1j1Xag
+cabal: Leaving directory '/tmp/cabal-tmp-6207/simple-reflect-0.3.3'

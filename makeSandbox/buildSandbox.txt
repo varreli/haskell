@@ -1,0 +1,42 @@
+-- create a cabal sandbox in separate directory (called sandbox) :
+
+[~/haskell/hutton/85_chapt12/sandbox]
+$ cabal sandbox init
+Writing a default package environment file to /home/john/haskell/hutton/.../
+Creating a new sandbox at..
+
+
+-- update for new packages :
+
+[~/haskell/hutton/85_chapt12/sandbox]
+$ cabal update
+
+
+-- add a package to test :
+
+[~/haskell/hutton/85_chapt12/sandbox]
+$ cabal install simple-reflect
+
+
+-- load a ghci (repl) :
+
+[~/haskell/hutton/85_chapt12/sandbox]
+$ cabal repl
+GHCi, version 8.4.4: http://www.haskell.org/ghc/  :? for help
+Loaded GHCi configuration from /home/john/.ghc/ghci.conf
+λ >
+
+
+-- import package :
+
+λ > import Debug.SimpleReflect
+
+
+-- run some test :
+
+λ > ff = map Just $ [(+), (*), (^)] <*> [a,b] <*> [1,2,3] :: [Maybe Expr]
+
+λ > ff
+[Just (a + 1),Just (a + 2),Just (a + 3),Just (b + 1),Just (b + 2),Just (b + 3),
+Just (a * 1),Just (a * 2),Just (a * 3),Just (b * 1),Just (b * 2),Just (b * 3),
+Just a,Just (a * a),Just (a * a  a),Just b,Just (b * b),Just (b * b * b)]

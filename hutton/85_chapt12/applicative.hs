@@ -24,7 +24,7 @@ fmap3 g x y z = pure g <*> x <*> y <*> z
 
 -- > fmapp (\x y z -> x * y + z) (Just 10) (Just 3) (Just 7)
 
--- > map Just $  [(+), (*), (^)] <*> [a,b] <*> [1,2,3] :: [Maybe Expr
+-- > map Just $  [(+), (*), (^)] <*> [a,b] <*> [1,2,3] :: [Maybe Expr]
 
 -- > [(+), (*), (^)] <*> [a,b] <*> [1,2,3] :: [Expr]
 
