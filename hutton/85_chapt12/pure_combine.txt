@@ -1,0 +1,380 @@
+15:39 You have joined the channel
+15:39 crestfallen has joined (~crestfall@128.32.176.159)
+15:39 Topic: https://www.haskell.org | https://wiki.haskell.org/IRC_channel | Paste code/errors: https://gist.github.com/ | Logs: http://tunes.org/~nef/logs/haskell/?C=M;O=D | https://www.reddit.com/r/haskell | Admin: #haskell-ops | Offtopic: #haskell-offtopic | https://downloads.haskell.org
+15:39 glguy set the topic at: Jan 5, 2019, 7:21 AM
+15:39 Mode: +CLntj 3:5
+15:39 Created at: Nov 25, 2006, 10:42 PM
+15:39 crestfallen: > pure 5 :: [Int]
+15:39 lambdabot:  [5]
+15:39 crestfallen: hi why do I need to specify the type here?
+15:40 crestfallen: > pure 5
+15:40 lambdabot:  error:
+15:40 lambdabot:      • Ambiguous type variable ‘f0’ arising from a use of ‘show_M566981383817...
+15:40 lambdabot:        prevents the constraint ‘(Show (f0 Integer))’ from being solved.
+15:40 hpc: what should it show?
+15:40 hpc: > pure 5 :: Maybe Int
+15:40 lambdabot:  Just 5
+15:40 hpc: > pure 5 :: IO Int
+15:40 lambdabot:  <IO Int>
+15:40 xkapastel has joined (uid17782@gateway/web/irccloud.com/x-alclzwgawtunnogg)
+15:41 hpc: > pure 5 :: (Int -> Int)
+15:41 lambdabot:  mueval-core: Time limit exceeded
+15:41 crestfallen: the instance declaration for applicative []  is pure x = [x]
+15:42 bolichep has joined (~bolichep@186.61.4.96)
+15:42 hpc: why should it look at that instance in the first place?
+15:42 crestfallen: I dont know
+15:42 boj: :t pure
+15:42 lambdabot: Applicative f => a -> f a
+15:42 hpc: it could pick any of the others i showed
+15:43 hpc: or ones that your module doesn't even know about yet
+15:43 boj: there's no way it can know what f you are talking about
+15:44 basic: http://dpaste.com/155YMA9
+15:44 basic: can somebody tell me whats the problem here? i don't see it
+15:44 hpc: fun fact: this happens all the time
+15:44 crestfallen: what does
+15:44 wroathe has left IRC (Ping timeout: 258 seconds)
+15:44 hpc: ambiguous type variables
+15:44 hpc: :t 5
+15:44 lambdabot: Num p => p
+15:44 hpc: > 5
+15:44 orzo: i found some benchmarks and ran them and compared.  It solved linear problems with 500,1000,and 1500 samples respectively.  My branch did way worse with 500 samples, but did noticably better with 1000 and about the same with 1500
+15:44 laem has left IRC (Ping timeout: 248 seconds)
+15:44 lambdabot:  5
+15:44 orzo: not what i expected heh
+15:45 hpc: here it doesn't know if it should be Int or Double or Complex or Rational or what
+15:45 zeta_0 has left IRC (Quit: rcirc on GNU Emacs 26.1)
+15:45 hpc: but only for numbers, the type gets defaulted
+15:45 hpc: if it's Num p, it picks Int (or Integer?)
+15:45 hpc: if it's Floating p, it picks DOuble
+15:46 hpc: > 5.0
+15:46 lambdabot:  5.0
+15:46 hpc: :t 5.0
+15:46 lambdabot: Fractional p => p
+15:46 crestfallen: hpc yeah somehow I thought it defaults to List but there's no reason for that
+15:46 hpc: ah, Fractional
+15:46 wroathe has joined (~wroathe@c-68-54-25-135.hsd1.mn.comcast.net)
+15:46 basic: crestfallen: do you know the track by soilwork?
+15:46 crestfallen: ?
+15:46 hpc: there are extended defaulting rules
+15:46 hpc: but i think that just means as a last ditch effort pick ()
+15:46 eschnett has left IRC (Quit: eschnett)
+15:46 basic: crestfallen: there is a song, crestfallen by soilwork, it's great
+15:47 crestfallen: kraftwerk I remember back in the day
+15:47 pera has joined (~pera@unaffiliated/pera)
+15:47 crestfallen: oh my namesake I see :)
+15:47 crestfallen: great word, too pretty to change though I'm essentially an eternal optimist
+15:48 hpc: i thought it came from a tragic toothpaste accident ;)
+15:48 crestfallen: hpc that's funny
+15:48 neightchan has joined (~natechan@108-233-125-227.lightspeed.sntcca.sbcglobal.net)
+15:48 crestfallen: used primarily for birds and mammals
+15:49 nh is now known as christopher
+15:49 crestfallen: I tried taking a class on ethereum. what a pain. asked for a refund
+15:51 tomboy64 has left IRC (Ping timeout: 260 seconds)
+15:51 milanj has joined (~milan@87.116.176.91)
+15:52 hpc: basic: what do you want the type of allBlocks to be?
+15:52 glittershark has left IRC (Ping timeout: 244 seconds)
+15:52 mdunnio has left IRC (Remote host closed the connection)
+15:52 crestfallen: basic holy smokes listening now...
+15:52 hpc: (trying to see if i can get a better error message)
+15:53 laem has joined (~laem@unaffiliated/laem)
+15:53 neightchan has left IRC (Ping timeout: 248 seconds)
+15:53 falafel has joined (~falafel@2a02:c7f:65c:3100:fc44:5c91:97f2:85c6)
+15:53 mkoenig has left IRC (Ping timeout: 272 seconds)
+15:54 lambda-11235 has joined (~lambda-11@207.183.239.54)
+15:55 mkoenig has joined (~mkoenig@ip-95-222-144-56.hsi15.unitymediagroup.de)
+15:55 orzo: jle`: I meant the Element class, not Member.  Is that more familiar?
+15:55 rvenyze has left IRC (Ping timeout: 272 seconds)
+15:56 chaosmasttter has left IRC (Ping timeout: 252 seconds)
+15:56 basic: crestfallen be thy name
+15:56 jle`: orzo: ah yeah, that's what i suspected
+15:56 basic: hpc: all possible Threes
+15:56 basic: (named by someone earlier)
+15:57 basic: Threes = k-tree with k = 3
+15:57 basic: https://stackoverflow.com/questions/28100650/generate-all-possible-trees trying to apply this to a 3-tree
+15:57 hackage: X 0.3.0.0 - A light-weight XML library  https://hackage.haskell.org/package/X-0.3.0.0 (HerbertValerioRiedel)
+15:57 wildtrees has joined (~wildtrees@unaffiliated/wildtrees)
+15:57 jle`: orzo: yeah, the reason why Element exists is because effectively all non-trivial operations are outsourced to blas/lapack, which only supports those specific monomorphic types
+15:57 jle`: orzo: so the typeclass basically selects the C API call to dispatch
+15:57 basic: i don't know what "inits" does there, and what the equivalent for zip smaller (reverse smaller) 
+15:57 hpc: basic: ah, here we go
+15:58 hpc: replicateM 3 $ concat groups :: [[Block a]]
+15:58 basic: i mean, i know what inits does, but not why he does it
+15:58 hpc: go :: [[[Block a]]] -> [Block a]
+15:58 hpc: :t inits
+15:58 lambdabot: [a] -> [[a]]
+15:58 jle`: orzo: technically Matrix should be able to store anything storable, but you can't really do anything with it within hmatrix without having it be cblas-compatible
+15:58 basic: as i said, i know what inits does :/ but not why he uses it
+15:58 jle`: orzo: it's kind of like how technically you can store any type in a Set, but pretty much all of the operations require Ord
+15:58 basic: and that the type is different, the compiler told me that, also :/
+15:59 hpc: yeah, trying to think through this
+15:59 basic: well, i found out why, by now, and moved one already :/
+16:00 basic: i do not even know if replicateM would be the correct way
+16:01 basic: basicially i want to create trees of length n+1 while having all trees of length n
+16:01 basic: depth, whatever
+16:01 hpc: ah
+16:01 hpc: okay, so i guess you want something like this?
+16:01 hpc: *Main> go [[[EndBlock], [EndBlock], [EndBlock]]]
+16:01 hpc: [Block EndBlock EndBlock EndBlock]
+16:01 tomboy64 has joined (~tomboy64@gateway/tor-sasl/tomboy64)
+16:01 hpc: but replicateM 3 $ concat groups = [[EndBlock,EndBlock,EndBlock]]
+16:01 basic: more like
+16:02 basic: go [[EndBlock ]] ⇒ [[Block EndBlock EndBlock EndBlock]]
+16:02 basic: (not sure)
+16:02 hpc: hmm
+16:03 hpc: extract go from the where block, and try and get that to do what you want individually
+16:03 hpc: since it's not really dependent on anything else being defined
+16:03 hpc: since it sounds like that's not quite right
+16:03 basic: :'(
+16:03 conal has joined (~conal@64.71.133.70)
+16:03 wroathe has left IRC (Ping timeout: 244 seconds)
+16:04 basic: oh, i think i know what inits is for there
+16:04 basic: thinks
+16:04 conal has left IRC (Client Quit)
+16:06 basic: http://dpaste.com/2HRVG2K
+16:06 basic: this is correct for the first two, which isn't special
+16:06 subttle has joined (~anonymous@unaffiliated/subttle)
+16:08 spew has left IRC (Quit: Connection closed for inactivity)
+16:09 nbloomf has joined (~nbloomf@104-183-67-6.lightspeed.fyvlar.sbcglobal.net)
+16:09 basic: oh i killed my ram with that cody :(
+16:10 nbloomf has left IRC (Client Quit)
+16:11 yyy has left IRC (Remote host closed the connection)
+16:11 yyy has joined (~yyy@unaffiliated/tinnotl)
+16:12 yyy has left IRC (Max SendQ exceeded)
+16:12 jathan has left IRC (Ping timeout: 272 seconds)
+16:13 yyy has joined (~yyy@unaffiliated/tinnotl)
+16:13 basic: :( gotta go to sleep, but i have to think about this either way
+16:13 basic: learning haskell takes a long time, ay?
+16:14 yyy has left IRC (Max SendQ exceeded)
+16:14 yyy has joined (~yyy@unaffiliated/tinnotl)
+16:15 yyy has left IRC (Max SendQ exceeded)
+16:16 yyy has joined (~yyy@unaffiliated/tinnotl)
+16:16 basic: gn
+16:16 basic has left IRC (Quit: leaving)
+16:17 yyy has left IRC (Max SendQ exceeded)
+16:18 asymptotically has left IRC (Quit: https://quassel-irc.org - Chat comfortably. Anywhere.)
+16:18 yyy has joined (~yyy@unaffiliated/tinnotl)
+16:18 harry has joined (~ryun@221.146.29.171)
+16:20 ltriant has joined (~ltriant@210-10-238-100.cust.static-ipl.aapt.com.au)
+16:23 hive-mind has left IRC (Ping timeout: 258 seconds)
+16:23 neightchan has joined (~natechan@2600:1702:a20:5610:21d4:668d:290e:22a6)
+16:24 nbloomf has joined (~nbloomf@2600:1700:83e0:1f40:a99e:bba5:6152:32f1)
+16:24 harry has left ()
+16:38 You have joined the channel
+16:38 crestfallen has joined (~crestfall@128.32.176.159)
+16:38 Topic: https://www.haskell.org | https://wiki.haskell.org/IRC_channel | Paste code/errors: https://gist.github.com/ | Logs: http://tunes.org/~nef/logs/haskell/?C=M;O=D | https://www.reddit.com/r/haskell | Admin: #haskell-ops | Offtopic: #haskell-offtopic | https://downloads.haskell.org
+16:38 glguy set the topic at: Jan 5, 2019, 7:21 AM
+16:38 Mode: +CLntj 3:5
+16:38 Created at: Nov 25, 2006, 10:42 PM
+16:39 crestfallen: hi I'm still wondering about pure. in the example on line 7 , what does pure do with the (*) .. ie does it need to convert (*) to something before it can operate on the two lists?  https://paste.ee/p/awVqE
+16:40 CrazyPython has joined (~crazypyth@71-135-5-88.lightspeed.rlghnc.sbcglobal.net)
+16:41 heatsink has joined (~heatsink@2600:1700:bef1:5e10:35c5:763a:6469:ed2b)
+16:43 Amras has left IRC (Remote host closed the connection)
+16:44 jackdk: what do you mean by "convert"? if you remove the `pure` there, it will fail to typecheck.
+16:45 leptonio has joined (~leptonio@athedsl-222101.home.otenet.gr)
+16:45 leptonio has left IRC (Client Quit)
+16:45 Amras has joined (~Amras@unaffiliated/amras0000)
+16:46 heatsink has left IRC (Ping timeout: 276 seconds)
+16:46 crestfallen: jackdk: I'm trying to figure out why line 3 is written that way:      pure x = [x]
+16:46 crestfallen: so the way I read that is ..
+16:47 crestfallen: that pure takes a function, say, (*)
+16:47 lucasb has left IRC (Quit: Connection closed for inactivity)
+16:47 crestfallen: and give us this [(*)]
+16:47 crestfallen: so I'm missing something
+16:48 crestfallen: gives*
+16:48 hpc: that's what it does
+16:48 hpc: now look at the thing that's using [(*)]
+16:48 crestfallen: [(*)]   ?
+16:48 hpc: and consider what other values you could use besides [(*)]
+16:48 hpc: what if the list was empty?
+16:48 hpc: what if it had two different functions in it?
+16:49 hpc: (<*>)
+16:50 crestfallen: what if it had two different functions in it?      
+16:50 jle`: [(*),(+)]
+16:51 jle`: crestfallen: pure x takes x and returns [x]
+16:51 jle`: so pure (*) takes (*) and returns [(*)]
+16:51 jle`: just like how pure 1 takes 1 and returns [1]
+16:51 jle`: it doesn't really convert 1 into anything, all it does is put it in a list
+16:51 crestfallen: so <*> is operating inside that initial list which contains the (*)    ie [(*)]     ?
+16:52 jle`: yeah, (<*>) is a function that takes two lists, and does stuff with the items in both lists
+16:52 crestfallen: so it might look like this   [[1,2,3] <*> (*) <*> [10,20]] or something   ?
+16:53 jle`: not sure what "it" means here or what you are trying to give an example of
+16:53 hpc: take the ghci line in your paste
+16:53 hpc: and experiment with the start of it, where you pass the function(s)
+16:54 jle`: crestfallen: (<*>) for lists is defined so that [f,g,h] <*> [x,y,z] = [f x, f y, f z, g x, g y, g z, h x, h y, h z]
+16:54 jle`: > [f,g] <*> [x,y]
+16:54 lambdabot:  error:
+16:54 lambdabot:      Ambiguous occurrence ‘f’
+16:54 lambdabot:      It could refer to either ‘Debug.SimpleReflect.f’,
+16:54 jle`: > [f,g] <*> [x,y] :: [Expr]
+16:54 jle`: oh, who defined f in lambdabot
+16:54 lambdabot:  error:
+16:54 lambdabot:      Ambiguous occurrence ‘f’
+16:54 lambdabot:      It could refer to either ‘Debug.SimpleReflect.f’,
+16:54 jle`: @undefine
+16:54 lambdabot: Undefined.
+16:54 jle`: oh, who defined f in lambdabot
+16:54 jle`: > [f,g] <*> [x,y] :: [Expr]
+16:54 plutoniix has joined (~q@175.176.222.7)
+16:54 lambdabot:  [f x,f y,g x,g y]
+16:54 crestfallen: that much I understand
+16:55 jle`: > [negate] <*> [1,2,3]
+16:55 lambdabot:  [-1,-2,-3]
+16:55 jle`: > pure negate <*> [1,2,3]
+16:55 lambdabot:  [-1,-2,-3]
+16:55 jle`: pure negate is just a fancy way of writing [negate]
+16:55 crestfallen: ok so the function (*) just sits in the first place with its own <*>   ie..
+16:56 jle`: do you understand `pure negate <*> [1,2,3]` ?
+16:56 crestfallen: [(*)] <*> [1,2,3] <*> [10,20]
+16:56 jle`: yeah, that's what pure (*) <*> [1,2,3] <*> [10,20] turns into
+16:56 jle`: because in haskell you can always replace function calls by their definitions
+16:56 hpc: the value of pure here is, what if you're not operating on lists
+16:56 jle`: and pure x = [x], so you can replace `pure (*)` with `[(*)]`
+16:57 jle`: also probably important, you should know how (<*>) associates
+16:58 jle`: fs <*> xs <*> ys is associated as (fs <*> xs) <*> ys
+16:58 crestfallen: that's interesting . its simply that using <*> each operand needs to be of the same type : [(*)] , [1,2] etc
+16:59 mkoenig has left IRC (Ping timeout: 258 seconds)
+16:59 jle`: well, both sides of <*> have to have the same 'f' (Applicative instance)
+16:59 jle`: but the parameter to f doesn't have to be the same necessarily
+16:59 jle`: consider the case of [negate] <*> [1,2,3], where the left hand side is [Int -> Int] and the right hand side is [Int]
+16:59 pyan: Is self-application of a monomorphic value even possible?
+17:00 jle`: :t id id
+17:00 WeLoveCP has left IRC ()
+17:00 pyan: Errr, of a value of monomorphic type.
+17:00 lambdabot: a -> a
+17:00 pyan: jle`: Those id's don't have the same monomorphic type.
+17:00 jle`: hehe
+17:00 jle`: no, \f -> f f doesn't typecheck in haskell
+17:00 crestfallen: ok yeah so bottom line is line 3 produces [(*)] .. oh reading those last posts...
+17:00 mkoenig has joined (~mkoenig@ip-176-198-201-117.hsi05.unitymediagroup.de)
+17:01 CrazyPython has left IRC (Remote host closed the connection)
+17:02 ktonga has joined (~quassel@gen-119-17-171-125.ptr4.otw.net.au)
+17:02 crestfallen: that's like  '  fmap id = id      id on each side has a different type
+17:02 jle`: do you mean on both sides of the equal sign?
+17:02 crestfallen: yeah
+17:03 crestfallen: fmap id    would give    f a -> f a  on the rhs
+17:04 jle`: well, the equals sign there doesn't quite mean anything in haskell
+17:04 jle`: but yeah it's a generally accepted convention that the things on both sides of an equal sign are meant to be equal
+17:04 jle`: as a notational convention
+17:05 jle`: when someone says "fmap id = id" as a law, it's not quite something that exists using that syntax in haskell
+17:05 falafel has left IRC (Ping timeout: 252 seconds)
+17:05 crestfallen: well I guess it means that the a is preserved, but its now inside the f :  '  f a  '
+17:05 jle`: but they are trying to convey that "fmap id" and "id" should be replaceable with each other within a program
+17:06 crestfallen: that last comment of yours I would love to see an example..
+17:06 jle`: well, the statement "fmap id = id" is a non-haskell-syntax statement that you should be able to replace "fmap id" with "id" (and vice versa) within a program without changing the meaning
+17:06 ziyourenxiang has joined (~ziyourenx@unaffiliated/ziyourenxiang)
+17:06 jle`: that's what the equals sign there means, when people talk about it as a law
+17:06 jle`: they don't actually mean to refer to any '=' syntax within haskell, it's more of an informal human-level statement
+17:07 jle`: crestfallen: yeah, the law says that if you ever see 'fmap id x' in a program, you can just replace it with 'id x' without changing the meaning
+17:07 crestfallen: it means that the a -> a part is preserved, but its in a context now
+17:07 jle`: for example if i ever saw someone write "fmap id [1,2,3]", i would say "why are you writing fmap id [1,2,3], don't you know about the functor laws? you can just write 'id [1,2,3]'. which is just [1,2,3]"
+17:08 jle`: i might use a different tone though :)
+17:08 pyan: No Haskell type is discrete, or even T1, I think, so equality testing is a brutal act of discontinuity, anyway.
+17:08 crestfallen: right, the fmap just falls off whenever you see id [1,2,3]
+17:08 jle`: crestfallen: well remember that fmap id [1,2,3] is associated as (fmap id) [1,2,3]
+17:08 jle`: so it means that (fmap id) is just (id)
+17:09 pyan: And rightfully “undefined == undefined” returns neither True nor False.
+17:10 jle`: crestfallen: so my point is that, when someone says "blah = blahblah", the implication is yes, blah and blahblah have the same type. because they are meant to be interchangeable with each other
+17:10 jle`: i just wanted to give an answer "yes, because..." instead of just "yes" :)
+17:10 crestfallen: jle`: if I could extend this idea.. is this like the combinators id flip const    and all that business?
+17:11 tristah has left IRC (Quit: Lost terminal)
+17:11 jle`: things like const id = flip const ?
+17:11 jle`: yeah, the = there as i use it has the same meaning
+17:11 crestfallen: > fmap id [1,2,3]
+17:11 lambdabot:  [1,2,3]
+17:11 crestfallen: yeah looks awfully familiar
+17:12 crestfallen: > const id 5
+17:12 iqubic: :t const id
+17:12 lambdabot:  mueval-core: Time limit exceeded
+17:12 lambdabot: b -> a -> a
+17:13 crestfallen: wait a minute :)
+17:13 crestfallen: > const id 5 "t"
+17:13 lambdabot:  "t"
+17:14 kupi has joined (uid212005@gateway/web/irccloud.com/x-xthjlrwosuhxmkxk)
+17:15 crestfallen: so what I don't see is why these seem to be important combinators :    const id flip        ie. I read little tutorials about them but don't really see how they work in programs
+17:16 jle`: their definitions are pretty simple, so "how they work" isn't too tricky, is it?
+17:16 jle`: const x y = x, const just ignores the second argument
+17:16 jle`: id x = x, it just returns its argument as-is
+17:16 crestfallen: yeah but first off, why are they combinators? I mean, whats a combinator?
+17:17 crestfallen: const ignores the 2nd arg, is that for say currying?
+17:17 jle`: combinator doesn't really mean anything formal, the most general sort of meaning they evoke is that they can be used to build complicated things from simple building blocks
+17:17 jle`: in haskell they usually just mean "higher order functions"
+17:18 crestfallen: does that tie into SKI calculus ?
+17:18 jle`: a lot of times when working with higher order functions in haskell, you only really need to pass in simple functions
+17:19 crestfallen: like where would you pass in const say?
+17:19 jle`: for example a lot of people use const to replace the result of a Functor value
+17:19 jle`: > map (const ()) [1,2,3,4]
+17:19 lambdabot:  [(),(),(),()]
+17:20 jle`: this is in the standard libraries as "void"
+17:20 jle`: or you can use it with, say, zipWith to ignore items in the second list and only use items in the first list
+17:20 jle`: > zipWith const [1,2,3] [4,5]
+17:20 lambdabot:  [1,2]
+17:20 jle`: i don't think there is any "big picture" overall idea that unites all usages of const
+17:21 crestfallen: the zipWith example...
+17:21 crestfallen: what happened there?
+17:21 jle`: it's just that (\x _ -> x) comes up here and there often enough in different places for different usages that it's useful enough to justify giving it a common name
+17:21 jle`: well zipWith f [x,y,z] [a,b] = [f x a, f y b]
+17:21 jle`: it just zips the values in two lists together, using a combining function
+17:22 jle`: but if you only care about the items in the first list...then you can do something like zipWith (\x _ -> x) [1,2,3] [4,5]
+17:22 jle`: it's not like this is a fundamental deep and powerful property of const
+17:22 jle`: it's just that 'const' takes less characters than (\x _ -> x)
+17:22 comerijn has joined (~merijn@83-160-49-249.ip.xs4all.nl)
+17:22 jle`: and is probably more readable :)
+17:23 crestfallen: > zipWith const [1,2,3,4] [4,5] 
+17:23 lambdabot:  [1,2]
+17:23 jle`: ah yeah also remember that zip drops the items from the longer list
+17:23 jle`: > zip [1,2,3,4] [4,5]
+17:24 lambdabot:  [(1,4),(2,5)]
+17:24 crestfallen: ok yeah
+17:24 jle`: so this is not some deep mystical property of const
+17:24 jle`: if you wanted to do this you might just write zipWith (\x _ -> x)
+17:24 jle`: and if you wanted to replace all the items in a list with () you might just do map (\_ -> ()) [1,2,3]
+17:24 crestfallen: so even though [4,5] is dropped, the first list reflects the number of elements
+17:25 crestfallen: of the lesser list
+17:25 jle`: it's just that when you work with higher order functions enough times, similar functions pop up here and there and it's common enough that it's useful to give them names for readability
+17:25 nineonine has left IRC (Remote host closed the connection)
+17:26 crestfallen: thanks jle` kindly. are my last 2 posts correct 
+17:26 crestfallen: ?
+17:26 jle`: the values 4 and 5 are dropped
+17:26 jle`: but the shape of the list (the length) persists
+17:26 crestfallen: so zip chooses the first 2 elements of [1,2,3,4] ?
+17:26 comerijn has left IRC (Ping timeout: 245 seconds)
+17:26 ignace has joined (~braden@218.158.95.253)
+17:27 jle`: yeah, it matches the elements until it runs out on either list
+17:27 jle`: @src zip
+17:27 lambdabot: zip (a:as) (b:bs) = (a,b) : zip as bs
+17:27 lambdabot: zip _      _      = []
+17:27 yyy has left IRC (Ping timeout: 246 seconds)
+17:28 crestfallen: actually sometimes I find elemental functions like this hard to get.
+17:28 crestfallen: appreciate it ! jle`
+17:28 boj: > zipWith (+) [1,2,3,4] [9,8]
+17:28 lambdabot:  [10,10]
+17:29 jle`: no problem :)
+17:29 jle`: i don't mean to give the definition to show that it is simple/elementary, but rather to give you the tools to be able to work through the conclusion yourself :)
+17:29 carlomagno has joined (~carlomagn@inet-hqmc07-o.oracle.com)
+17:29 crestfallen: no I wasn't referring to the definition you gave
+17:30 yyy has joined (~yyy@unaffiliated/tinnotl)
+17:30 crestfallen: but in the case of using zipWith const   ...
+17:30 crestfallen: still ..
+17:30 crestfallen: if you drop the second list
+17:31 yyy has left IRC (Remote host closed the connection)
+17:31 crestfallen: you are ' matching the elements '   ,  really just the first two elements of the first list, given the number of elements in the 2nd list? what good is that?
+17:31 crestfallen: > zipWith const [1,2,3,4] [4,5]
+17:32 lambdabot:  [1,2]
+17:32 jle`: small random things like this come up all the time in everyday program
+17:32 jle`: so this question is like "if you add two to 56, you get 58 ... what good is that?"
+17:32 jle`: *everyday programming
+17:32 crestfallen: :) !!
+17:32 jle`: it's not like "what good is adding 3 to a number?" has a real answer
+17:32 Axman6: "I need these lists to be the same length because I'm making an HTML table, and I don't want to use length because it's unnecessarilly strict"
+17:33 kinouchou has joined (~kinouchou@178.162.204.238)
+17:33 jle`: it's just ... sometimes you need to add something, and sometimes it's just three
+17:33 crestfallen:  no but it is not zipping, those elements are just at index 0,1 of the first list
+17:33 jle`: yeah, it can be useful for limiting your lists to a given length
+17:33 Axman6: \row ->  zipWith const row headers -- will ensure the row is the same length as the list of headers, or less
+17:34 jle`: so if i had headers = ["Color", "Length", "Weight"]
+17:34 jle`: then zipWith const myRow headers will limit myRow to the number of items that headers has
+17:34 ignace has left ()
+17:35 crestfallen: ok good example
+17:35 crestfallen: thanks .. see! one needs to know this !
+17:35 nineonine has joined (~nineonine@216.81.48.202)
+17:38 wildtrees has left IRC (Quit: Leaving)
