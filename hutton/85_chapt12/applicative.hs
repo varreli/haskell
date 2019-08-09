@@ -23,16 +23,9 @@ products :: [Int] -> [Int] -> [Int]
 products xs ys = pure (*) <*> xs <*> ys  -- applicative product 
 ----------------------------------------------------------------
 
--- instance Applicative Maybe where
--- --  pure :: a -> Maybe a
---       pure = Just
--- --  (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b
---       Nothing <*> _ = Nothing
---       (Just g) <*> mx = fmap g mx
+-- > fmap3 (\x y z -> x * y + z) [10,100,1000] [3,4,5] [7,8,9]
 
--- > fmapp (\x y z -> x * y + z) [10,100,1000] [3,4,5] [7,8,9]
-
--- > fmapp (\x y z -> x * y + z) (Just 10) (Just 3) (Just 7)
+-- > fmap3 (\x y z -> x * y + z) (Just 10) (Just 3) (Just 7)
 
 -- > map Just $  [(+), (*), (^)] <*> [a,b] <*> [1,2,3] :: [Maybe Expr]
 
@@ -42,3 +35,9 @@ products xs ys = pure (*) <*> xs <*> ys  -- applicative product
 -- [a,b,c]
 -- > a:b:c:a+2:[]
 -- [a,b,c,a + 2]   -- list with four elements, a, b, c and a + 2
+
+-- > pure [f,g,h] <*> [x,y,z]
+
+-- If you have a tuple of functions, you can pattern match on 
+-- the tuple 
+-- > (\(f,g) -> [f,g] <*> xs <*> ys)
