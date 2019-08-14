@@ -1,8 +1,12 @@
 -- applicative is left associative:   g <*> x <*> y <*> z
 --                                  ((g <*> x) <*> y) <*> z
 
-fmap0 :: Applicative f => a -> f a
-fmap0 = pure --    degenerate case
+
+fmap0 :: Applicative f => a -> f a   -- pure has "return-type polymorphism"
+fmap0 = pure                         -- so the type of the return type
+				     -- dictates which instance (implementation) 
+				     -- of pure to use
+
 
 fmap1 :: Applicative f => (a -> b) -> f a -> f b
 fmap1 g x = pure g <*> x                             -- standard case

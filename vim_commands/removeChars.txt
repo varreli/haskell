@@ -1,0 +1,9 @@
+To remove all lines starting with a asterisk (*)  (i.e. joined/quit in chat log)
+This is a special character, so it has to be escaped with a backslash.
+     
+:g/^\*/d
+
+To remove all lines starting with a single Char 'A':
+:g/^A/d
+ 
+To remove all lines starting with a word :
