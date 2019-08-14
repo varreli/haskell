@@ -11,3 +11,4 @@ seqA (x:xs) = pure (:) <*> x <*> seqA xs
 getChars' :: Int -> IO String
 getChars' n = seqA (replicate n getChar)
 
+
