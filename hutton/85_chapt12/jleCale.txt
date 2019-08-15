@@ -1,0 +1,618 @@
+crestfallen  > pure 5 :: [Int]
+lamdabot:  [5]
+crestfallen  hi why do I need to specify the type here?
+crestfallen  > pure 5
+lamdabot:  error:
+lamdabot:      • Ambiguous type variable ‘f0’ arising from a use of ‘show_M566981383817...
+lamdabot:        prevents the constraint ‘(Show (f0 Integer))’ from being solved.
+ what should it show?
+ > pure 5 :: Maybe Int
+lamdabot:  Just 5
+ > pure 5 :: IO Int
+lamdabot:  <IO Int>
+ > pure 5 :: (Int -> Int)
+lamdabot:  mueval-core: Time limit exceeded
+crestfallen  the instance declaration for applicative []  is pure x = [x]
+ why should it look at that instance in the first place?
+crestfallen  I dont know
+ :t pure
+lamdabot: Applicative f => a -> f a
+ it could pick any of the others i showed
+ or ones that your module doesn't even know about yet
+ there's no way it can know what f you are talking about
+ fun fact: this happens all the time
+crestfallen  what does
+ ambiguous type variables
+ :t 5
+lamdabot: Num p => p
+ > 5
+lamdabot:  5
+ 
+ here it doesn't know if it should be Int or Double or Complex or Rational or what
+ but only for numbers, the type gets defaulted
+ 
+ if it's Num p, it picks Int (or Integer?)
+ if it's Floating p, it picks Double
+ > 5.0
+lamdabot:  5.0
+ :t 5.0
+lamdabot: Fractional p => p
+crestfallen  hpc yeah somehow I thought it defaults to List but there's no reason for that
+
+there are extended defaulting rules
+but i think that just means as a last ditch effort pick ()
+
+crestfallen oh my namesake: great word, too pretty to change though I'm essentially an eternal optimist
+
+I thought it came from a tragic toothpaste accident ;)
+crestfallen  hpc that's funny
+
+crestfallen  https://paste.ee/p/awVqE
+
+If you remove the `pure` there, it will fail to typecheck.
+
+ x = [x]
+
+pure takes a function, say, (*)
+give us this [(*)]
+
+look at the thing that's using [(*)]
+crestfallen  [(*)]   ?
+ and consider what other values you could use besides [(*)]
+ what if the list was empty?
+ what if it had two different functions in it?
+ (<*>)
+
+crestfallen  what if it had two different functions in it?      
+[(*),(+)]
+
+crestfallen  pure x takes x and returns [x]
+
+so pure (*) takes (*) and returns [(*)]
+just like how pure 1 takes 1 and returns [1]
+
+it doesn't really convert 1 into anything, all it does is put it in a list
+crestfallen  so <*> is operating inside that initial list which contains the (*)    ie [(*)]     ?
+yeah, (<*>) is a function that takes two lists, and does stuff with the items in both lists
+
+crestfallen  so it might look like this   [[1,2,3] <*> (*) <*> [10,20]] or something   ?
+not sure what "it" means here or what you are trying to give an example of
+
+take the ghci line in your paste
+and experiment with the start of it, where you pass the function(s)
+
+crescrestfallen  (<*>) for lists is defined so that [f,g,h] <*> [x,y,z] = [f x, f y, f z, g x, g y, g z, h x, h y, h z]
+
+> [f,g] <*> [x,y] :: [Expr]
+lamdabot:  [f x,f y,g x,g y]
+
+crestfallen  that much I understand
+
+> [negate] <*> [1,2,3]
+lamdabot:  [-1,-2,-3]
+
+> pure negate <*> [1,2,3]
+lamdabot:  [-1,-2,-3]
+
+pure negate is just a fancy way of writing [negate]
+
+crestfallen  ok so the function (*) just sits in the first place with its own <*>   ie..
+do you understand `pure negate <*> [1,2,3]` ?
+
+crestfallen  [(*)] <*> [1,2,3] <*> [10,20]
+
+yeah, that's what pure (*) <*> [1,2,3] <*> [10,20] turns into
+because in haskell you can always replace function calls by their definitions
+
+the value of pure here is, what if you're not operating on lists
+
+and pure x = [x], so you can replace `pure (*)` with `[(*)]`
+
+also probably important, you should know how (<*>) associates
+fs <*> xs <*> ys is associated as (fs <*> xs) <*> ys
+
+
+crestfallen  that's interesting . its simply that using <*> each operand needs to be of the same type : [(*)] , [1,2] etc
+
+: well, both sides of <*> have to have the same 'f' (Applicative instance), but the parameter to f doesn't need to be the same necessarily
+
+consider the case of [negate] <*> [1,2,3], where the left hand side is [Int -> Int] and the right hand side is [Int]
+
+> :t id id
+lamdabot: a -> a
+
+crestfallen  ok yeah so bottom line is line 3 produces [(*)] .. oh reading those last posts...
+crestfallen  that's like  '  fmap id = id      id on each side has a different type
+crestfallen  fmap id    would give    f a -> f a  on the rhs
+
+well, the equals sign there doesn't quite mean anything in haskell; but yeah it's a generally accepted convention 
+
+the things on both sides of an equal sign are meant to be equal as a notational convention
+
+when someone says "fmap id = id" as a law, it's not quite something that exists using that syntax in haskell
+
+crestfallen  well I guess it means that the a is preserved, but its now inside the f :  '  f a  '
+
+but they are trying to convey that "fmap id" and "id" should be replaceable with each other within a program
+
+crestfallen  that last comment of yours I would love to see an example..
+
+well, the statement "fmap id = id" is a non-haskell-syntax statement that you should be able to replace "fmap id" with "id" (and vice versa) within a program without changing the meaning
+
+that's what the equals sign there means, when people talk about it as a law
+they don't actually mean to refer to any '=' syntax within haskell, it's more of an informal human-level statement
+
+crestfallen  yeah, the law says that if you ever see 'fmap id x' in a program, you can just replace it with 'id x' without changing the meaning
+
+crestfallen  it means that the a -> a part is preserved, but its in a context now
+
+for example if i ever saw someone write "fmap id [1,2,3]", i would say "why are you writing fmap id [1,2,3], don't you know about the functor laws? you can just write 'id [1,2,3]'. which is just [1,2,3]"
+
+crestfallen  right, the fmap just falls off whenever you see id [1,2,3]
+
+well remember that fmap id [1,2,3] is associated as (fmap id) [1,2,3]
+so it means that (fmap id) is just (id)
+And rightfully “undefined == undefined” returns neither True nor False.
+
+crestfallen  so my point is that, when someone says "blah = blahblah", the implication is yes, blah and blahblah have a type. because they are meant to be interchangeable with each other
+
+crestfallen  jle`: if I could extend this idea.. is this like the combinators id flip const    and all that business?
+things like const id = flip const ?
+yeah, the = there as I use it has the same meaning
+
+> fmap id [1,2,3]
+lamdabot:  [1,2,3]
+
+> const id 5
+:t const id
+
+lamdabot:  mueval-core: Time limit exceeded
+lamdabot: b -> a -> a
+
+crestfallen  > const id 5 "t"
+lamdabot:  "t"
+crestfallen  so what I don't see is why these seem to be important combinators :    const id flip        ie. I read little tutorials about them but don't really see how they work in programs
+
+their definitions are pretty simple, so "how they work" isn't too tricky, is it?
+const x y = x, const just ignores the second argument
+id x = x, it just returns its argument as-is
+
+crestfallen  yeah but first off, why are they combinators? I mean, whats a combinator?
+crestfallen  const ignores the 2nd arg, is that for say currying?
+
+combinator doesn't really mean anything formal, the most general sort of meaning they evoke is that they can be used to build complicated things from simple building blocks
+in haskell they usually just mean "higher order functions"
+
+crestfallen  does that tie into SKI calculus ?
+
+a lot of times when working with higher order functions in haskell, you only really need to pass in simple functions
+
+crestfallen  like where would you pass in const say?
+
+for example a lot of people use const to replace the result of a Functor value
+: > map (const ()) [1,2,3,4]
+lamdabot:  [(),(),(),()]
+
+this is in the standard libraries as "void"
+
+or you can use it with, say, zipWith to ignore items in the second list and only use items in the first list
+
+> zipWith const [1,2,3] [4,5]
+lamdabot:  [1,2]
+
+I don't think there is any "big picture" overall idea that unites all usages of const
+
+it's just that (\x _ -> x) comes up here and there often enough in different places for different usages that it's useful enough to justify giving it a common name
+
+crestfallen  the zipWith example..what happened there?
+
+well zipWith f [x,y,z] [a,b] = [f x a, f y b]
+it just zips the values in two lists together, using a combining function
+but if you only care about the items in the first list...then you can do something like zipWith (\x _ -> x) [1,2,3] [4,5]
+
+it's not like this is a fundamental deep and powerful property of const
+it's just that 'const' takes less characters than (\x _ -> x)
+and is probably more readable :)
+
+> zipWith const [1,2,3,4] [4,5] 
+lamdabot:  [1,2]
+
+ah yeah also remember that zip drops the items from the longer list
+> zip [1,2,3,4] [4,5]
+lamdabot:  [(1,4),(2,5)]
+
+so this is not some deep mystical property of const
+if you wanted to do this you might just write zipWith (\x _ -> x)
+
+and if you wanted to replace all the items in a list with () you might just do map (\_ -> ()) [1,2,3]
+
+crestfallen  so even though [4,5] is dropped, the first list reflects the number of elements of the lesser list
+
+it's just that when you work with higher order functions enough times, 
+similar functions pop up here and there and it's common enough that it's 
+useful to give them names for readability
+
+the values 4 and 5 are dropped
+but the shape of the list (the length) persists
+
+so zip chooses the first 2 elements of [1,2,3,4] ?
+yeah, it matches the elements until it runs out on either list
+
+@src zip
+lamdabot: zip (a:as) (b:bs) = (a,b) : zip as bs
+lamdabot: zip _      _      = []
+ > zipWith (+) [1,2,3,4] [9,8]
+lamdabot:  [10,10]
+
+crestfallen  but in the case of using zipWith const   ...
+crestfallen  still ..
+crestfallen  if you drop the second list
+crestfallen  you are ' matching the elements '   ,  really just the first two elements of the first list, given the number of elements in the 2nd list? what good is that?
+crestfallen  > zipWith const [1,2,3,4] [4,5]
+lamdabot:  [1,2]
+
+small random things like this come up all the time in everyday programming.
+so this question is like "if you add two to 56, you get 58 ... what good is that?"
+
+it's not like "what good is adding 3 to a number?" has a real answer
+
+Axman6: "I need these lists to be the same length because I'm making an HTML table, and I don't want to use length because it's unnecessarilly strict"
+
+it's just ... sometimes you need to add something, and sometimes it's just three
+
+crestfallen   no but it is not zipping, those elements are just at index 0,1 of the first list
+yeah, it can be useful for limiting your lists to a given length
+
+Axman6: \row ->  zipWith const row headers -- will ensure the row is the same length as the list of headers, or less
+So if i had headers = ["Color", "Length", "Weight"]
+Then zipWith const myRow headers will limit myRow to the number of items that headers has
+
+-----------------------------------------------------------------------------------------------
+
+<crestfallen>	hi why wouldn't the following return [15]    ?  ..
+<crestfallen>	> pure ((*3) 5)
+<lambdabot>	 error:
+<lambdabot>	     • Ambiguous type variable ‘f0’ arising from a use of ‘show_M535413171008...
+<lambdabot>	       prevents the constraint ‘(Show (f0 Integer))’ from being solved.
+<crestfallen>	> pure ((*3) 5) :: Integer
+<lambdabot>	 error:
+<lambdabot>	     • Couldn't match expected type ‘Integer’
+<lambdabot>	                   with actual type ‘f0 Integer’
+<crestfallen>	weird the first try works in ghci
+<crestfallen>	pure (*3) 5)  returns 15, not [15]
+<mniip>	it does so in the IO applicative
+<Axman6>	it'll be using f ~ IO in ghci
+<mniip>	% pure ((*3) 5)
+<yahb>	mniip: 15
+<Axman6>	try pure ((*3) 5) :: [Integer]
+<crestfallen>	so the list needs to be specified
+<Axman6>	the type you're actually getting (which :t it should confirm) will be IO Integer
+<crestfallen>	> pure ((*3) 5) :: [Integer]
+<Axman6>	remembe rthat GHCi will execute IO actions
+<lambdabot>	 [15]
+<jle`>	crestfallen: remember that pure is an example of "return-type polymorphism", where the type of the return type of the function dictates which instance is dispatched
+<jle`>	another common example is 'read'
+<jle`>	> read "5" + 2
+<lambdabot>	 7
+<jle`>	> read "True" || False
+<lambdabot>	 True
+<mniip>	% let x = traceShow (typeOf x) $ pure 123 in x
+<yahb>	mniip: IO Integer; 123
+<jle`>	read is actually a bunch of different functions under the same name, and each type has a different implementation of read
+<jle`>	so the return type determines which implementation to use
+<crestfallen>	ok so when we have a case where the return could be impure, we need to specify if we want a functor like [15], or Integer IO etc
+<crestfallen>	or is IO also pure at that stage?
+<jle`>	return is never impure
+<jle`>	er, pure is never 'impure'
+<jle`>	in this case we have `pure :: Applicative f => a -> f a`, so the choice of 'f' (in the return type) determines which implementation of pure to use
+<jle`>	so it's not really a pure/impure sort of distinction
+<crestfallen>	ok yeah your comment "the return type of the function dictates which instance is dispatched is helpful...
+<crestfallen>	so once again its a case where studying the type signature is KEY. thanks Axman6 mniip jle`   alot    also
+<crestfallen>	..
+<crestfallen>	if you could look at my final draft of Sundays evaluation by hand..
+<crestfallen>	to tell me if you'd do it differently.
+<crestfallen>	https://paste.ee/p/go0ej   jle` et al
+<jle`>	i wouldn't say "is sugar for", but rather "evaluates to"
+<jle`>	just from the definition of <*>
+<jle`>	for lists
+<jle`>	if you want to be explicit with the evaluation, i think you do skip a few steps
+<crestfallen>	I start on lines 11 and 24. where do I skip steps?
+<crestfallen>	(I used sugar since you mentioned it sunday, though only for the (\x -> (\y z .. )    and used the term inner lambda
+<crestfallen>	)
+<jle`>	(\x y z -> ..) is sugar for (\x -> \y z -> ..), but the application of <*> is not sugar
+<jle`>	well, the full steps to evaluating [f] <$> [1,2] <*> [3,4] <*> [5,6]
+<jle`>	would probably be [f 1, f 2] <*> [3,4] <*> [5,6]
+<jle`>	 = [f 1 3, f 1 4, f 2 3, f 2 4] <*> [5,6]
+<jle`>	= [f 1 3 5, f 1 3 6, f 1 4 5, f 1 4 6, f 2 3 5, f 2 3 6, f 2 4 5, f 2 4 6]
+<crestfallen>	ok so my evaluation order is actually wrong
+<jle`>	i guess that does skip some steps within the implementation of <*>, however it is implemented
+<crestfallen>	 [f 1 3, f 1 4, f 2 3, f 2 4]   << so here f 2 is evaluated first, before all 4 (f 1)'s are evaluated ?
+<jle`>	if we are talking about order of evaluation, it doesn't matter
+<crestfallen>	hmm
+<jle`>	if you want to eventually force the entire list and evaluate every item, it doesn't matter what order they are evaluated in
+<jle`>	if we are talking about the order of the items in the list...then yeah, the order i think is how it works
+<jle`>	> [f] <*> [1,2] <*> [3,4] <*> [5,6]
+<lambdabot>	 error:
+<lambdabot>	     • Ambiguous type variable ‘b0’ arising from a use of ‘show_M922800072687...
+<lambdabot>	       prevents the constraint ‘(Show b0)’ from being solved.
+<jle`>	> [f] <*> [1,2] <*> [3,4] <*> [5,6] :: [Expr]
+<lambdabot>	 [f 1 3 5,f 1 3 6,f 1 4 5,f 1 4 6,f 2 3 5,f 2 3 6,f 2 4 5,f 2 4 6]
+<jle`>	phew
+<crestfallen>	ok yeah that's what I had in mind
+<crestfallen>	see jle` I figured I'll never get this stuff until I really master the evaluation and appropriate notation to express it, to say a young person.
+<crestfallen>	especially(?) in the case of recursive evaluation
+<crestfallen>	there's also the question of how the evaluation should look with impure objects..
+<jle`>	what is an 'impure object' ?
+<crestfallen>	well, for example:   ...
+<crestfallen>	https://paste.ee/p/mtC66
+<crestfallen>	maybe what I mean is IO, return, etc.
+<jle`>	neither IO nor return nor etc. are 'impure objects' :)
+<crestfallen>	etc isn't? :)
+<jle`>	;)
+<crestfallen>	but how to write it out..
+<crestfallen>	for example the above more recent paste
+<crestfallen>	how to write out the evaluation steps
+<crestfallen>	where they use replicate with a function which seems odd to me
+<jle`>	for which one?
+<crestfallen>	getChars'
+<crestfallen>	lines 11,12
+<jle`>	just follow normal rules
+<jle`>	are you familiar with 'evaluation by substitution' ?
+<crestfallen>	yeah
+<jle`>	basically: every time you see something like 'f x', replace it with the definition of f
+<jle`>	do you see how this applies to getChars ?
+<jle`>	(the first one)
+<jle`>	try evaluating 'getChars 2' by hand
+<crestfallen>	getChars 2 = pure (:) <*> getChar <*> getChars (2-1)
+<crestfallen>	H:  <*> getChar <*> getChars (1)
+<crestfallen>	 or is it       H:[]  <*> getChar <*> getChars (1)
+<jle`>	`pure (:) <*> getChar <*> getChars 1`
+<jle`>	and from there you can expand getChars 1 again
+<crestfallen>	so there's no [] of course
+<jle`>	not that i see yet
+<jle`>	nothing we have yet seen introduces a []
+<crestfallen>	but do you not do:     H:i   ->   Hi
+<jle`>	are you talking about 'pure' here?
+
+<jle`>	pure here is :: a -> IO a, it is a completely different function than pure for lists
+
+<crestfallen>	oh so pure (:) is Cons for IO but doesn't actually denote Cons operator?
+<Axman6>	:t (:)
+<lambdabot>	a -> [a] -> [a]
+
+<Cale>	pure (:) :: IO (a -> [a] -> [a])
+
+<Axman6>	:t pure (:)
+<lambdabot>	Applicative f => f (a -> [a] -> [a])
+<Axman6>	a.k.a IO (a -> ([a] -> [a]))
+
+(:) denotes the cons operator, but the 'f' here is IO, not []
+
+<jle`>	note the type of pure, a -> f a
+<jle`>	a and f are allowed to vary independently
+
+<Cale>	So then pure (:) <*> getChar :: IO ([Char] -> [Char])
+
+<Cale>	(a gets specialised to Char, because getChar can only get us a Char to supply as the first argument to (:))
+
+<crestfallen>	ok so in terms of writing out by hand, the (:) can be used in the way of convention
+<crestfallen>	just don't add list brackets
+<crestfallen>	correct?
+<Axman6>	I don't understand that sentence at all
+<jle`>	(:) is a function, like negate or abs or not, etc.
+<jle`>	it's just like 'negate' doesn't add list brackets to anything
+<crestfallen>	convention meaning to convey the consing
+<Axman6>	There's nothing special about (:), other than it is also a constructor, like Just. both of these are just functions
+<jle`>	well, it's not a convention
+<jle`>	that's what the function is
+<jle`>	just like 'negate' being a negation function isn't a "convention"
+<jle`>	that's...what it actually is, in the standard libraries
+<crestfallen>	but you do this ie
+<jle`>	> negate 3
+<lambdabot>	 -3
+<crestfallen>	> 1:2:[]
+<lambdabot>	 [1,2]
+<crestfallen>	to convey what the result is
+
+<Axman6>	> let cons x xs = (:) x xs in cons 3 []
+<lambdabot>	 [3]
+
+<jle`>	crestfallen: you might be mixing up the function and the result of the function
+<jle`>	'negate 3' returns -3
+<jle`>	it doesn't mean that negate is -3
+<jle`>	negate is a function that takes a number and returns its negation
+<Axman6>	crestfallen: are you ok with the fact that the syntax [1,2,3] is syntax sugar for 1:2:3:[]?
+<jle`>	but it would be incorrect to say that 'negate' == -3
+<crestfallen>	yeah Axman6 
+<jle`>	(:) is a function that takes an item, and a list, and returns a new list
+<MarcelineVQ>	"how do I denote the reduction of using pure on (:) for IO, if it was a list I could just write [ ]"
+<crestfallen>	right but the return is printed, so I'm talking about in lieu of having the output in brackets, how would you write it out?
+<crestfallen>	printed to the screen, so I'm just looking for a notational convention, if I make any sense
+<jle`>	ah
+<jle`>	IO is an 'abstract' data type, so i would just reduce `pure (:)` to `pure (:)` for IO
+<jle`>	just like how i'd reduce `Just (:)` to `Just (:)`, for Maybe
+<jle`>	some people also like to reduce it to 'return' instead of 'pure', just for consistency
+<jle`>	in the end when you fully reduce getChars 2 in this way, you get:
+<jle`>	pure (:) <*> getChar <*> (pure (:) <*> getChar <*> (pure (:) <*> getChar <*> pure []))
+<jle`>	so how to examine this requires understanding how <*> works for IO. IO is a normal data type, 
+just like any other one
+
+<jle`>	(<*>) for IO is pure, just as pure as it is for lists
+<jle`>	so like how for lists, to understand <*>, we understand how lists define <*>.  here, for IO, to understand <*>, we understand how IO defines <*>
+
+<jle`>	so how `iof <*> iox` works is that it takes two IO actions iof and iox, and returns a new IO action whose effects are the effects of iof, followed by the effects of iox
+<jle`>	and, the important thing, 'pure x' has no IO effects
+<jle`>	oh, and that <*> is associative with respect to effects combination
+<jle`>	the effects of (ioa *> iob) *> ioc are the same as the effects of ioa *> (iob *> ioc)
+<jle`>	but i guess that's something you could deduce from what i said before -- it's just sequencing one after the other
+<jle`>	so when you look at `pure (:) <*> getChar <*> (pure (:) <*> getChar <*> (pure (:) <*> getChar <*> pure []))`, 
+you can see a bunch of chained <*>'s
+
+<jle`>	and each one "combines" the effects on both sides
+<jle`>	remembering that pure (:), pure [], has no effects...what can you say about the 'effects' of that final giant result?
+<jle`>	if you look at all the non-pure values being <*>'d, you see there are only three: getChar, getChar, and getChar
+<jle`>	so 'getChars 3' results in an IO action that does getChar three times
+<crestfallen>	but <*> with pure will make each one pure as the result 
+
+<jle`>	remember, <*> combines effects one-after-the-other
+<jle`>	so `pure f <*> iox` will have the effects of pure f, then the effects of iox
+<jle`>	but since pure f has no effects, then pure f <*> iox just has the effects of iox
+
+<jle`>	so this is 'kind of like' reading 0 + x + (0 + x + (0 + x + 0)) and seeing that it is just 3*x
+<jle`>	or 1 * x * (1 * x * (1 * x * 1)) and seeing that it is just x^3
+
+<crestfallen>	sorry I can't follow. if pure f <*> iox just has the effects of iox, it still has effects after it is combined, right?
+<jle`>	crestfallen: remember <*> is a function
+<jle`>	it takes two IO actions and returns a new IO action
+<jle`>	so if i do `let ioy = pure f <*> iox`
+<jle`>	crestfallen: then in that case, ioy is a new IO action. and its effects are exactly the same as the effects of iox
+
+<crestfallen>	I'm reading back, I missed plenty (5 kind people helping) but what does this mean? "  <*> is associative with respect to effects combination "
+<jle`>	crestfallen: i mentioned it earlier, (ioa *> iob) *> ioc has the same effects as ioa *> (iob *> ioc)
+<jle`>	yeah, it can be convenient to bind them to a name
+<jle`>	crestfallen: more specifically, if i set test1 = (ioa *> iob) *> ioc, and test2 = ioa *> (iob *> iob), then test1 and test2 are both io actions that have the same effects
+<MarcelineVQ>	but jle`, what is an effect :D
+<jle`>	the reason why i mention that is to say that we can ignore the parenthesization when reasoning about effects in the expression we were looking at
+<MarcelineVQ>	and is it different than a value
+
+-------------------------------------------------------------------------------------------------------------------------
+
+<dminuoso>	crestfallen: What if I told you that Applicative didn't have ⌜<*>⌝, but some method ⌜><⌝ instead,                                       with the following type signature ⌜(><) :: Applicative f=> f a -> f b -> f (a, b)⌝
+<dminuoso>	crestfallen: And equivalently, instead of ⌜pure⌝ you had ⌜unit :: Applicative f => f ()⌝
+
+<dminuoso>	crestfallen: I think in a lot of ways, Applicative is confusing because there's that 
+                notion of function application to it - but in reality the function application is not the point.
+
+<dminuoso>	crestfallen: The point is that (><) that somehow merges together two effects and their results.
+<dminuoso>	crestfallen: "effect" is a lose term that somehow describes that sort of "context" that separates 
+                "T A" from just "A" . For each choice of T, you would think of T as having some effect in a lose notion.
+-------------------------------------------------------------------------------------------------------------------------
+
+<Cale>	crestfallen: It might be clearer to start with Monad, because it's not necessary to think of these 
+things which are producing functions as their results.
+<Cale>	as suggested earlier :D
+
+<dminuoso>	Cale: The strangest thing is, this superclass relationship is fairly misleading - I feel that Applicative is so much more orthogonal to Monad.
+<Cale>	I mean, Applicative is something you can get for free if you have Monad, so I don't find it very orthogonal
+
+<dminuoso>	That is, Semigroup and Monoid are related differently than Applicative and Monad.
+<dminuoso>	Cale: Sure, but that's just because Monad give rise to a canonical Applicative instance via Yoneda.
+<dminuoso>	If you compare say Ord with Eq, where Ord is pretty much Eq plus some stuff, or Monoid which is Semigroup plus some stuff.
+<MarcelineVQ>	dminuoso: my man you didn't example any effects :O
+<Cale>	I don't know why it's Yoneda, but okay :)
+<crestfallen>	but wait what are we trying to do with taking effects and transforming them? ultimately, it makes them mathematically in step with the rest of haskell, right?
+<Cale>	crestfallen: Well, that's part of it, yeah
+
+<Cale>	Specifically, it's necessary to have *some* type for describing IO effects
+<Cale>	and then it so happens that the operations we want for those types that describe "computations having results", like IO actions, end up being patterns that happen over and over again
+<Cale>	So we end up defining these type classes like Applicative and Monad to capture the pattern which is common across many libraries (IO being just one of them)
+<Cale>	Like any abstraction, it'll make a whole lot more sense as you pick up more and more examples
+
+<Cale>	There are not many relevant examples of instances of Applicative which are not also instances of Monad though
+<phadej>	Arrow and Monad aren't related
+<phadej>	but both can be used to describe effects
+
+<Cale>	crestfallen: At least for the case of Haskell, a functor is a parametric data type F for which we can define a function  fmap :: (a -> b) -> F a -> F b
+
+<Cale>	crestfallen: Lists are a good first example of that, since everyone comes across map early on
+
+<crestfallen>	I was watching bartosz milewski who was talking about their (functors) efficiency in memory
+<Cale>	crestfallen: But also, we can have more interesting things. Let's define our own type for representing IO actions
+
+<dminuoso>	Lists are also an interesting concept because the "effect" they model is the one of 
+non-determinism. By that I mean that [1,2,3] doesn't mean a sequence of three numbers. It rather means 
+"It's some number (out of three), but we dont know which one exactly"
+
+<Cale>	data TermIO a = Done a | PutStr String (TermIO a) | GetLine (String -> TermIO a)
+<Cale>	Let's just start with this one :)
+<dminuoso>	So the difference between 2 and [1,2,3] is that the list adds some sort of "fuzziness", and that's the effect the Applicative and Monad instances talk about.
+
+<Cale>	Are you familiar with this syntax?
+<Cale>	We're defining a data type with three constructors, Done, PutStr, and GetLine
+
+<dminuoso>	phadej: Interesting, what kind of constraints are those?
+
+<Cale>	The idea is, that any action (whose result has type a) is either going to be Done, along with a value of type a that it finishes with, or it will start off by printing a string to the terminal (followed by some other action whose result will have type a)
+<Cale>	... or it will start by getting a line of text from the user, and then based on the String result of that, decide which action to perform next
+<MarcelineVQ>	The terminology overload is getting steamy in here.
+<Cale>	(and that action will have a result of type a)
+<crestfallen>	ok thanks Cale I follow that pretty well
+<Cale>	crestfallen: Okay, so we could write a Functor instance for this too
+<Cale>	instance Functor TermIO where
+<Cale>	  fmap f (Done a) = Done (f a)
+<Cale>	  fmap f (PutStr str x) = PutStr str (fmap f x)
+<Cale>	  fmap f (GetLine k) = GetLine (\str -> fmap f (k str))
+<jle`>	crestfallen: IO is not a container
+<jle`>	oh, i should have read scrollback
+<Cale>	Well, I'm kind of in the middle of showing the sense in which IO is kind of container-ish
+<jle`>	yes, please igore me :)
+<crestfallen>	thanks so much jle` for everything!
+<Cale>	crestfallen: Does that implementation of fmap make sense? The end result is that we're applying f to the results of our TermIO action
+<Cale>	The first line there says that if our action is simply the trivial one which produces a result, then fmap f will transform it into a similar one, but with f applied to the result
+<Cale>	The second line says that if our action starts off by printing a string, then it still will start off that way, but we'll fmap f over the action which follows that
+<crestfallen>	the action?
+<crestfallen>	fmap f x    ?
+<Cale>	Well, I'm going to refer to values of type TermIO a as "actions"
+<Cale>	and in particular, the action I was referring to was the x in fmap f x, yeah
+<Cale>	Values of type TermIO a are simply describing things to be done -- if we want to actually print strings on the terminal, or get text from a user, we'll need to implement a way of executing them
+<crestfallen>	ok
+<Cale>	The last line there, fmap f (GetLine k) = GetLine (\str -> fmap f (k str)) says that if the given action starts off by getting a line of text from the user, and then proceeds to use k to decide what steps to take next
+<Cale>	then our resulting action will get a line of text from the user, and then, given the string the user typed is str,
+<Cale>	apply k to str to get an action to be performed next, but fmap f over that
+<Cale>	(so as to transform the eventual result)
+<Cale>	Make sense?
+<crestfallen>	what is k ?
+<Cale>	So, GetLine :: (String -> TermIO a) -> TermIO a
+<Cale>	Takes a function which will decide how to proceed given the user's input
+<Cale>	Of course, that's just how I'm interpreting it, it's really just an arbitrary function
+<Cale>	So that we can eventually encode actions which proceed differently based on what the user types
+<Cale>	(which is something you often want programs to be able to do)
+<Cale>	We can write an interpreter which will transform our TermIO actions into plain Haskell IO actions:
+<Cale>	execute :: TermIO a -> IO a
+<Cale>	execute (Done v) = return v
+<Cale>	execute (PutStr str x) = do putStr str; execute x
+<Cale>	execute (GetLine k) = do str <- getLine; execute (k str)
+<Cale>	You can imagine that IO is similar to our TermIO type, and that inside the Haskell runtime there is a similar program which is pattern matching on the constructors of IO and carrying out the steps described.
+<Cale>	(It's not actually, it's an ugly hack for performance and ease of compiler implementation, but it *could* be)
+<crestfallen>	shall Plan A be to start reading about Monads?
+<Cale>	Well, I'm getting there :)
+<Cale>	Let's start with a few *particular* monads
+<Cale>	and then worry about the abstraction a bit after
+<Cale>	We could look at how (>>=) is implemented for this TermIO type
+<Cale>	(>>=) :: TermIO a -> (a -> TermIO b) -> TermIO b
+<Cale>	The idea with this type
+<crestfallen>	I'm not sure I'm capable at this moment tbh
+<Cale>	is that we're giving an action of type TermIO a to start off with
+<Cale>	and then a function which will take the result of that first TermIO action, (which has type a), and produce an action of type TermIO b to continue with
+<Cale>	and (>>=) is going to glue those together into a single action
+<Cale>	crestfallen: Totally lost?
+<Cale>	Maybe we could just start with other examples of monads, if you're not having an easy time with this one
+<crestfallen>	yeah sorry I'm pretty lost. I understand the cases based on the user input
+<Cale>	okay
+<Cale>	So yeah, the idea here is just that we can make data types whose values represent "computations" or "actions" to be performed. This is a common strategy across many Haskell libraries. What those computations are allowed to do varies...
+<Cale>	For example, we might have a type  Parser a  for things which try to consume the start of an input string, and, if successful, produce a result of type a
+<crestfallen>	so each action needs to ultimately be pure, right?
+<Cale>	Our description of what is to be done is
+<Cale>	Actually carrying out the steps might not be
+<Cale>	Yeah, the real thing I'm getting at with the TermIO example was to try to give some sense that IO action values are just ordinary values, even though IO is an opaque type
+<crestfallen>	opaque
+<Cale>	as in, its implementation is hidden from us
+<Cale>	We can't pattern match on its constructors
+<Cale>	"abstract" would be another word for it
+<crestfallen>	 We can't pattern match on its constructors    << sorry pretty confused
+<Cale>	Like, normally, if we define some data type like:
+<Cale>	data List a = Empty | Cons a (List a)
+<Cale>	We can see the constructors Empty and Cons, and use them to take apart values of type List a
+<crestfallen>	right
+<dminuoso>	Cale: You can only pattern match on a constructor if the implementor gives it to you. 
+Hiding the data constructor is a mechanism of hiding implementation (such that you cant just arbitrarily 
+break it apart and look inside)
+
+<Cale>	But imagine they're not exported from the module in which they're defined
+
+<dminuoso>	So it's encapsulation. :)
+<Cale>	We could export just some basic lists and ways of working with them, without exposing our specific implementation of lists
+<Cale>	If you look at Data.Sequence, it's very much like that, actually
+<Cale>	From outside, it's something which looks like a list, internally, it's a weird tree thingy
+<Cale>	(with some really nice asymptotics for concatenating and splitting)
+<Cale>	IO is also like that, we can't tell from what the IO library gives us how the data type is implemented -- we're just given a bunch of basic IO actions and ways of combining them together.
