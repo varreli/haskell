@@ -1,16 +1,25 @@
+import Debug.Trace
+
 getChars :: Int -> IO String
 getChars 0 = return []
 getChars n = pure (:) <*> getChar <*> getChars (n-1)
 
 -- more generalized is seqA (Library function sequenceA) :
 
-seqA :: Applicative f => [f a] -> f [a]
+seqA :: (Applicative f, Show a) => [f a] -> f [a]
 seqA [] = pure []
 seqA (x:xs) = pure (:) <*> x <*> seqA xs
 
-getChars' :: Int -> IO String
+getChars' :: Int -> traceShowIO [Char] 
 getChars' n = seqA (replicate n getChar)
 
+-- You can't show IO actions. If you want to see how seqA 
+-- proceeds, you will need to use an Applicative that can 
+-- be shown, for example, ZipList or Maybe.
+
+-- pure embeds the pure language into the impure DSL currently 
+-- in use. "impure" is a convenient shorthand for "this pure 
+-- computation that models an impure one in an effective way"
 
 -- pure is an example of "return-type polymorphism", where 
 -- the type of the return type of the function dictates 

@@ -6,7 +6,7 @@ import Debug.Trace
 euclid :: Int -> Int -> Int
 euclid s t | traceShow (s, t) False = undefined
 euclid s t
-| s <= 0 || <= 0 = error "Works for positive numbers only" 
+  | s <= 0 || <= 0 = error "Works for positive numbers only" 
   | s == t = s
   | s < t = euclid s ( t - s )
   | s > t = euclid ( s - t ) t
