@@ -27,9 +27,13 @@ products :: [Int] -> [Int] -> [Int]
 products xs ys = pure (*) <*> xs <*> ys  -- applicative product 
 ----------------------------------------------------------------
 
--- > fmap3 (\x y z -> x * y + z) [10,100,1000] [3,4,5] [7,8,9]
+-- > fmap3 (\x y z -> x * y + z) [10,100] [3,5] [8,9]
+-- [38,39,58,59,308,309,508,509]
 
--- > fmap3 (\x y z -> x * y + z) (Just 10) (Just 3) (Just 7)
+-- > fmap3 (\x y z -> x * y ^ z) (Just 10) (Just 3) (Just 7)
+-- Just 135
+
+----------------------------------------------------------------------
 
 -- > map Just $  [(+), (*), (^)] <*> [a,b] <*> [1,2,3] :: [Maybe Expr]
 
@@ -39,6 +43,8 @@ products xs ys = pure (*) <*> xs <*> ys  -- applicative product
 -- [a,b,c]
 -- > a:b:c:a+2:[]
 -- [a,b,c,a + 2]   -- list with four elements, a, b, c and a + 2
+
+----------------------------------------------------------------------
 
 -- > pure [f,g,h] <*> [x,y,z]
 

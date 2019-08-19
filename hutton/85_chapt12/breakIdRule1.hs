@@ -37,4 +37,3 @@ instance Functor List where
 
 -- > fmap id (Cons 1 (Cons 2 (Cons 3 Nil)))
 -- Cons 3 (Cons 2 (Cons 1 Nil))
-
