@@ -28,7 +28,7 @@ eval (Div x y) = case eval x of
 -- which has no provision for divide by zero.
 
 
--- lift operator:
+-- lift operator for Maybe:
 
 -- (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b
 -- mx >>= f = case mx of
