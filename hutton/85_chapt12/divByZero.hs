@@ -36,6 +36,8 @@ eval (Div x y) = case eval x of
 --               Just x -> f x
 
 
+-- rewrite eval:
+
 eval' :: Expr -> Maybe Int
 eval' (Val n) = Just n
 eval' (Div x y) = eval' x >>= \n ->
