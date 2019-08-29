@@ -1,0 +1,9 @@
+Functors allow values to be mapped over.
+
+Applicatives allow us to view values of certain data 
+types as values with contexts and use normal functions on 
+those values while preserving the meaning of those contexts.
+
+Monads are an extension of applicatives.
+
+

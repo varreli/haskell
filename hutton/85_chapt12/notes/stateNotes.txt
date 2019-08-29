@@ -1,0 +1,11 @@
+-- Motivation for State:
+
+-- A pure functional language cannot update values 
+-- in place because it violates referential transparency. 
+-- A common idiom to simulate such stateful computations 
+-- is to "thread" a state parameter through a sequence of 
+-- functions.
+
+-- The State monad hides the threading of the state parameter 
+-- inside the binding operation, simultaneously making the 
+-- code easier to write, easier to read and easier to modify.
