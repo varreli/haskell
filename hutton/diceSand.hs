@@ -26,3 +26,14 @@ rollNDieIO n = replicateM n $ (randomRIO (1,6))
 
 rollNDiceIO :: Int -> IO [(Int,Int)] 
 rollNDiceIO n = replicateM n $ lifter (,) (randomRIO (1,6)) (randomRIO (1,6))
+
+
+generatorR = mkStdGen 0
+rg = random generatorR :: (Int, StdGen)
+
+
+
+
+
+
+-- https://en.wikibooks.org/wiki/Haskell/Understanding_monads/State 
