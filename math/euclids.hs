@@ -6,7 +6,7 @@ import Debug.Trace
 euclid :: Int -> Int -> Int
 euclid s t | traceShow (s, t) False = undefined
 euclid s t
-  | s <= 0 || <= 0 = error "Works for positive numbers only" 
+  | s <= 0 || t <= 0 = error "Works for positive numbers only" 
   | s == t = s
   | s < t = euclid s ( t - s )
   | s > t = euclid ( s - t ) t
@@ -19,3 +19,13 @@ euclid s t
 -- (54,108)
 -- (54,54)
 -- 54
+
+
+----------------------------------------------------------------
+
+-- n = qm + r :
+
+-- λ > 43 == (7*6) + 1
+-- True
+
+-- This is the same as the result of a long division
