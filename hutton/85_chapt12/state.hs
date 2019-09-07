@@ -20,7 +20,6 @@ instance Applicative ST where
                        
 
 
-
 -- re: instance Applicative ST :
 
 -- The state being passed from `stf` to `stx` is s'
