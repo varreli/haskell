@@ -29,3 +29,13 @@ euclid s t
 -- True
 
 -- This is the same as the result of a long division
+
+-- In euclid
+-- both numbers are formed by adding some multiples of the 
+-- original numbers. Thus there are some numbers, a and b, 
+-- such that 
+
+-- gcd(n,m) = (a * n) + (b * m)  
+
+-- The Extended Euclidean algorithm can recover not only 
+-- gcd(n,m), but also these numbers a and b.
