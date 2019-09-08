@@ -1,0 +1,11 @@
+if d|a and d|b what can we say about the linear combination 
+of a and b?
+
+A linear combation of 'a' and 'b' is 
+
+a*x + b*y 
+
+where x,y are real coefficients. For euclid's proof consider 
+only integer coefficients. Experiment with it.
+
+https://paste.pics/e5fc086cdfae868f4816fb37ed1df2d6
