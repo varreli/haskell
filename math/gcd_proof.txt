@@ -1,7 +1,7 @@
 if d|a and d|b what can we say about the linear combination 
 of a and b?
 
-A linear combation of 'a' and 'b' is 
+A linear combination of 'a' and 'b' is 
 
 a*x + b*y 
 
