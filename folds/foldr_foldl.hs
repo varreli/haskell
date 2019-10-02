@@ -17,6 +17,11 @@ length2 :: [a] -> Int
 length2 = foldl (\seed -> \_ -> seed + 1) 0     -- seed, newElement
 
 
+-- folds are called catamorphisms.
+
+
+
+
 -- https://wiki.haskell.org/wikiupload/5/5a/Left-fold-transformation.png 
 
 -- https://wiki.haskell.org/wikiupload/3/3e/Right-fold-transformation.png

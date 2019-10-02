@@ -1,3 +1,5 @@
+-- Algebras as typeclasses:
+
 -- free monoids:          e * a = a * e = a
 --                        (a * b) * c = a * (b * c)
 M :: (m, m) -> m
@@ -10,6 +12,11 @@ M :: (m, m) -> m
 
 -- multiplication (*) is just concatenation of all possible lists.
 -- In the case of integers, the set is infinite.
+
+
+-- The laws of an algebra guarantee predictable composition of 
+-- programs. We must combine programs safely.
+
 
 -- What are the morphisms for the set of monoids? They need to
 -- understand the structure of monoids. A function that preserves
