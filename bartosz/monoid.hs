@@ -1,4 +1,4 @@
-import Data.Monoid
+import Data.Monoid      -- an algebra as a typeclass
 
 
 -- associativity:
@@ -33,6 +33,7 @@ x = getProduct $ mappend (Product 5) (Product 2)  -- unwrap {getSum = 101}.
 
 y = foldr mappend mempty ["are you", " experienced?"]
 z = foldr mappend mempty ([2,4,6] :: [Product Int])
+
 
 -- monoids and identity are good for parallel, concurrent and
 -- distributed programming.
