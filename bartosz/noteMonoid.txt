@@ -1,0 +1,17 @@
+What these Monoids have in common is that they are giv-
+ing you a new Monoid for a larger type by reusing the Monoid
+instances of types that represent components of the larger
+type.
+This obligation to ask for a Monoid for an encapsulated type
+(such as the a in Maybe a) exists even when not all possible val-
+ues of the larger type contain the value of the type argument.
+For example, Nothing does not contain the a we’re trying to
+get a Monoid for, but Just a does, so not all possible Maybe values
+contain the a type argument. For a Maybe Monoid that will have
+a mappend operation for the a values, we need a Monoid for what-
+ever type a is. Monoids like First and Last wrap the Maybe a but
+do not require a Monoid for the a value itself because they don’t
+mappend the a values or provide a mempty of them.
+If you do have a datatype that has a type argument that does not appear anywhere in the terms (a phantom type), the
+typechecker does not demand that you have a Monoid instance
+for that argument.
