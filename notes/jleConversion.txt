@@ -1,0 +1,91 @@
+15:16 jle`: crestfallen: f is a -> () -> a, it takes an 'a' and a (), and returns an 'a'
+15:17 jle`: g should work if you give it any (() -> a) function
+15:17 jle`: for example g (\_ -> "hello")
+
+15:23 iqubic: It looks like f and g are two sides of an isomorphism. And it looks like like he's trying to prove that 'f . g = id'.
+15:25 jle`: is tt = f . g right or wrong? it depends on what you want to do with tt, or what you expect tt to be
+
+15:25 crestfallen: the first example was swap :: (a -> b) -> (b -> a); swap (x,y) = (y,x). so the comment was that data is not lost in a "safe conversion"
+
+15:27 crestfallen: so  I see how tt = f . g is id. so in the type def, how does taking (() -> a) and () as arguments make it isomorphic?  
+15:29 crestfallen: . :t tt               tt :: (() -> a) -> () -> a
+15:30 iqubic: jle`: He's trying to prove that 'f . g' is 'id'
+
+15:31 jle`: crestfallen: the fact that the types match isn't what makes it isomorphic
+15:31 jle`: crestfallen: there are a lot of functions where the types match up correctly, but they do'nt form an isomorphism
+
+15:31 jle`: so the types aren't really the important thing here
+The important property is that for all inputs, it returns the same input unchanged
+
+15:32 crestfallen: yeah thanks iqubic  jle`       the function is what makes it isomorphic right?
+15:32 crestfallen: a conversion function like:
+15:32 jle`: yeah. so try feeding it some sample inputs, and seeing what outputs you get
+15:32 jle`: for example, feed it (\_ -> "hello").  what function do you get back out?
+15:32 crestfallen: f :: A -> B    and    g :: B -> A
+15:32 crestfallen: hold on
+15:32 iqubic: this is isomorphic if and only if 'f . g = g . f = id' for all inputs.
+
+15:33 jle`: it has to return (\_ -> "hello")
+15:33 jle`: not "hello"
+15:33 jle`: if you feed it (\_ -> "hello"), the result has to also be (\_ -> "hello")
+15:34 jle`: that's the only way it can be an isomorphism
+15:34 jle`: if it gives back anything else, it's not an isomorphism
+
+15:34 crestfallen: tt (\_ -> "hello") ()    returns "hello"
+15:34 jle`: yeah, but it's not important what tt (\_ -> "hello") () gives back
+15:34 jle`: what's important is what tt (\_ -> "hello") gives back
+15:35 jle`: that's the 'point' of an isomorphism
+15:35 jle`: if you give it an input, it has to return the same input unchanged, as output
+
+15:36 jle`: so you have to look at it analytically, or 'think' about what it does
+
+15:36 jle`: maybe give it a name, newHello = tt (\_ -> "hello")
+15:36 jle`: what is the type of newHello, and how does it behave?
+15:36 jle`: maybe to make it more explicit, newHello = tt (\() -> "hello")
+
+15:37 jle`: so newHello is an isomorphism if and only if it is equivalent to the function (\() -> "hello")
+15:37 jle`: er, tt is a valid isomorphism candidate if newHello is equivalent to (\() -> "hello") 
+15:38 jle`: so, what is the type of newHello, and how does it behave when you give it different inputs?
+16:16 EvanR: i'm serious https://www.youtube.com/watch?v=faJ8N0giqzw
+
+16:21 jle`: sure, so call it newHello = tt (\() -> "hello")
+16:25 crestfallen: jle`: so yeah that works .. I mean it works just like const
+16:25 jle`: it doesn't work just like const, does it?
+16:25 jle`: const takes two inputs, but newHello takes one input
+16:27 jle`: it works like `const "hello"`, maybe
+16:27 jle`: because the next step will only make sense fi you understand why it's the same as const "hello"
+16:28 crestfallen: this is the tutorial it's the second example under basics: https://kseo.github.io/posts/2016-12-25-type-isomorphism.html
+16:29 jle`: so, do you see why `newHello` is the same as `const "hello"`?
+16:31 crestfallen: yeah because you're inputting () to newHello, which is ignored, or not ignored but the isomorphism is completed when you input () jle`
+16:32 crestfallen: so "hello" is all that is left
+
+16:32 jle`: the isomorphism is already 'completed' before you give the ()
+16:33 jle`: remember, we are talking about isomorphisms between functions, not isomorphisms between strings
+16:33 jle`: so, tt (const "hello") == const "hello", right?
+16:35 jle`: crestfallen: okay, so `newHello = tt (const "hello")`, right?
+16:35 jle`: and you just told me that newHello == const "hello"
+16:36 jle`: so, by transitive property, if tt (const "hello") == newHello, and newHello = const "hello"
+16:36 jle`: then that means that tt (const "hello") == const "hello"
+16:36 jle`: if x == y and y == z, then x == z
+
+16:38 crestfallen: yeah because (\_ -> "hello") is interchangeable with const "hello" because  \_ is a wildcard that returns "hello"
+
+16:40 jle`: yeah. so do you see how `tt (const "hello")` returns `const "hello"`. it just returned our original input, unchanged
+
+16:40 jle`: and because nothing special is going on with "hello", you can maybe also see that `tt (const x) = const x`
+16:41 jle`: and, since all functions from () are a constant function, this is like saying `tt blah == blah`
+16:41 jle`: so tt = id.  since whatever function you give it, it'l return the same function in return
+16:41 jle`: if you give it const "hello", it'll give back const "hello"
+16:41 jle`: if you give it const 123, it'll gibe back const 123
+16:41 jle`: if you give it const True, it'll give back const True, etc.
+16:42 jle`: tt = id :)
+16:46 crestfallen: so id is 'const "hello"' but what about the type of tt      :t tt  () -> [Char]    where is the function const in that type signature jle`   ?
+16:46 jle`: id is not const "hello"
+16:46 jle`: and that is not the type of tt
+16:46 crestfallen: its just hello
+16:47 jle`: crestfallen: i'm saying that `tt = id`, which means `tt (const "hello")` is the same as `id (const "hello")`
+16:47 jle`: which is the same as `const "hello"`
+16:47 jle`: tt (const "hello")
+16:47 jle`: = id (const "hello")
+16:47 jle`:  = const "hello"
+16:48 jle`: and tt :: (() -> a) -> (() -> a), not whatever type you wrote out, heh
