@@ -1,6 +1,7 @@
 -- list comprehensions are a concise way of creating a 
 -- sequence of values based on some rules and lists of 
--- input values, rather than combining fmaps and folds
+-- input values. comprehensions cannot fold. They can map, 
+-- concat, and filter. See MonadPlus. 
 
 -- weird example:
 
