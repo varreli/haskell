@@ -47,8 +47,12 @@ h = c -> d :
 a -> b -> c -> d   =   h . (g . f)
 a -> b -> c -> d   =   (h . g) . f
 
-These are associative. Parentheses take
-precedence.
+These are associative. 
+They are extensionally equal, that is, as 
+functions, when given any particular input, they 
+both compute the same output -- but intensionally 
+different. That is, the way the computer performs 
+the computation is different for the two.
 
 Types are sets of values, functions
 operate on sets of values, you can define
