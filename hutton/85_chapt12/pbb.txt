@@ -1,0 +1,8 @@
+-- > pure [f,g,h] <*> [x,y,z]
+
+-- If you have a tuple of functions, you can pattern match on 
+-- the tuple:
+
+(\(f,g) -> [f,g] <*> xs <*> ys)
+
+-- > (\(f,g) -> [f,g] <*> [3,4] <*> [2,2]) ((pure (+)), (pure (*)))
