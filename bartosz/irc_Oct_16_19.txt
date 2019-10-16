@@ -1,0 +1,185 @@
+
+Oct 16 11:51:52 <crestfallen>	I'm looking at the definition of semigroup which says: "A semigroup generalizes a monoid in that there might not exist an identity element. It also (originally) generalized a group (a monoid with all inverses) to a type where every element did not have to have an inverse, thus the name semigroup" so this is something I don't understand about these mathematical classes. How can a set with a single binary operation be a generalization of something 
+Oct 16 11:51:52 <crestfallen>	far more specific, such as a monoid or group (I understand groups to an elementary degree) thanks. 
+Oct 16 11:52:24 <merijn>	crestfallen: More generic = less specific
+Oct 16 11:53:02 *	paulasdf (~paulasdf@2601:1c1:c200:2d8c:3b02:890a:8d63:6fa7) has joined
+Oct 16 11:53:05 <merijn>	crestfallen: So "semigroup" is a generalisation of monoid (less specific) and monoid a specialisation/subset of semigroup (i.e. more specific)
+Oct 16 11:53:33 *	knupfer (~Thunderbi@200116b824969000f69634fffef0b45f.dip.versatel-1u1.de) has joined
+Oct 16 11:53:46 <crestfallen>	yeah thanks, but in haskell it came later that Semigroup became a superclass of Monoid right?
+Oct 16 11:53:53 <merijn>	So?
+Oct 16 11:54:37 <crestfallen>	I was wondering about the need to make that change, when monoid was being used unrelated to semigroup, or is that wrong?
+Oct 16 11:54:56 <crestfallen>	trying to form my questions...
+Oct 16 11:55:27 <merijn>	crestfallen: The problem is that without that superclass you can define monoids which are not semigroups, which means you can't generalise monoid code to semigroup code without that superclass
+Oct 16 11:55:50 *	khisanth_ has quit (Ping timeout: 276 seconds)
+Oct 16 11:56:19 <merijn>	There's not technical reason semigroup has to be a superclass of Monoid. You could define instances for both before that was the case
+Oct 16 11:56:37 *	ltriant (~ltriant@58-7-143-125.dyn.iinet.net.au) has joined
+Oct 16 11:56:45 <merijn>	crestfallen: What the superclass gets you is the guarantee that *every* Monoid also has a Semigroup instances
+Oct 16 11:58:25 *	o1lo01ol1o (~o1lo01ol1@104.247.52.66) has joined
+Oct 16 11:58:58 *	drbrule (uid395654@gateway/web/irccloud.com/x-pulspqwqpdwatdys) has joined
+Oct 16 11:59:14 *	chalkmonster has quit (Quit: WeeChat 2.6)
+Oct 16 11:59:37 *	Unhammer (~Unhammer@gateway/tor-sasl/unhammer) has joined
+Oct 16 12:01:17 *	ltriant has quit (Ping timeout: 265 seconds)
+Oct 16 12:02:20 *	o1lo01ol1o has quit (Remote host closed the connection)
+Oct 16 12:03:18 <crestfallen>	thanks merijn please stand by
+Oct 16 12:03:34 *	knupfer has quit (Quit: knupfer)
+Oct 16 12:03:39 <dignissimus>	I want to install a project is it recommended that I use `cabal install` or `stack install`?
+Oct 16 12:03:45 *	knupfer (~Thunderbi@200116b824969000f69634fffef0b45f.dip.versatel-1u1.de) has joined
+Oct 16 12:04:00 <merijn>	dignissimus: Well, how are you building the project right now?
+Oct 16 12:04:16 *	nowhere_man has quit (Ping timeout: 264 seconds)
+Oct 16 12:04:32 <dignissimus>	It's an external one, I don't have it: https://github.com/hdevtools/hdevtools/
+Oct 16 12:04:40 *	toppler has quit (Ping timeout: 265 seconds)
+Oct 16 12:05:01 <merijn>	Does hdevtools even work anymore?
+Oct 16 12:05:23 *	dfeuer (~dfeuer@wikimedia/Dfeuer) has joined
+Oct 16 12:05:24 *	zacts (~zacts@dragora/developer/zacts) has joined
+Oct 16 12:05:58 <dignissimus>	Not sure, looking at the repo, it does seem quite old
+Oct 16 12:06:14 *	zacts has quit (Client Quit)
+Oct 16 12:06:45 *	o1lo01ol1o (~o1lo01ol1@104.247.52.66) has joined
+Oct 16 12:06:48 <merijn>	There's plenty of repos that are quite old and still work
+Oct 16 12:07:18 <merijn>	The more problematic thing is that I remember writing emergency CPR patches to keep it working several years ago and I don't think maintenance has gotten more active :p
+Oct 16 12:08:04 <merijn>	dignissimus: I've been playing with ghcide recently which works marvellous (well for my simpler projects, lack of TH support is killing me)
+Oct 16 12:08:35 <crestfallen>	merijn, ok I see. monoid has a "single most natural operation for combining values" which is different from a binary operator, correct? so foldr for example, also doesn't need to apply a binary operator necessary to the list
+Oct 16 12:08:57 *	khisanth_ (~Khisanth@pool-108-46-0-57.nycmny.east.verizon.net) has joined
+Oct 16 12:09:08 <crestfallen>	necessarily* 
+Oct 16 12:09:08 <merijn>	crestfallen: Where did you find that definition?
+Oct 16 12:09:31 <crestfallen>	https://wiki.haskell.org/Monoid
+Oct 16 12:09:34 <merijn>	crestfallen: Because the proper definition of a monoid is "an associative binary operation + identity element"
+Oct 16 12:09:48 *	sedeki (~textual@unaffiliated/sedeki) has joined
+Oct 16 12:10:37 <crestfallen>	its the first sentence there
+Oct 16 12:10:44 *	captjakk (~captjakk@c-65-50-169-164.hs.gigamonster.net) has joined
+Oct 16 12:10:58 <merijn>	Yeah, that's sloppy "human terminology" not a proper definition
+Oct 16 12:11:06 <crestfallen>	oh boy
+Oct 16 12:12:27 *	mdunnio has quit (Remote host closed the connection)
+Oct 16 12:12:38 *	Lears (~leary@122-58-153-250-adsl.sparkbb.co.nz) has joined
+Oct 16 12:12:41 *	toppler (~user@mtop.default.momentoftop.uk0.bigv.io) has joined
+Oct 16 12:12:46 <merijn>	crestfallen: The laws of Monoid (the Haskell class and also the math notion) are as follows: "mappend a (mappend b c) == mappend (mappend a b) c" and "mappend mempty x = x = mappend x mempty"
+Oct 16 12:12:48 *	infinity0 (~infinity0@freenet/developer/infinity0) has joined
+Oct 16 12:13:50 <crestfallen>	so mappend is technically a binary operation? because the definition I posted seems like the writer was careful not to say binary operation
+Oct 16 12:13:51 <Athas>	Although a mathematician would slap you for writing it like that.
+Oct 16 12:13:51 <dminuoso>	Are there some notable projects displaying how to properly structure a parser using megaparsec?
+Oct 16 12:14:05 <merijn>	crestfallen: Mappend *is* a binary operation, not just technically
+Oct 16 12:14:33 *	Ariakenom (~Ariakenom@h-98-128-229-79.NA.cust.bahnhof.se) has joined
+Oct 16 12:14:37 <merijn>	dminuoso: Eh, the same way you do it with parsec, trifecta, attoparsec? >.>
+Oct 16 12:14:57 <dminuoso>	merijn: Sure, so any reference for those? ;)
+Oct 16 12:15:03 <MarcelineVQ>	dminuoso: there's a selection of megaparsec tutorials
+Oct 16 12:15:17 <merijn>	dminuoso: I usually try to mimic the BNF/logical blocks
+Oct 16 12:15:27 <merijn>	dminuoso: and make it up as I go along :p
+Oct 16 12:15:55 <MarcelineVQ>	e.g. https://markkarpov.com/megaparsec/megaparsec.html
+Oct 16 12:17:40 *	jusss` (~user@106.37.223.243) has joined
+Oct 16 12:19:01 *	paulasdf has quit (Ping timeout: 250 seconds)
+Oct 16 12:19:51 *	sytherax (~sytherax@60-242-28-108.static.tpgi.com.au) has joined
+Oct 16 12:20:18 *	jusss has quit (Ping timeout: 245 seconds)
+Oct 16 12:21:00 *	dale_ (~dale@unaffiliated/dale) has joined
+Oct 16 12:21:17 <crestfallen>	> foldr not Bool [True,False,True]
+Oct 16 12:21:19 *	dale has quit (Disconnected by services)
+Oct 16 12:21:20 <lambdabot>	 error:
+Oct 16 12:21:20 <lambdabot>	     • Data constructor not in scope: Bool
+Oct 16 12:21:20 <lambdabot>	     • Perhaps you meant variable ‘bool’ (imported from Data.Bool)
+Oct 16 12:21:20 *	jusss`` (~user@106.37.223.243) has joined
+Oct 16 12:21:23 *	dale_ is now known as dale
+Oct 16 12:21:26 *	carlomagno (~carlomagn@inet-hqmc06-o.oracle.com) has joined
+Oct 16 12:21:31 <crestfallen>	sorry what should the seed value be there?
+Oct 16 12:21:41 <dmwit>	can't be made to work
+Oct 16 12:21:44 <sm[m]>	dminuoso: I don't know about properly, but hledger is a real world app using it
+Oct 16 12:21:52 <dmwit>	not is unary, foldr needs a binary operation
+Oct 16 12:21:55 <sm[m]>	it is mostly in monadic style, not applicative
+Oct 16 12:22:28 <crestfallen>	dmwit dang I thought I was working with that a while back
+Oct 16 12:22:29 *	vlatkoB has quit (Remote host closed the connection)
+Oct 16 12:22:47 *	Aquazi has quit (Quit: Connection closed for inactivity)
+Oct 16 12:23:28 *	dale has quit (Read error: Connection reset by peer)
+Oct 16 12:23:40 <merijn>	crestfallen: There's two monoids on Bool (well, actually a lot more, but two common/oft used ones)
+Oct 16 12:23:45 *	dale_ (~dale@unaffiliated/dale) has joined
+Oct 16 12:23:53 *	dale_ is now known as dale
+Oct 16 12:23:56 <merijn>	crestfallen: But since you can only have one instance per type you need newtypes to use them
+Oct 16 12:24:04 <merijn>	crestfallen: Which in this case are Any and All
+Oct 16 12:24:14 *	jusss` has quit (Ping timeout: 268 seconds)
+Oct 16 12:24:18 <merijn>	> foldMap Any [True, False, True, False]
+Oct 16 12:24:20 <lambdabot>	 Any {getAny = True}
+Oct 16 12:24:28 <merijn>	> foldMap All [True, False, True, False]
+Oct 16 12:24:31 <lambdabot>	 All {getAll = False}
+Oct 16 12:24:58 *	jusss``` (~user@106.37.223.243) has joined
+Oct 16 12:25:05 *	toppler has quit (Ping timeout: 276 seconds)
+Oct 16 12:25:27 <crestfallen>	merijn, ok thanks I was thinking of a snippet I was working on, where the seed was True or Bool, like a snippet to illustrate boolean logic
+Oct 16 12:26:20 *	Amras0000 (~Amras@unaffiliated/amras0000) has joined
+Oct 16 12:27:08 <crestfallen>	so the difference b/t foldable and monoid is that foldable needs no identity
+Oct 16 12:27:16 <crestfallen>	confused
+Oct 16 12:27:52 *	jusss`` has quit (Ping timeout: 265 seconds)
+Oct 16 12:27:57 *	dale has quit (Ping timeout: 240 seconds)
+Oct 16 12:28:03 <merijn>	crestfallen: I'm not sure what you mean by that?
+Oct 16 12:28:18 *	Neo-- (~neo@c-67-188-108-242.hsd1.ca.comcast.net) has joined
+Oct 16 12:28:27 *	acarrico has quit (Ping timeout: 240 seconds)
+Oct 16 12:28:39 *	jusss```` (~user@106.37.223.243) has joined
+Oct 16 12:28:57 *	samhh has quit (Ping timeout: 240 seconds)
+Oct 16 12:29:19 *	Amras has quit (Ping timeout: 265 seconds)
+Oct 16 12:31:38 *	jusss``` has quit (Ping timeout: 268 seconds)
+Oct 16 12:31:40 *	toppler (~user@mtop.default.momentoftop.uk0.bigv.io) has joined
+Oct 16 12:31:51 *	o1lo01ol1o has quit (Remote host closed the connection)
+Oct 16 12:32:06 *	o1lo01ol1o (~o1lo01ol1@104.247.52.66) has joined
+Oct 16 12:32:18 *	jb55 has quit (Remote host closed the connection)
+Oct 16 12:32:50 *	jb55 (~jb55@gateway/tor-sasl/jb55) has joined
+Oct 16 12:34:51 *	jusss```` has quit (Ping timeout: 246 seconds)
+Oct 16 12:34:52 <dmwit>	(There are four monoids on Bool: (&&)/True, (/=)/False, (==)/True, (||)/False. These correspond to making two independent choices: either Sum or Product, and which of False/True represents 0/1.)
+Oct 16 12:35:21 <merijn>	dmwit: You're forgetting *at least* two
+Oct 16 12:35:31 <merijn>	oh, wait no I'm thinking of semigroups
+Oct 16 12:35:51 <merijn>	(First and Last)
+Oct 16 12:36:22 <dmwit>	There are 8 semigroups.
+Oct 16 12:38:19 <crestfallen>	dmwit I need to study that thanks both you and merijn .. I gotta go.. you'll be hearing from me again :)
+Oct 16 12:38:22 <dmwit>	(besides First and Last, there's const False and const True)
+Oct 16 12:38:47 <crestfallen>	this stuff is rough
+Oct 16 12:39:05 *	spew (uid195861@gateway/web/irccloud.com/x-tsofckjnvjidhlim) has joined
+Oct 16 12:39:11 <crestfallen>	I need to listen to Leonard Cohen
+Oct 16 12:39:16 <merijn>	crestfallen: Lets rewind, how'd you end up with these questions? Because perhaps you don't need to know the answer right now :)
+Oct 16 12:39:52 <boxscape>	dmwit so const False and const True are Semigroup but not Monoids?
+Oct 16 12:39:55 *	fweht (uid344711@gateway/web/irccloud.com/x-utefbivojzrydkmw) has joined
+Oct 16 12:40:12 <crestfallen>	I was trying to get one point straight, then other questions came up, then your input made me wonder about various foggy areas
+Oct 16 12:40:27 <crestfallen>	It's a bit soup
+Oct 16 12:40:32 <crestfallen>	big*
+Oct 16 12:40:49 <dmwit>	boxscape: right
+Oct 16 12:40:57 *	fendor_ has quit (Ping timeout: 240 seconds)
+Oct 16 12:41:04 <boxscape>	dmwit why can't you just set mempty to True for const True and False for const False?
+Oct 16 12:41:32 *	mdunnio (~mdunnio@38.126.31.226) has joined
+Oct 16 12:41:39 <boxscape>	wait I should probably just look at the identity laws huh
+Oct 16 12:42:07 <dmwit>	boxscape: No matter what mempty you pick, mempty <> False = True, which isn't okay.
+Oct 16 12:42:15 <boxscape>	okay, that makes sense
+Oct 16 12:42:27 <dmwit>	(Sorry, I meant const (const False) and const (const True), of course.)
+Oct 16 12:43:20 *	toppler has quit (Ping timeout: 265 seconds)
+Oct 16 12:44:43 *	Deide (~Deide@90.249.126.204) has joined
+Oct 16 12:45:12 *	carlomagno has quit (Ping timeout: 268 seconds)
+Oct 16 12:47:49 <crestfallen>	merijn, I'm trying to get it from the math side as well so I've been reading about these different structures
+Oct 16 12:47:51 *	hackage hsinspect 0.0.5 - Inspect Haskell source files.  https://hackage.haskell.org/package/hsinspect-0.0.5 (tseenshe)
+Oct 16 12:49:08 *	carlomagno (~carlomagn@inet-hqmc06-o.oracle.com) has joined
+Oct 16 12:49:19 <crestfallen>	hey how do you make the little bullet to make clever little comments under your handle in say hexchat? like: crestfallen nods
+Oct 16 12:49:37 <svipal>	  *tries*
+Oct 16 12:49:42 <dmwit>	cabal v2-* searches up the directory tree for a cabal.project file. If it doesn't find one, but it sees a *.cabal file, it uses that. Can I ask it to skip looking for a cabal.project file and just behave as it would if it just used the *.cabal file in the current directory?
+Oct 16 12:49:46 *	svipal tries again
+Oct 16 12:49:58 <svipal>	crest, /me
+Oct 16 12:50:30 *	toppler (~user@mtop.default.momentoftop.uk0.bigv.io) has joined
+Oct 16 12:51:13 <crestfallen>	svipal sorry?
+Oct 16 12:51:30 <crestfallen>	what do I type precisely..
+Oct 16 12:51:50 *	sternmull has quit (Quit: Leaving.)
+Oct 16 12:52:06 <boxscape>	you type /me nods
+Oct 16 12:52:18 *	crestfallen nods
+Oct 16 12:52:22 *	dale (~dale@unaffiliated/dale) has joined
+Oct 16 12:52:25 <crestfallen>	thanks ! boxscape 
+Oct 16 12:52:46 *	mossplix (~mossplix@102.83.71.123) has joined
+Oct 16 12:52:49 <crestfallen>	I've been wondering about that for many moons :)
+Oct 16 12:52:51 *	sm[m] high-fives crestfallen
+Oct 16 12:53:05 *	crestfallen hip hip hooray!
+Oct 16 12:53:43 <dmwit>	I thought I'd be clever and try `cabal v2-build --project-file <(echo packages: $(pwd))`, but it tells me 'No cabal.project file or cabal file matching the default glob './*.cabal' was found.'.
+Oct 16 12:53:51 <dmwit>	Which... seems like an odd error in the circumstances.
+Oct 16 12:53:51 <dminuoso>	Wow. 80 lines megaparsec program taking about 22 seconds to compile. o.o
+Oct 16 12:53:56 <dminuoso>	This is.. odd.
+Oct 16 12:54:02 *	sytherax has quit (Ping timeout: 240 seconds)
+Oct 16 12:54:30 *	royal_screwup21 has quit (Remote host closed the connection)
+Oct 16 12:54:43 *	sedeki has quit (Quit: Textual IRC Client: www.textualapp.com)
+Oct 16 12:57:59 <crestfallen>	Athas, sorry did you mean a mathematician would slap the member helping me or the o.p. haskell wiki writer for writing it that way?
+Oct 16 12:58:44 <dminuoso>	sm[m], merijn, MarcelineVQ: Cheers by the way for the tips.
+Oct 16 12:59:16 *	heatsink (~heatsink@2600:1700:bef1:5e10:e570:7d90:4905:65c6) has joined
+Oct 16 12:59:38 <Athas>	crestfallen: neither.  A mathematician would never use prefix application to demonstrate associativity.
+Oct 16 12:59:57 *	Dykam has quit (Ping timeout: 240 seconds)
+Oct 16 13:00:18 <Athas>	It was just a small joke about merijn's statement about the "math motion" contrasted with his Haskell notation.
+Oct 16 13:00:57 *	doublex has quit (Ping timeout: 240 seconds)
+Oct 16 13:02:28 *	toppler has quit (Ping timeout: 268 seconds)
+Oct 16 13:03:16 *	Dykam (~Dykam@37.139.10.7) has joined
+Oct 16 13:03:38 *	heatsink has quit (Ping timeout: 245 seconds)
+Oct 16 13:04:07 *	Neo-- has quit (Ping timeout: 265 seconds)
+Oct 16 13:05:00 <crestfallen>	Athas, thanks I see, you don't like prefix notation like "mappend a (mappend b c) == mappend (mappend a b) c"  . I studied scheme for a minute and got used to prefix notation so I often prefer it. it's weird how sometimes it just looks wrong, other times clean.
