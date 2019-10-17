@@ -2,9 +2,9 @@
 
 -- free monoids:          e * a = a * e = a
 --                        (a * b) * c = a * (b * c)
-M :: (m, m) -> m
+-- M :: (m, m) -> m
 
-       (0 + 3)  (1 + 2) = (2 + 1) = (0 + 3)
+--     (0 + 3)  (1 + 2) = (2 + 1) = (0 + 3)
 -- 3 =  (0,3)    (1,2)     (1,2)     (0,3)
 
 -- in matrix multiplication, ab /= ba . 
@@ -45,4 +45,15 @@ M :: (m, m) -> m
 --                            set : monoid -> U(m)
 
 
+-- if a monoid is a tuple like (m,e,+,law1,law2) 
+-- then U (m,e,+,law1,law2) = m
+
+-- it's obviously forgetting 4 things in the process
+-- of mapping the objects
+-- it's also forgetting aspects of the homomorphism
+-- the fact that its a monoid homomorphism and not just a random 
+-- function
+
+-- U (f, proofId, proofMappend) = f
+-- is more explicit.
 
