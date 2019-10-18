@@ -1,4 +1,4 @@
-import Data.Monoid    hiding (<>) -- ?
+import Data.Monoid   --  hiding (<>) 
 import Data.Semigroup
 
 -- fix 1
