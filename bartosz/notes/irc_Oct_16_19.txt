@@ -1,0 +1,72 @@
+
+I'm looking at the definition of semigroup which says: "A semigroup 
+generalizes a monoid in that there might not exist an identity element. 
+It also (originally) generalized a group (a monoid with all inverses) 
+to a type where every element did not have to have an inverse, thus 
+the name semigroup." 
+
+The problem is that without that superclass you can define monoids which are not semigroups, which means you can't generalise monoid code to semigroup code without that superclass. There's not technical reason semigroup has to be a superclass of Monoid. You could define instances for both before that was the case
+What the superclass gets you is the guarantee that *every* Monoid also has a Semigroup instances
+
+Ok I see. monoid has a "single most natural operation for combining values" which is different from a binary operator, correct? so foldr for example, also doesn't need to apply a binary operator necessarily to the list
+
+Because the proper definition of a monoid is "an associative binary operation + identity element"
+
+---------------------------------------------------------------
+The laws of Monoid (the Haskell class and also the math notion) 
+are as follows: 
+
+1) "mappend a (mappend b c) == mappend (mappend a b) c" 
+2) "mappend mempty x = x = mappend x mempty"
+
+(Note: A mathematician would never use prefix application to 
+demonstrate associativity).
+
+
+mappend *is* a binary operation, not just technically
+---------------------------------------------------------------
+ 
+-- > foldr not Bool [True,False,True]
+Oct 16 12:21:20 <lambdabot>	 error:
+Oct 16 12:21:20 <lambdabot>	     • Data constructor not in scope: Bool
+Oct 16 12:21:20 <lambdabot>	     • Perhaps you meant variable ‘bool’ 
+                                       (imported from Data.Bool)
+
+sorry what should the seed value be there?
+<dmwit>	can't be made to work:
+not is unary, foldr needs a binary operation
+----------------------------------------------------------------
+
+There's two monoids on Bool (well, actually a lot more, but two common/oft used ones)
+But since you can only have one instance per type you need newtypes to use them
+Which in this case are Any and All
+
+-- > foldMap Any [True, False, True, False]
+<lambdabot>	 Any {getAny = True}
+
+-- > foldMap All [True, False, True, False]
+All {getAll = False}
+
+so the difference b/t foldable and monoid is that foldable needs no identity.
+
+
+(There are four monoids on Bool: (&&)/True, (/=)/False, (==)/True, 
+(||)/False. These correspond to making two independent choices: 
+either Sum or Product, and which of False/True represents 0/1.)
+
+<merijn> (First and Last)
+<dmwit>	There are 8 semigroups.
+(besides First and Last, there's const False and const True)
+
+<boxscape> dmwit so const False and const True are Semigroup but not Monoids?
+right
+
+<boxscape> dmwit why can't you just set mempty to True for const 
+True and False for const False?
+
+<dmwit> No matter what mempty you pick, 
+
+mempty <> const (const False) = mempty <> const (const True) 
+
+is wrong.
+

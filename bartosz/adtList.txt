@@ -1,4 +1,4 @@
--- List as algebraic data type:
+-- List as: algebraic data type:
 
   L(a) = 1 + a * L(a)
   L(a) - a * L(a) = 1
@@ -23,11 +23,8 @@
 -- This leads to the summation of all Lists:
 
 --     oo 
---     Sum  a^n
---     n=0       =       
-  
---     1 + [singleton] + [a,a] + [a,a,a] ...
-
+--     Sum  a^n = 1 + [singleton] + [a,a] + [a,a,a] ...
+       n=0
 
 -- This is also the sum of a geometric sequence.
 
