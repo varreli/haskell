@@ -1,14 +1,14 @@
 -- Logic of (Either a b) being a functor:
 
 -- instance Functor (Either a) where
---     fmap f (Right x) = Right (f x)
---     fmap f (Left x) = Left x
+--    fmap f (Right x) = Right (f x)
+--    fmap f (Left x) = Left x
 
 -- fmap :: (c -> d) -> f c -> f d
 
 -- Since (Either a) is the functor, we substitute it for f
 
--- fmap :: (c -> d) -> Either a c -> Either a di
+-- fmap :: (c -> d) -> Either a c -> Either a d
 
 ----------------------------------------------------------------------
 
