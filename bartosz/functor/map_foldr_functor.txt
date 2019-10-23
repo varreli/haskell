@@ -1,0 +1,85 @@
+> (<$>) (foldr (+) 0) [(Just 4.5), (Just 2), (Just 3.3)]
+[4.5,2.0,3.3]
+
+> map sum [Just 4.5, Just 2, Just 3.3]
+[4.5,2.0,3.3]
+
+> sum (Just 4.5)
+4.5
+> map (foldr f z) [Nothing, Just x]
+[z,f x z]
+
+> foldr (liftA2 (+)) (Just 0) [Just 4.5, Just 2, Just 3.3]
+Just 9.8
+
+why does 'map sum' work on functor elements in the list?
+It doesn't. It works on foldable elements in the list.
+
+For lists <$> is map, to clarify:
+> map (foldr (+) 0) [Just 4.5, Just 2, Just 3.3, Nothing]
+[4.5,2.0,3.3,0.0] 
+
+> :t sum
+(Foldable t, Num a) => t a -> a
+
+> :t map sum
+(Foldable t, Num b) => [t b] -> [b]
+ 
+map is still specialized to list?
+Yes. We already have the perfectly good name fmap for the generalized one.
+(Two names for it, in fact!)
+ 
+> sum (Just 4.5) -- the elements of the Maybe Double, 
+                 -- namely, 4.5, are being summed. 
+
+> map (foldr f z) [Nothing, Just x]
+[z,f x z]
+ 
+> foldr f z (Just x)
+f x z
+ 
+It was just a quick way to show you the definition of foldr for Maybe.
+Specifically:foldr f z Nothing = z
+
+foldr f z (Just x) = f x z
+
+
+> foldr f z (Just x)
+f x z
+so you don't call z the accumulator
+- z is the base value or zero value
+
+> foldr f z Nothing
+z
+
+z is the initial value (of the accum).
+
+> map (foldr f z) [Nothing, Just x]
+[z,f x z]
+
+z becomes the second param of f
+- understand all this by considering Maybe as a list with at most 1 element
+
+> foldr f z [x]
+f x z
+> foldr f z []
+z
+
+[x] corresponds to Just x
+
+Why is the base value returned as the 2nd param of f as in f x z ?
+- that's just the order foldr uses. The first arg is "this element" 
+- and the second arg is the "base value" (not the running total, 
+- since it doesn't change.)
+
+Same using pattern match:
+
+> map (\case Just x -> f x z; Nothing -> z) [Nothing, Just x]
+[z,f x z]
+
+--------------------------------------------------------------------
+Applicative has the shape 
+class Functor f => Monoidal f where (<+>) :: f a -> f b -> f (a, b); unit :: f () 
+
+- This is combining two effects and just grabbing 
+- both results alongside
