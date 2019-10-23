@@ -4,16 +4,22 @@
 > map sum [Just 4.5, Just 2, Just 3.3]
 [4.5,2.0,3.3]
 
+why does 'map sum' work on functor elements in the list?
+It doesn't. It works on foldable elements in the list.
+
 > sum (Just 4.5)
 4.5
+
 > map (foldr f z) [Nothing, Just x]
 [z,f x z]
 
+-----------------------------------------------------------------
+liftA2 :: (Applicative f) => (a -> b -> c) -> f a -> f b -> f c  
+liftA2 f a b = f <$> a <*> b  
+
 > foldr (liftA2 (+)) (Just 0) [Just 4.5, Just 2, Just 3.3]
 Just 9.8
-
-why does 'map sum' work on functor elements in the list?
-It doesn't. It works on foldable elements in the list.
+-----------------------------------------------------------------
 
 For lists <$> is map, to clarify:
 > map (foldr (+) 0) [Just 4.5, Just 2, Just 3.3, Nothing]
@@ -26,8 +32,8 @@ For lists <$> is map, to clarify:
 (Foldable t, Num b) => [t b] -> [b]
  
 map is still specialized to list?
-Yes. We already have the perfectly good name fmap for the generalized one.
-(Two names for it, in fact!)
+- Yes. We already have the perfectly good name fmap for 
+- the generalized one. (Two names for it, in fact!)
  
 > sum (Just 4.5) -- the elements of the Maybe Double, 
                  -- namely, 4.5, are being summed. 
@@ -83,3 +89,5 @@ class Functor f => Monoidal f where (<+>) :: f a -> f b -> f (a, b); unit :: f (
 
 - This is combining two effects and just grabbing 
 - both results alongside
+
+
