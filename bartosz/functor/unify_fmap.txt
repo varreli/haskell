@@ -1,0 +1,68 @@
+> let nn = fmap (++) (Just "Hey")
+Defined.
+
+
+> let oo = (\x -> x " Joe")         -- OR oo x = x " Joe"
+Defined.
+
+
+> :t nn
+Maybe ([Char] -> [Char])
+
+> :t oo
+([Char] -> t) -> t
+
+> oo <$> nn
+Just "Hey Joe"
+
+Unify with fmap. "oo <$> nn" is "fmap oo nn"   fmap :: Functor f => (a -> b) -> f a -> f b
+
+oo :: ([Char] -> t) -> t   
+
+so   fmap oo  needs to unify the first argument of fmap, (a -> b), with oo, ([Char] -> t) -> t. 
+This means that a is ([Char] -> t) and b is t.
+
+> :t fmap oo 
+Functor f => f ([Char] -> b) -> f b
+
+We can see that's what happens here because now the remaining arguments of fmap i
+have had their a's and b's changed, f a has become f ([Char] -> t) and b has become t. 
+Though lambdabot has chosen to just leave b as b, since t (being any type at all) 
+is equivalent to b which is also any type at all at this point.
+
+Going one step further and writing:
+
+fmap oo nn  
+
+means we need to unify f ([Char] -> b) with nn as that's the next argument 
+of fmap. We have:
+
+fmap oo :: Functor f => f ([Char] -> b) -> f b    and   
+nn :: Maybe ([Char] -> [Char]), so to say 'fmap oo nn' we're wanting to 
+unify f ([Char] -> b) with Maybe ([Char] -> [Char])
+
+> :t fmap oo nn     -- This is fairly straightforward Maybe fits f, so all f are Maybe, 
+Maybe [Char]        -- we already have [Char] fitting there, and now all b are [Char] as well.
+
+> :t fmap oo
+Functor f => f ([Char] -> b) -> f b
+
+> :t fmap oo `asAppliedTo` nn -- stepped back a reduction step to show the types
+Maybe ([Char] -> [Char]) -> Maybe [Char]
+
+@src asAppliedTo
+f `asAppliedTo` a = f where _ = f a
+infixl 0 `asAppliedTo`
+
+@type asAppliedTo
+(a -> b) -> a -> a -> b
+
+I'm showing the type of fmap oo as if you applied it to nn, this lets 
+you see what applying fmap oo to nn does to the types, but just writing 
+fmap oo nn would only show Maybe [Char] because the arguments are all 
+applied.
+
+
+
+
+
