@@ -1,1 +1,0 @@
-You need to withdraw it back to your own wallet balance first by using the WITHDRAW button, then you can Transfer from there by using the TRANSFER button. You can't transfer directly from IDEX wallet balance if you have deposited it already.

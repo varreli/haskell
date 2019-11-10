@@ -1,0 +1,51 @@
+
+Nov 09 22:16:52 <crestfallen>	hi I'd like to play around with vm's on a buster machine. I guess virtualbox is not available. a few years ago I was trying to get kvm/qemu working. never made it. I wonder if it's any easier to use nowadays..
+Nov 09 22:17:36 <crestfallen>	or i.e. what's the most beginner friendly why to set up vm's on debian
+Nov 09 22:17:40 <maqr>	crestfallen: i'm about to find out... libvirt seems to be the way to go these days
+Nov 09 22:18:04 <maqr>	crestfallen: https://wiki.debian.org/KVM is what i'm reading
+Nov 09 22:18:15 <Unit193>	Not sure I should mention it, but there *is* https://people.debian.org/~lucas/virtualbox-buster/
+Nov 09 22:18:36 <maqr>	virtualbox is neat software, but it doesn't really work for what i'm trying to do anyway
+Nov 09 22:19:38 <crestfallen>	maqr, Unit193 interesting.  ..   the kvm stuff is more true to debian and I guess the learning curve is steeper. I had a rough time about 3 years ago when I first installed linux
+Nov 09 22:20:03 <maqr>	crestfallen: there's a libvirt manager that supposedly makes it easy
+Nov 09 22:20:43 <crestfallen>	yeah I used that. I bet its easier and a nicer environment now
+Nov 09 22:21:40 <crestfallen>	I was using something called vagrant (from hashicorp) to 'spin' vm's , and that used virtualbox. I got those to work
+Nov 09 22:22:25 <crestfallen>	something else I read about was proxmox
+Nov 09 22:22:35 <maqr>	crestfallen: i just gave up on proxmox and installed debian
+Nov 09 22:23:05 <maqr>	crestfallen: it worked great for VMs, couldn't be simpler, but i could not make full disk encryption work no matter how hard i tried to figure it out
+Nov 09 22:23:46 <maqr>	i did learn that thin lvm is a mess to be avoided though
+Nov 09 22:24:16 <crestfallen>	full disk? you were trying to encrypt the vm's themselves maqr  ?
+Nov 09 22:24:30 <maqr>	crestfallen: well, the whole host, but yeah
+Nov 09 22:25:14 <crestfallen>	so what is proxmox, you said you replaced it with debian? I'm missing something
+Nov 09 22:25:43 <maqr>	crestfallen: proxmox is pretty much debian with vm management stuff in it
+Nov 09 22:26:00 <maqr>	but you can also install proxmox on debian if you want, which is my plan b if i can't figure out libvirt
+Nov 09 22:27:10 <crestfallen>	huh, I'm not a programmer at all, I'm just playing around. I'm learning haskell (hard as hell) and like linux stuff
+Nov 09 22:28:05 <crestfallen>	so if you install it on debian, you can encrypt little vm's sitting on your debian system? maqr 
+Nov 09 22:28:29 <maqr>	crestfallen: no, i don't care about encrypting the vms, i want the host os encrypted
+Nov 09 22:28:39 <maqr>	by extension that'll mean the vms are encrypted too though
+Nov 09 22:29:07 <crestfallen>	so you have a better shot at encrypting the system using kvm et al?
+Nov 09 22:29:29 <maqr>	crestfallen: no, has nothing to do with that... but debian's installer has a very convenient luks setup built into it, and the proxmox installer doesn't
+Nov 09 22:29:54 <crestfallen>	hmm, luks ? sorry this is new..
+Nov 09 22:30:34 <maqr>	yeah, luks is the disk encryption suite
+Nov 09 22:30:40 <crestfallen>	I see its a partition thing
+Nov 09 22:31:28 <crestfallen>	interesting, so encrypt a designated partition. I guess you do that on the install of a new debian os
+Nov 09 22:32:02 <maqr>	yeah, pretty much, /boot remains unencrypted but that's solvable in a number of other ways
+Nov 09 22:33:18 <crestfallen>	interesting , I'll save the log of our chat and look this stuff up. that's great if you can encrypt a partition and run vm's, who needs tails and tor and that stuff, right maqr ?
+Nov 09 22:33:48 <maqr>	crestfallen: well those are important projects in their own right, i'm just trying to run a home server with full disk encryption and a few VMs, nothing fancy
+Nov 09 22:34:29 <crestfallen>	cool that's inspiring in any case. so learning kvm will keep you busy ;)
+Nov 09 22:35:08 <maqr>	hopefully not, it should be quick
+Nov 09 22:35:25 <crestfallen>	and that proxmox is dead easy is also inspiring, just for creating vm's 
+Nov 09 22:35:52 <maqr>	yeah, i'm still open to installing that on debian, but it's probably more than i need if i can get pfsense to run properly in libvirt
+Nov 09 22:36:10 <crestfallen>	pfsense ?
+Nov 09 22:36:36 <maqr>	it's a popular router bsd distribution, worth knowing about
+Nov 09 22:37:26 <crestfallen>	that's so cool. reading wikipedia
+Nov 09 22:37:42 <crestfallen>	I know bsd is not for the weak hearted
+Nov 09 22:38:37 <maqr>	pfsense is pretty neatly done, you can know pretty much nothing about bsd and still make use of it
+Nov 09 22:38:55 <maqr>	i think there's a linux project that does something similar called ipfire, but i haven't used it
+Nov 09 22:40:46 <crestfallen>	yeah reading a comparison: ipfirewall
+Nov 09 22:41:18 <crestfallen>	maqr, are you interested in blockchain stuff?
+Nov 09 22:41:40 <maqr>	not really, there's not much to know until people start using it
+Nov 09 22:41:59 <crestfallen>	I'm just a dabbler. 
+Nov 09 22:42:29 <crestfallen>	thanks definitely going to spend a day based on our chat.
+Nov 09 22:42:54 <maqr>	i'm hoping i'll have this set up in less than a day :P
+Nov 09 22:44:12 <crestfallen>	I mean just reading.. I hope you get great results with kvm et al
+Nov 09 22:46:28 <maqr>	heh, thanks, me too
