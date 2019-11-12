@@ -26,7 +26,7 @@ instance Applicative ST where
  
 -- giving state to stf results in a tuple of a new state 
 -- called s' and a function called f. this is what the 
--- line "let (f,s') = app stf s" is doing.
+-- line        let (f,s') = app stf s        is doing.
  
 -- that new state s' is then used to give state to stx, 
 -- giving another new state called s'' and a value 
