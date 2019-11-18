@@ -1,3 +1,5 @@
+-- Many things in haskell are just complicated ways to talk about state:
+
 type State = Int
 newtype ST a = S (State -> (a, State)) -- newtype requires 
                                        -- dummy constructor S

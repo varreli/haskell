@@ -1,0 +1,5 @@
+in nvim do:
+
+:scriptnames
+
+to get all files being sourced.
