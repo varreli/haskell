@@ -11,7 +11,7 @@ instance Eq TwoIntegers where
     r == r' && s == s'
 
 -- ------------------------------------------------
-data StringOrInt = TisAnInt Int | TisAString String
+data StringOrInt = TisAnInt Int | TisAString String deriving Show
 
 instance Eq StringOrInt where
    (==) (TisAnInt x) (TisAnInt y) = x == y
