@@ -1,4 +1,4 @@
-import Control.Monad.State.Lazy
+import Control.Monad.Trans.State.Lazy
 ff = runState (return 'X') 1
 
 -- > :t ff 
