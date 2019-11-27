@@ -1,0 +1,9 @@
+λ > :r
+[1 of 1] Compiling Main             ( state2.hs, interpreted )
+
+state2.hs:3:10: warning: [-Wmissing-methods]
+    • No explicit implementation for
+        ‘Prelude.fmap’
+    • In the instance declaration for ‘Functor (Staat s)’
+Ok, modules loaded: Main.
+
