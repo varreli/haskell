@@ -1,0 +1,176 @@
+
+ <crestfallen>	real quick , I was wondering why something like pure = a -> f a    is called a degenerate case. or what degenerate is generally in cs. in math they are talking about triangles as degenerate, so the only criterion I see with pure is that it is 'simpler' since the function is just a type as in 'a'. 
+ <divVerent>	crestfallen: just like that, a degenerate triangle is also simpler
+ <crestfallen>	say if a triangle has an angle that is zero, it lies on a line and is degenerate
+ <divVerent>	as its three points are on a line, its area is zero
+ <MarcelineVQ>	it depends what pure is said to be a degenerate case of
+ <divVerent>	but degerate triangles also do NOT fulfill some things normal triangles do - degenerate functions don't have that in this case
+ <MarcelineVQ>	as to "why something like pure = a -> f a    is called a degenerate case" I mean
+ <divVerent>	like, a degenerate tringle does not have a unique circumcircle
+ <crestfallen>	divVerent, thanks, yeah I never knew a triangle could be defined like that
+ <divVerent>	unless you also see a line as a degenerate circle, of course :)
+ <monochrom>	lines and points are two degenerate kinds of circles
+ <crestfallen>	MarcelineVQ, I guess it is being related to <*>
+ <divVerent>	which it technically is (e.g. inversion at a point independent from all other points you are using turns both lines and triangles into circles equally)
+ <monochrom>	lines being if you allow radius to be infinity, points if you allow radius to be 0.
+ <divVerent>	but anyway, I wouldn't call pure :: a -> f a degenerate per se
+ <monochrom>	But I did.
+ <crestfallen>	I think it means that a is a type and not a function that takes an argument
+ <monochrom>	Perhaps I should call it "imagine liftA0".
+ <divVerent>	however, I'd say it generates degenerate elements of f a
+ <divVerent>	namely, elements that use no properties of the Applicative, in a way
+ <crestfallen>	a is merely a data type
+ <crestfallen>	in the context of the hutton text
+ <divVerent>	e.g. in the [] Applicative, pure :: a -> [a] returns one-element lists
+ <divVerent>	I wouldn't call those lists degenerate per se, but in context of the [] Applicative, they are
+ <divVerent>	simply because they do "nothing special"
+ <crestfallen>	yeah since a singleton is still a list in every way, right?
+ <divVerent>	yes
+ <divVerent>	now outside the context of Applicative, I'd rather call the empty list degenerate
+ 
+ <monochrom>	My line of thought was that Applicative gives you liftA2, liftA3, etc., and you also have liftA1 
+                as fmap from Functor, so how do I explain pure?  I explained by extrapolating in the other direction, 
+                that is towards 0.  At that point it's analogous to "point = circle of radius 0" so I called it degenerate.
+ 
+ <divVerent>	it e.g. is the only list that is member of multiple list types (namely, all of them)
+ <divVerent>	pure f <*> pure x = pure (f x)
+ <divVerent>	explains the degenerate-ness of pure very well, IMHO
+ <crestfallen>	they do nothing special [singleton] say, but they can be passed around as structures, I guess.
+ <divVerent>	yeah, pure basically is liftA0
+ <divVerent>	hm... but to do this reductively, how to turn liftA2 into liftA the same way that turns liftA3 into liftA2?
+ <crestfallen>	divVerent, ...
+ <divVerent>	liftA2 f = liftA3 (const f) (pure undefined)
+ <divVerent>	looks like this reduction always goes one level lower
+ <crestfallen>	I haven't come to the lift stuff yet.. however...
+ <divVerent>	so what is liftA (const f) (pure undefined)? It's actually pure f.
+ <crestfallen>	could we go back to pure f <*> pure x = pure (f x) explains the degenerate-ness of pure very well, IMHO
+ <divVerent>	yes :)
+ <divVerent>	liftA_minus_1 = pure (const f) (pure undefined)... that now really makes no sense, unless you're in the (-> a) applicative.
+ <divVerent>	it makes zero sense anyway :)
+ <crestfallen>	pure f      that injects a function into a structure?
+ <divVerent>	sort of, yeah
+ <divVerent>	pure a injects a value into the structure, so Applicative can operate on it
+ <crestfallen>	the last post, yes that I see
+ <crestfallen>	so what sort of function could pure inject into a structure.. not any function, correct?
+ <crestfallen>	but in the case of pure f <*> pure x = pure (f x)   ultimately f has an argument 
+ <divVerent>	it can inject anything
+ <divVerent>	Prelude Control.Applicative> (pure (+1)) <*> [2, 3, 5, 7]
+ <divVerent>	[3,4,6,8]
+ <divVerent>	I know that example is rather useless, but here pure injects a function
+ <divVerent>	Prelude Control.Applicative> [(+1), (+2)] <*> pure 42
+ <divVerent>	[43,44]
+ <divVerent>	and here it injects a value
+ <crestfallen>	good example
+ <divVerent>	basically Applicative in a way generalizes functions as values and lets you operate with them in similar ways
+ <divVerent>	and the list Applicative is probably the easiest to understand I think
+ <crestfallen>	so the above example (pure (+1)) <*> [2, 3, 5, 7]     ....     pure (+1) would be degenerate
+ <divVerent>	sort of - it's the part that doesn't really use the Applicative
+ <crestfallen>	I see that is reasonable. thanks kindly
+ <crestfallen>	the applicative uses _it_
+ <divVerent>	left op f = op (pure f) (pure undefined)
+ <divVerent>	now this is fun... this "left" turns liftA3 into liftA2, into liftA, into pure...
+ <divVerent>	but left pure is pure again
+ <dibblego>	liftA1 :: (a -> b) -> f a -> f b
+ <dibblego>	liftA2 :: (a -> b -> c) -> f a -> f b -> f c
+ <dibblego>	liftA3 :: (a -> b -> c -> d) -> f a -> f b -> f c -> f d
+ <divVerent>	Prelude Control.Applicative> :t left (pure :: a -> (b -> c) -> a)
+ <divVerent>	left (pure :: a -> (b -> c) -> a) :: Applicative f => a -> f a
+ <dibblego>	liftA4 :: (a -> b -> c -> d -> e) -> f a -> f b -> f c -> f d -> f e
+ <dibblego>	liftA0 :: ?
+ <divVerent>	well, that's what my "left" does... it removes one layer of lifting
+ <divVerent>	Prelude Control.Applicative> :t left liftA
+ <divVerent>	left liftA :: Applicative f => b -> f b
+ <divVerent>	so liftA0 :: a -> f a, which must be pure
+ <crestfallen>	yes actually those posts are close to the text I'm using divVerent dibblego 
+ <dibblego>	it is the zero or identity case
+ <divVerent>	what surprises me is that applying my "left" to liftA0 (i.e. pure) yields liftA0 again, once I make it work at all
+ <crestfallen>	but how can pure (+1) be identity, it is succ, right?
+ <divVerent>	it's succ, yes
+ <dibblego>	crestfallen: pure is the identity for (<*>)
+ <dibblego>	just like 0 is the identity for (+)
+ <crestfallen>	but in the case of a function being lifted dibblego  as in (+1) ? not sure I follow
+ <dibblego>	> let identityPure \f x -> (pure f <*> pure x) == pure (f x)
+ <dibblego>	anyway, that will always return True
+ <dibblego>	also this: (\x -> pure id <*> x)
+ <dibblego>	also this: (\x -> pure id <*> x == x)
+ <divVerent>	oh, I get it... liftA_minus_1 can only exist in the a-> applicative, but it reduces to pure in the same
+ <divVerent>	but then... shouldn't liftA and pure ALSO be somewhat "equivalent" in the a-> applicative?
+ 
+ <dibblego>	> pure (+1) <*> [1,2,3,4,5]
+ <lambdabot>	 [2,3,4,5,6]
+ <crestfallen>	pure id <*> x == x    that makes complete sense
+ <dibblego>	> pure id <*> [1,2,3,4,5]
+ <lambdabot>	 [1,2,3,4,5]
+ <dibblego>	(pure f <*> x) == (f <$> x)
+ <divVerent>	oh, now I get it... it actually IS
+ <divVerent>	(a -> b) -> (a -> a) -> a -> b
+ <divVerent>	is a type both pure and liftA can have
+ <divVerent>	the -> Applicative is certainly amazing
+ <crestfallen>	so yeah, pure just injects anything into a structure so that it can be used in the applicative, 
+                whether it changes anything or not. that's why its degenerate dibblego I suppose.
+ <dibblego>	I tend to call it the identity or neutral element, "the thing that does nothing"
+ <divVerent>	except... the neutral element for <*> would be something else
+ <dibblego>	I think of it as [] in relation to (++), or 0 in relation to (+), or id in relation to (.)
+ 
+ <crestfallen>	but how can pure (+1) be seen to do nothing?
+ <divVerent>	it'd be the value X so that X <*> y = y for all y
+ <divVerent>	crestfallen: but it doesn't do nothing
+ <divVerent>	in my example it incremented all the list elements on the other side by 1
+ <divVerent>	that X, of course, is pure id
+ <dibblego>	pure id
+ <divVerent>	now is there also a neutral element on the right of <*>?
+ <divVerent>	no, but there is at least
+ <divVerent>	pure ($ x) <*> pure id = x
+ <divVerent>	I suppose that's as neutral as it gets
+ <divVerent>	it's a consequence of the Interchange law of Applicative
+ <crestfallen>	Interchange law... looking in my book. there are functor laws discussed...are they shared with applicative?
+ <dmwit>	Yes, Applicatives must be Functors.
+
+ <dmwit>	> newtype Eat a = Eat (a -> Eat a)
+ <dmwit>	> unEat (Eat f) = f
+ <dmwit>	> :t \v -> (unEat <$> v) <*> pure undefined
+                Applicative f => f (Eat a) -> f (Eat a)
+ 
+ <crestfallen>	actually, that is implied only in the book... but the logic is not immediately apparent to me
+ <crestfallen>	cant wait to understand dmwit 's example
+ <crestfallen>	need to wait til morning tea
+ <divVerent>	crestfallen: I didn't understand the example either... damn, even got confused by the <$> which is just an odd way of saying fmap
+ <divVerent>	with v :: f (Eat t), fmap unEat v :: f (t -> Eat t), which kinda makes sense
+ <divVerent>	and then the <*> with pure undefined basically passes a value that does not matter to the first argument of the function, yielding an Eat t back
+ <divVerent>	(so, a f (Eat t) in total)
+ <divVerent>	the fun part here is that Eat t allows getting a value out of a t -> Eat t
+ <divVerent>	which normally you can't just do
+ <divVerent>	also, I can't currently even think of any value of the type Eat
+ <divVerent>	is that even inhabited?
+ <EvanR>	sure
+ <divVerent>	but by anything other than Eat undefined and variants?
+ <EvanR>	i think Eat undefined is different from let e = Eat (\x -> e) in e
+ <crestfallen>	actually, after all this time I still don't quite get the structure of a let statement. They are coming up in state monad/applicative definitions. the result is often on the lhs which confuses me
+ <divVerent>	is any of the differences actually observable though, except in the form of bottom vs non-bottom?
+ <EvanR>	you mean the result uses something defined in the bindings
+ <crestfallen>	the function application is on the rhs, and the result, with the new state, is on the left
+ <EvanR>	which makes sense
+ <EvanR>	the structure is let <bindings> in <evaluate this>. The only trick is bindings are recursive and can appear in binding rh-sides
+ <EvanR>	aka letrec
+ <EvanR>	divVerent: one freezes or crashes, the other doesn't
+ <EvanR>	the other one let's you feed is any number of times without problems
+ <divVerent>	not sure what to call that in theory, but it seems like it's only really observable from "outside"
+ <EvanR>	codata
+ <crestfallen>	letrec  what's that?
+ <EvanR>	recursive let
+ <divVerent>	i.e. you can't define any expression that takes an Eat and for which values exist so it may return True for one and False for another
+ <divVerent>	of course... you can't do that for the type () either
+ <EvanR>	yeah it may be observably equivalent to ()
+ <dmwit>	Yes, Eat is a fancy ().
+ <dmwit>	This is closely related to my objection to the "encoding" of untyped lambda calculus as data L = L (L -> L)
+ <crestfallen>	EvanR I really wish I understood your posts re: recursive bindings on the rh sides. I understand recursion in many cases fairly well..
+ <EvanR>	crestfallen: the bindings define names using equations. The names can be used on the right side of each equation
+ <crestfallen>	https://termbin.com/ykqx   EvanR if you could peek at this and in the Applicative instance help me understand how recursion works in the let statement
+ <EvanR>	it's not using recursion
+ <EvanR>	you could write that without recursive let
+ <crestfallen>	so this:    let <bindings> in <evaluate this>     allows you to give the state names s' and s'' to reflect ST a -> ST b. The bindings are s' and s''     EvanR  ?   
+ <crestfallen>	so no I think the bindings are the tuples (f,s') and (x,s'')
+ <crestfallen>	in the case of the let statement applicative 
+ <EvanR>	yes
+ <EvanR>	> let (x,y) = (1,2); z = x + 1 in (z,y)
+ <lambdabot>	 (2,2)
