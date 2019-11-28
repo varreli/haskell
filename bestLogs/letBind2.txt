@@ -126,17 +126,44 @@
  <crestfallen>	Interchange law... looking in my book. there are functor laws discussed...are they shared with applicative?
  <dmwit>	Yes, Applicatives must be Functors.
 
+ 
+ <crestfallen>	actually, that is implied only in the book... but the logic is not immediately apparent to me
+ <divVerent>	crestfallen: I didn't understand the example either... damn, even got confused by the <$> which is just an odd way of saying fmap
+
+----------------------------------------------------------------------------------------------------------------------------
+
+ <crestfallen>	actually, after all this time I still don't quite get the structure of a let statement. They are coming up 
+ <EvanR>	you mean the result uses something defined in the bindings
+ <crestfallen>	the function application is on the rhs, and the result, with the new state, is on the left
+ <EvanR>	which makes sense
+ <EvanR>	the structure is let <bindings> in <evaluate this>. The only trick is bindings are recursive and can appear in binding rh-sides
+ <EvanR>	aka letrec (recursive let): 
+                https://stackoverflow.com/questions/11922134/how-to-increment-a-variable-in-functional-programming ) 
+
+ <EvanR>	crestfallen: the bindings define names using equations. The names can be used on the right side of each equation
+ <crestfallen>	https://termbin.com/ykqx   EvanR if you could peek at this and in the Applicative instance help me understand 
+                how recursion works in the let statement
+ <EvanR>	it's not using recursion
+ <EvanR>	you could write that without recursive let
+ <crestfallen>	so this:    let <bindings> in <evaluate this>     allows you to give the state names s' and s'' to reflect ST a -> ST b. 
+                The bindings are the tuples (f,s') and (x,s'') 
+ <crestfallen>	in the case of the let statement applicative . Right EvanR ?
+ <EvanR>	yes
+ <EvanR>	> let (x,y) = (1,2); z = x + 1 in (z,y)
+ <lambdabot>	 (2,2)
+ <EvanR>        is the same thing
+
+----------------------------------------------------------------------------------------------------------------------------
+-- study dmwit's example:
+ 
  <dmwit>	> newtype Eat a = Eat (a -> Eat a)
  <dmwit>	> unEat (Eat f) = f
  <dmwit>	> :t \v -> (unEat <$> v) <*> pure undefined
                 Applicative f => f (Eat a) -> f (Eat a)
- 
- <crestfallen>	actually, that is implied only in the book... but the logic is not immediately apparent to me
- <crestfallen>	cant wait to understand dmwit 's example
- <crestfallen>	need to wait til morning tea
- <divVerent>	crestfallen: I didn't understand the example either... damn, even got confused by the <$> which is just an odd way of saying fmap
+
  <divVerent>	with v :: f (Eat t), fmap unEat v :: f (t -> Eat t), which kinda makes sense
- <divVerent>	and then the <*> with pure undefined basically passes a value that does not matter to the first argument of the function, yielding an Eat t back
+ <divVerent>	and then the <*> with pure undefined basically passes a value that does not matter to the first argument 
+                of the function, yielding an Eat t back
  <divVerent>	(so, a f (Eat t) in total)
  <divVerent>	the fun part here is that Eat t allows getting a value out of a t -> Eat t
  <divVerent>	which normally you can't just do
@@ -144,33 +171,17 @@
  <divVerent>	is that even inhabited?
  <EvanR>	sure
  <divVerent>	but by anything other than Eat undefined and variants?
- <EvanR>	i think Eat undefined is different from let e = Eat (\x -> e) in e
- <crestfallen>	actually, after all this time I still don't quite get the structure of a let statement. They are coming up in state monad/applicative definitions. the result is often on the lhs which confuses me
+ <EvanR>	I think Eat undefined is different from let e = Eat (\x -> e) in e
+                in state monad/applicative definitions. the result is often on the lhs which confuses me
  <divVerent>	is any of the differences actually observable though, except in the form of bottom vs non-bottom?
- <EvanR>	you mean the result uses something defined in the bindings
- <crestfallen>	the function application is on the rhs, and the result, with the new state, is on the left
- <EvanR>	which makes sense
- <EvanR>	the structure is let <bindings> in <evaluate this>. The only trick is bindings are recursive and can appear in binding rh-sides
- <EvanR>	aka letrec
  <EvanR>	divVerent: one freezes or crashes, the other doesn't
  <EvanR>	the other one let's you feed is any number of times without problems
  <divVerent>	not sure what to call that in theory, but it seems like it's only really observable from "outside"
  <EvanR>	codata
- <crestfallen>	letrec  what's that?
- <EvanR>	recursive let
- <divVerent>	i.e. you can't define any expression that takes an Eat and for which values exist so it may return True for one and False for another
+ <divVerent>	i.e. you can't define any expression that takes an Eat and for which values exist so it may return 
+                True for one and False for another
  <divVerent>	of course... you can't do that for the type () either
  <EvanR>	yeah it may be observably equivalent to ()
  <dmwit>	Yes, Eat is a fancy ().
  <dmwit>	This is closely related to my objection to the "encoding" of untyped lambda calculus as data L = L (L -> L)
- <crestfallen>	EvanR I really wish I understood your posts re: recursive bindings on the rh sides. I understand recursion in many cases fairly well..
- <EvanR>	crestfallen: the bindings define names using equations. The names can be used on the right side of each equation
- <crestfallen>	https://termbin.com/ykqx   EvanR if you could peek at this and in the Applicative instance help me understand how recursion works in the let statement
- <EvanR>	it's not using recursion
- <EvanR>	you could write that without recursive let
- <crestfallen>	so this:    let <bindings> in <evaluate this>     allows you to give the state names s' and s'' to reflect ST a -> ST b. The bindings are s' and s''     EvanR  ?   
- <crestfallen>	so no I think the bindings are the tuples (f,s') and (x,s'')
- <crestfallen>	in the case of the let statement applicative 
- <EvanR>	yes
- <EvanR>	> let (x,y) = (1,2); z = x + 1 in (z,y)
- <lambdabot>	 (2,2)
+
