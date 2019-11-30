@@ -1,8 +1,3 @@
-aa = fmap (++) (Just "Hey")
-bb = (\f -> f (" Joe"))
-jimi = bb <$> aa
- 
---------------------------------------- 
 cc = (*) <$> [2,5,10] <*> [8,10,11] 
  
 -- compare to list comprehension:
