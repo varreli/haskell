@@ -10,7 +10,7 @@ seqA :: (Applicative f, Show a) => [f a] -> f [a]
 seqA [] = pure []
 seqA (x:xs) = pure (:) <*> x <*> seqA xs
 
-getChars' :: Int -> traceShowIO [Char] 
+getChars' :: Int -> IO [Char] 
 getChars' n = seqA (replicate n getChar)
 
 -- You can't show IO actions. If you want to see how seqA 
