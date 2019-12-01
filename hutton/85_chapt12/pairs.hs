@@ -28,7 +28,7 @@ pairs' xs ys =
   ys >>= \y ->
   return (x,y)
 
--- Expanded --
+-- Expanded, without sugar --
 
 pairs'' :: [a] -> [b] -> [(a,b)]
 pairs'' xs ys = xs >>= \x -> ys >>= \y -> return (x,y)
