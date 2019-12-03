@@ -22,9 +22,10 @@ nn = [1,2,3] >>= (\x -> [1,2,3] >>= (\y -> return (x /= y) >>=
         (\r -> case r of True -> return (x,y)
                          _    -> fail "")))
 
--- <&> == >>= == (flip fmap)
--- but substituting them in nn fails.
+-- (Substituting <&> or (flip fmap) for >>=   
+-- has so far failed)
 
+----------------------------------------------------
 oo = concatMap (\x -> [x,x]) [1,2,3]
 
 
@@ -32,11 +33,11 @@ oo = concatMap (\x -> [x,x]) [1,2,3]
 -- bind is literally concatMap.
 -- replace bind with fmap (concatMap with map) to see the 
 -- tree that eventually gets collapsed.
--- We get a nested list of lists 
+-- We get a large nested list of lists 
 
 -- [[[(Int, Int)]]]
 
--- and their full concatenation is your final result
+-- and their full concatenation is the final result
 
 ----------------------------------------------------
 
