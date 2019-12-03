@@ -17,7 +17,6 @@ mm = do x <- [1,2,3]
 -- Q: How do we chart the evaluation steps of nn ? :
 
 
-
 nn = [1,2,3] >>= (\x -> [1,2,3] >>= (\y -> return (x /= y) >>= 
         (\r -> case r of True -> return (x,y)
                          _    -> fail "")))
