@@ -1,5 +1,9 @@
 factorial n = if n < 2 then 1 else n * factorial (n-1)
 
+factorial' n
+  | n > 1 = n * factorial' (n - 1)
+  | otherwise = 1
+
 
 fact :: Int -> Int
 fact 0 = 1
