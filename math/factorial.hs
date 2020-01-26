@@ -1,3 +1,6 @@
+factorial n = if n < 2 then 1 else n * factorial (n-1)
+
+
 fact :: Int -> Int
 fact 0 = 1
 fact n = product [1..n] -- less elegant: fact n = n * fact (n-1)
@@ -5,15 +8,16 @@ fact n = product [1..n] -- less elegant: fact n = n * fact (n-1)
 main = print $ map fact [12, 4, 7]
 
 
--- less elegant with much larger Integer range :
+-- pattern matching:
 
-fact' :: Integer -> Integer 
-fact' 0 = 1
-fact' n = n * fact' (n-1)
+factt :: Integer -> Integer 
+factt 0 = 1
+factt n = n * fact' (n-1)
 
+--iterative solution:
 
--- https://en.wikipedia.org/wiki/Proof_assistant#Comparison
--- https://en.wikipedia.org/wiki/Dependent_type#Comparison
+fact' n = foldl (*) 1 [1..n]
 
--- http://stackoverflow.com/questions/6806946/built-in-factorial-function-in-haskell
+-- simplicity:
 
+facct n = product [1..n]
