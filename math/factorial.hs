@@ -1,15 +1,16 @@
+-- if / then:
+
 factorial n = if n < 2 then 1 else n * factorial (n-1)
+
+--guard logic:
 
 factorial' n
   | n > 1 = n * factorial' (n - 1)
   | otherwise = 1
 
-
-fact :: Int -> Int
-fact 0 = 1
-fact n = product [1..n] -- less elegant: fact n = n * fact (n-1)
-
-main = print $ map fact [12, 4, 7]
+-- map over list:
+--
+main = print $ map facct [12, 4, 7]
 
 
 -- pattern matching:
