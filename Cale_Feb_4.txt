@@ -1,0 +1,167 @@
+
+Feb 04 19:16:51 <crestfallen>	sorry folks wondering what foldl (or foldr) does here:
+Feb 04 19:17:07 <crestfallen>	> foldl (+) 0 (2,3)
+Feb 04 19:17:09 <lambdabot>	 3
+Feb 04 19:17:19 <crestfallen>	no clue what it does there
+Feb 04 19:17:30 <mniip>	> toList (1,2,3)
+Feb 04 19:17:32 <lambdabot>	 error:
+Feb 04 19:17:32 <lambdabot>	     Ambiguous occurrence ‘toList’
+Feb 04 19:17:32 <lambdabot>	     It could refer to either ‘F.toList’,
+Feb 04 19:17:34 <Clint>	what do you expect it to do?
+Feb 04 19:17:38 <mniip>	> Data.Foldable.toList (1,2,3)
+Feb 04 19:17:40 <lambdabot>	 error:
+Feb 04 19:17:40 <lambdabot>	     • Could not deduce (Foldable ((,,) Integer Integer))
+Feb 04 19:17:40 <lambdabot>	         arising from a use of ‘F.toList’
+Feb 04 19:17:45 <mniip>	> Data.Foldable.toList (1,2)
+Feb 04 19:17:47 <lambdabot>	 [2]
+Feb 04 19:17:54 <mniip>	this is what's going on
+Feb 04 19:17:57 <crestfallen>	> foldl (+) 0 [2,3]
+Feb 04 19:17:59 <lambdabot>	 5
+Feb 04 19:18:04 <crestfallen>	that I understand
+Feb 04 19:18:29 <mniip>	there's also quite a misnormer:
+Feb 04 19:18:34 <mniip>	> length (3, 5) -- this is an odd one
+Feb 04 19:18:36 <lambdabot>	 1
+Feb 04 19:19:51 <mniip>	I think it's easier if you understand how toList works for (a, b) first
+Feb 04 19:19:59 <mniip>	then foldr/foldl will follow naturally
+Feb 04 19:20:18 <crestfallen>	I thought I understood l/r but only with lists I guess
+Feb 04 19:20:21 <Clint>	> foldl (+) 0 ("billions and billions", 3)
+Feb 04 19:20:23 <lambdabot>	 3
+Feb 04 19:20:58 <crestfallen>	Clint, what's it doing in plain language?
+Feb 04 19:21:13 <Clint>	crestfallen: it's folding
+Feb 04 19:21:16 <Clint>	0 + 3 = 3
+Feb 04 19:21:31 <mniip>	foldl f z (x, y) = f z y
+Feb 04 19:21:53 <mniip>	notice a peculiar lack of x
+Feb 04 19:22:12 <crestfallen>	yeah sorry what happens to the x? 
+Feb 04 19:22:18 <mniip>	nothing can happen to x
+Feb 04 19:22:30 <mniip>	it's impossible because of parametricity
+Feb 04 19:23:01 <mniip>	again consider the simpler  toList :: (a, b) -> [b]
+Feb 04 19:23:05 <mniip>	toList (x, y) = [y]
+Feb 04 19:25:28 <crestfallen>	If "billions and billions" is not allowed because of the (+) signature I understand, but not in the case of (2,3)
+Feb 04 19:25:48 <crestfallen>	I mean the type that (+) takes
+Feb 04 19:26:03 <mniip>	the implementation of foldl is not allowed to change behavior based on the type of x
+Feb 04 19:26:20 <mniip>	(x = 2 :: Int  versus  x = "billions and billions" :: String)
+Feb 04 19:26:50 <crestfallen>	but what is the purpose of foldl over a tuple then?
+Feb 04 19:27:41 <mniip>	there isn't any
+Feb 04 19:27:58 <crestfallen>	In a list I understand, because your just accumulating a value in the seed.
+Feb 04 19:28:09 <mniip>	you shouldn't foldl over tuples
+Feb 04 19:28:12 <mniip>	not explicitly at least
+Feb 04 19:28:33 <mniip>	it's just that it's sometimes useful for (a,) to be Foldable as it can appear nested in other structures
+Feb 04 19:29:08 <crestfallen>	mniip sorry I don't know what you're getting at. It's a video I'm reviewing, it's included as a quick aside.
+Feb 04 19:29:31 <crestfallen>	useful for (a,) to be Foldable?
+Feb 04 19:29:48 <mniip>	occasionally
+Feb 04 19:30:27 <mniip>	it makes perfect sense if you understand the types of everything involved
+Feb 04 19:30:38 <mniip>	but from an outside perspective everything about this instance might seem weird
+Feb 04 19:30:45 <mniip>	the most odd one perhaps being
+Feb 04 19:30:47 <mniip>	> length (3, 5)
+Feb 04 19:30:50 <lambdabot>	 1
+Feb 04 19:31:43 <Cale>	The Traversable instance has come in handy at least once or twice.
+Feb 04 19:32:23 <Cale>	It's generally best to think of pairs as being like containers for their second element which have a label on them which is the first element.
+Feb 04 19:32:34 <mniip>	yeah
+Feb 04 19:32:39 <mniip>	that's how their functor instance works too
+Feb 04 19:33:12 <crestfallen>	copy that, like key/value
+Feb 04 19:33:20 <Cale>	yeah
+Feb 04 19:33:43 <crestfallen>	thanks everyone that's great
+Feb 04 19:33:54 <Cale>	One of the things we have in reflex-dom is  performRequestsAsync :: (..., Traversable f) => Event t (f (XhrRequest a)) -> m (Event t (f XhrResponse))
+Feb 04 19:33:58 <crestfallen>	I thought it was an error in the video :)
+Feb 04 19:34:56 <Cale>	Basically, that type means you give it a thing which can occur at certain moments with an f (XhrRequest a) and it'll give you back a thing which can occur at some times with (f XhrResponse) values
+Feb 04 19:35:16 <Cale>	It can be handy to choose f to be a pair type if you want to know which response goes with which request
+Feb 04 19:35:41 <Cale>	You can put any extra data in the first part of the pair, and this will hand it back to you with the corresponding response.
+Feb 04 19:36:03 <Cale>	but at the same time, this can be used to make multiple requests at once, for example
+Feb 04 19:36:12 <crestfallen>	so haskell essentially defaults to the value and not the key, in a tuple, in the case of folds
+Feb 04 19:36:34 <Cale>	Yeah, if you think about it, it *has* to be the second component of the pair
+Feb 04 19:36:48 <Cale>	Because there's no way to write the instance to work on the first component
+Feb 04 19:36:53 <crestfallen>	that almost sounds like State, the "extra data" part
+Feb 04 19:37:13 <Cale>	Yeah, one of the annoying things about the definition of StateT is they got it backwards :P
+Feb 04 19:37:21 <Cale>	:t StateT
+Feb 04 19:37:22 <lambdabot>	(s -> m (a, s)) -> StateT s m a
+Feb 04 19:37:39 <Cale>	The s is in the second part, but it would have been much better to make that s -> m (s, a)
+Feb 04 19:37:51 <Cale>	Or s -> (s,a) in the case of plain State
+Feb 04 19:38:18 <dsal>	A lot of these kinds of things are easier to understand if you try to do it yourself.
+Feb 04 19:38:19 <Cale>	Well, it's a small difference in practice, but still kind of annoying :)
+Feb 04 19:38:47 <dsal>	State is actually another example of that.  I didn't understand the s and a in theory, but it was pretty obvious in practice.
+Feb 04 19:38:47 <crestfallen>	I actually thought that..why is it not in the first position?
+Feb 04 19:39:01 <mniip>	eh
+Feb 04 19:39:38 <Cale>	At the time the mtl package was first written, we didn't have all those instances for pairs
+Feb 04 19:40:04 <Cale>	In fact, I don't think Traversable and friends even existed yet.
+Feb 04 19:40:55 <crestfallen>	really appreciate it. I had to drop haskell for a while after a horrendous winter..
+Feb 04 19:42:11 <crestfallen>	winter break
+Feb 04 19:44:09 <crestfallen>	also I read something about monads that I'm curious about. that pure computations are separated by certain combinators. but which combinators are they? all I know is id, const and flip I believe
+Feb 04 19:44:50 <crestfallen>	just reading that gave me something to chew on anyway
+Feb 04 19:47:38 <crestfallen>	so I guess all combinators have no free variables, as in the above mentioned
+Feb 04 19:48:18 <Cale>	That's an extra-technical definition that people often don't mean when they use the word combinator informally
+Feb 04 19:48:35 <crestfallen>	hmm
+Feb 04 19:48:46 <Cale>	More generally, a "combinator" is just a function which is used to combine things (usually things which represent actions or computations of some sort)
+Feb 04 19:50:24 <crestfallen>	are you saying " comb. have no free variables" is the extra-technical part?
+Feb 04 19:50:28 <Cale>	yeah
+Feb 04 19:51:32 <Cale>	Actually, that one is usually "supercombinator"
+Feb 04 19:51:58 <crestfallen>	sorry which one?
+Feb 04 19:52:29 <Cale>	a lambda expression S is a supercombinator of arity n if it has no free variables and is of the form λx1.λx2...λxn.E (with n ≥ 0, so that lambdas are not required) such that E itself is not a lambda abstraction and any lambda abstraction in E is again a supercombinator
+Feb 04 19:52:53 <crestfallen>	holy smokes
+Feb 04 19:53:05 <Cale>	(but if you remove the arity restriction, that just means no free variables)
+Feb 04 19:54:19 <Cale>	oh, I guess not
+Feb 04 19:54:35 <Cale>	That does impose a restriction on where in E you're allowed to use x1,...,xn
+Feb 04 19:55:20 <Cale>	Anyway, be careful about the word "combinator", different authors use it to mean slightly different things
+Feb 04 19:55:39 <Cale>	But generally it has the sense of a function which is being used to combine things of some sort to produce other things of that sort.
+Feb 04 19:56:41 <Cale>	and there's a long history of "combinator libraries" whose philosophy is to provide the user with a bunch of extremely basic building blocks, and then some means of composing them together into more interesting things
+Feb 04 19:56:49 <dmj`>	like parsec 
+Feb 04 19:56:53 <Cale>	yeah
+Feb 04 19:57:06 <Cale>	You start out with parsers which parse single characters and stuff like that
+Feb 04 19:57:26 <Cale>	and then ways of combining parsers e.g. concatenation, alternation and so on
+Feb 04 19:57:44 <crestfallen>	also like SKI calculus?
+Feb 04 19:57:46 <dmj`>	@unmtl StateT s [] a
+Feb 04 19:57:46 <lambdabot>	s -> [] (a, s)
+Feb 04 19:59:24 <crestfallen>	see post re: SKI ^ .. but so really lambda calculus is implied in the monad, with the added element of "Kleisli" composition?
+Feb 04 19:59:47 <dmj`>	that's a basic type for a parser, which is just a function really, and can be composed like other functions using (.)
+Feb 04 20:00:04 <crestfallen>	dmj`, what is?
+Feb 04 20:00:14 <Cale>	crestfallen: Oh, well, maybe you're thinking of the case of the Applicative instance for (->) e?
+Feb 04 20:00:31 <dmj`>	type Parser s a = s -> [(a,s)]
+Feb 04 20:00:35 <Cale>	Applicative gives you exactly K and S there
+Feb 04 20:00:44 <Cale>	If we look at the types:
+Feb 04 20:00:50 <Cale>	pure :: a -> f a
+Feb 04 20:00:57 <Cale>	when f t = e -> t
+Feb 04 20:01:08 <Cale>	this becomes pure :: a -> (e -> a)
+Feb 04 20:01:16 <Cale>	which is exactly the type of K
+Feb 04 20:01:34 <Cale>	(<*>) :: f (a -> b) -> f a -> f b
+Feb 04 20:01:46 <Cale>	and this specialises to:
+Feb 04 20:02:00 <Cale>	(<*>) :: (e -> (a -> b)) -> (e -> a) -> (e -> b)
+Feb 04 20:02:06 <Cale>	which is exactly the type of S
+Feb 04 20:03:34 <Cale>	(oddly, this was for me a major part of what convinced me Applicative was something worth paying attention to)
+Feb 04 20:03:57 <Cale>	For some people, I'm sure that goes the other way around :)
+Feb 04 20:04:20 <crestfallen>	yikes ok thanks, so can you pass around the added data in Kleisli composition if you're working with lambda notation (whatever that added data is to the layman)
+Feb 04 20:04:41 <Cale>	Well, we could look at what Kleisli composition would be in this case if you like
+Feb 04 20:04:47 <Cale>	:t (<=<)
+Feb 04 20:04:49 <lambdabot>	Monad m => (b -> m c) -> (a -> m b) -> a -> m c
+Feb 04 20:04:55 <Cale>	So when m t = e -> t
+Feb 04 20:05:23 <Cale>	That becomes (b -> e -> c) -> (a -> e -> b) -> a -> e -> c
+Feb 04 20:06:07 <Cale>	and we could work through what function that needs to be based on the type
+Feb 04 20:06:13 <Cale>	If we're trying to define
+Feb 04 20:06:25 <Cale>	(f <=< g) x e :: c
+Feb 04 20:06:38 <Cale>	We have:
+Feb 04 20:06:40 <Cale>	f :: b -> e -> c
+Feb 04 20:06:45 <Cale>	g :: a -> e -> b
+Feb 04 20:06:50 <Cale>	x :: a
+Feb 04 20:06:52 <Cale>	e :: e
+Feb 04 20:07:19 <Cale>	We know we want to end up with something of type c, and the only way to get that would be to apply f
+Feb 04 20:07:26 <Cale>	So we try:
+Feb 04 20:07:48 <Cale>	(f <=< g) x e = f (... :: b) (... :: e)
+Feb 04 20:07:57 <Cale>	Now we need something of type b and something of type e
+Feb 04 20:08:11 <helloworld123>	hi isovector1
+Feb 04 20:08:14 <Cale>	We have a thing of type e, and no way of getting any other, so that bit is completely obvious
+Feb 04 20:08:19 <Cale>	(f <=< g) x e = f (... :: b) e
+Feb 04 20:08:33 <Cale>	and then to get something of type b, we must apply the function g
+Feb 04 20:08:46 <Cale>	(f <=< g) x e = f (g (... :: a) (... :: e)) e
+Feb 04 20:09:12 <Cale>	and here again, we have something of type a and something of type e (and they're the only things we could possibly have of those types)
+Feb 04 20:09:19 <Cale>	(f <=< g) x e = f (g x e) e
+Feb 04 20:09:22 <Cale>	and we're done
+Feb 04 20:09:40 <Cale>	So that's what Kleisli composition has to be in this instance
+Feb 04 20:10:14 <Cale>	Usually it won't be quite so uniquely defined as this, but often this kind of reasoning about types can reduce the search space and make it easier to think about how to write functions
+Feb 04 20:12:27 <Cale>	What I specifically described there is how Kleisli composition works out in the case of the Monad instance for (->) e
+Feb 04 20:12:50 <Cale>	People don't use that thing a whole lot, but it's good to have this skill of being able to work out what it must be from the type
+Feb 04 20:17:36 <crestfallen>	ok, I'm going to work on this. something is beginning to dawn on me Cale . Let me ask, ultimately, does Kleisli composition stay "pure" as well as keeping the pure functions separate? 
+Feb 04 20:19:13 <Cale>	crestfallen: Well, most instances of Monad are nothing special that you couldn't write with ordinary pure functions.
+Feb 04 20:19:54 <crestfallen>	like if you're keeping IO actions separate from computations, are these "combinators" also pure in themselves? if that makes sense..
+Feb 04 20:20:02 <Cale>	crestfallen: IO would be a challenge, because it's hard to come up with a representation of all the low-level things that a computer can do, but in principle, it could be an ordinary data type as well
+Feb 04 20:20:15 <Cale>	The things you're manipulating are descriptions of what action should be taken
+Feb 04 20:20:21 <Cale>	and you're computing pure functions of those
+Feb 04 20:26:50 <Cale>	crestfallen: I was going to maybe show you how to write a terminal IO monad as a completely ordinary data type if you think that'd help
+Feb 04 20:27:12 <Cale>	(like, if we just restrict ourselves to getLine and putStrLn or something)
