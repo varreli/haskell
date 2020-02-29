@@ -29,5 +29,12 @@ class  Monad m  where
 
 
 
+-- It is possible to write imperative-style code in Haskell as well. 
+-- Sometimes we really do want to say something like "do A, then do B, 
+-- then do C". This adds a new dimension to the simple world of function 
+-- application: we need a notion of 'happens before'. Haskell has 
+-- embraced the Monad concept to describe computations that have an 
+-- order of evaluation. This turns out to be very handy because it can 
+-- encapsulate effects such as changing state.
 
 -- https://www.haskell.org/tutorial/monads.html
