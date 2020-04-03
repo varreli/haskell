@@ -8,8 +8,8 @@ hh x = concat zs
 
 -- As monad :
 
--- h x = f x >>= g
--- h = f >=> g
+-- hh x = ff x >>= gg
+-- hh = ff >=> gg
 
 
 -- stackoverflow.com/questions/27265920/what-is-non-determinism-in-haskell
