@@ -9,13 +9,13 @@ instance Applicative Tree where
     Leaf f <*> treee = fmap f treee
     Node left right <*> treee = Node (left <*> treee) (right <*> treee)
 
-g x 
-    | x == 4 = (Leaf 99)
-    | otherwise = Node (Leaf (x * 2)) (Leaf (x * 4))
-
 instance Monad Tree where
     Leaf a >>= ff = ff a
     Node left right >>= ff = Node (left >>= ff) (right >>= ff)
+
+g x 
+    | x == 4 = (Leaf 99)
+    | otherwise = Node (Leaf (x * 2)) (Leaf (x * 4))
 
 
 -- For Tree Functor and Applicative, try:
@@ -36,3 +36,13 @@ instance Monad Tree where
 -- ghci> Node (Leaf 3) (Leaf 5) 
 -- Node (Node (Leaf 6) (Leaf 12)) (Node (Leaf 10) (Leaf 20))
 
+
+-- Try:
+
+-- ghci> x = Node (Leaf 4) (Node (Leaf 5) (Leaf 6))
+-- ghci> Node (Leaf (*10)) (Node (Leaf (+11)) (Leaf (+13))) <*> x
+-- ghci> (*) <$> Node (Leaf 2) (Node (Leaf 4) (Leaf 6)) <*> x
+
+
+--  $ is "the function application operator" 
+--  <*> is "the applicative function application operator"

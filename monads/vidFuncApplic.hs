@@ -29,12 +29,5 @@ instance Applicative Maybe2 where
 -- ghci> (*) <$> (Just 10) <*> (Just 3) 
 
 
--- Then try:
-
--- ghci> x = Node (Leaf 4) (Node (Leaf 5) (Leaf 6))
--- ghci> Node (Leaf (*10)) (Node (Leaf (+11)) (Leaf (+13))) <*> x
--- ghci> (*) <$> Node (Leaf 2) (Node (Leaf 4) (Leaf 6)) <*> x
-
-
 --  $ is "the function application operator" 
 --  <*> is "the appicative function application operator"
