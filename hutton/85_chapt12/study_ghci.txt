@@ -1,4 +1,4 @@
--- @[] is an extention telling pure that our f is [] (a list) :
+-- @[] is an extension telling pure that our f is [] (a list) :
 
 > :t pure @[] (*)
  Num a => [a -> a -> a]
