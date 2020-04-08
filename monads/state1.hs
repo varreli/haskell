@@ -1,28 +1,28 @@
 -- Many things in haskell are just complicated ways to talk about state:
 
 type State = Int
-newtype ST a = S (State -> (a, State)) -- newtype requires 
+newtype Staat a = S (State -> (a, State)) -- newtype requires 
                                        -- dummy constructor S
 
-app :: ST a -> State -> (a, State)
+app :: Staat a -> State -> (a, State)
 app (S st) x = st x
 
-instance Functor ST where
---  fmap :: (a -> b) -> ST a -> ST b
+instance Functor Staat where
+--  fmap :: (a -> b) -> Staat a -> Staat b
   fmap g st = S (\s -> let (x,s') = app st s
                            in (g x, s'))
 
-instance Applicative ST where
- -- pure :: a -> ST a
+instance Applicative Staat where
+ -- pure :: a -> Staat a
     pure x = S (\s -> (x,s))
- -- (<*>) :: ST (a -> b) -> ST a -> ST b
+ -- (<*>) :: Staat (a -> b) -> Staat a -> Staat b
     stf <*> stx = S (\s -> let (f,s') = app stf s 
                                (x,s'') = app stx s' 
                                in (f x, s''))
                        
 
 
--- re: instance Applicative ST :
+-- re: instance Applicative Staat :
 
 -- The state being passed from `stf` to `stx` is s'
  
@@ -36,8 +36,43 @@ instance Applicative ST where
 -- f to our value x because that's what our type signature 
 -- requires, and bundle that with the last state.
 
-instance Monad ST where
--- (>>=) :: ST a -> (a -> ST b) -> ST b
+instance Monad Staat where
+-- (>>=) :: Staat a -> (a -> Staat b) -> Staat b
   st >>= f = S (\s -> let (x,s') = app st s
                           in app (f x) s')
+
+data Tree a = Leaf a | Node (Tree a) (Tree a) deriving Show
+
+tree :: Tree Char
+tree = Node (Node (Leaf 'a') (Leaf 'b')) (Leaf 'c')
+
+rlabel :: Tree a -> Int -> (Tree Int, Int)
+rlabel (Leaf _) n = (Leaf n, n+1)
+rlabel (Node l r) n = (Node l' r', n'')
+    where
+      (l', n')  = rlabel l n
+      (r', n'') = rlabel r n'
+
+-----------------------------------------------------
+
+fresh :: Staat Int
+fresh = S (\n -> (n, n+1))
+
+relabel :: Tree a -> Staat (Tree Int)
+relabel (Leaf _) = Leaf <$> fresh
+relabel (Node l r) = Node <$> relabel l <*> relabel r
+
+-----------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
