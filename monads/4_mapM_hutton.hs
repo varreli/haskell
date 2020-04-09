@@ -25,3 +25,16 @@ conv c | isDigit c = Just (digitToInt c)
 
 -- ghci> mapMM conv "12a"
 -- Nothing
+
+-----------------------------------------------
+
+filterMM :: Monad m => (a -> m Bool) -> [a] -> m [a]
+filterMM p [] = return []
+filterMM p (x:xs) = do b  <- p x
+                       ys <- filterMM p xs
+                       return (if b then x:ys else ys)
+
+powSet list = filterMM (\x -> [True,False]) list
+
+powSet2 list = filterMM (\x -> [False,True]) list
+
