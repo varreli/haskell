@@ -2,7 +2,7 @@
 
 type State = Int
 newtype Staat a = S (State -> (a, State)) -- newtype requires 
-                                       -- dummy constructor S
+                                          -- dummy constructor S
 
 app :: Staat a -> State -> (a, State)
 app (S st) x = st x
