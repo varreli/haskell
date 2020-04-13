@@ -55,6 +55,10 @@ rlabel (Node l r) n = (Node l' r', n'')
 
 -----------------------------------------------------
 
+treee :: Tree Char
+treee = Node (Node (Leaf 't') (Leaf 'u')) (Leaf 'v')
+
+
 fresh :: Staat Int
 fresh = S (\n -> (n, n+1))
 
@@ -63,7 +67,6 @@ relabel (Leaf _) = Leaf <$> fresh
 relabel (Node l r) = Node <$> relabel l <*> relabel r
 
 -----------------------------------------------------
-
 
 
 
