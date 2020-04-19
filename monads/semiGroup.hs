@@ -1,7 +1,7 @@
 newtype First a = First a deriving Show
 
 instance Semigroup (First a) where 
-  a <> _ = a
+   a <> _ = a
 
 -----------------------------------------
 
