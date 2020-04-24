@@ -10,14 +10,15 @@ factorial' n
 
 -- map over list:
 --
-main = print $ map facct [12, 4, 7]
+main = print $ map facct [3, 4, 6]
 
 
 -- pattern matching:
 
-factt :: Integer -> Integer 
-factt 0 = 1
-factt n = n * fact' (n-1)
+facto :: Integer -> Integer 
+facto 0 = 1
+facto n = n * fact' (n-1)
+factoo = print $ facto 7 
 
 --iterative solution:
 
@@ -26,3 +27,4 @@ fact' n = foldl (*) 1 [1..n]
 -- simplicity:
 
 facct n = product [1..n]
+
