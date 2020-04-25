@@ -1,8 +1,9 @@
 -- if / then:
 
-factorial n = if n < 2 then 1 else n * factorial (n-1)
+-- factorial n = if n < 2 then 1 else n * factorial (n-1)
 
---guard logic:
+
+-- guard logic:
 
 factorial' n
   | n > 1 = n * factorial' (n - 1)
@@ -16,7 +17,7 @@ main = print $ map facct [3, 4, 6]
 -- pattern matching:
 
 facto :: Integer -> Integer 
-facto 0 = 1
+facto 0 = 1 && factoo
 facto n = n * fact' (n-1)
 factoo = print $ facto 7 
 

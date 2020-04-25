@@ -1,5 +1,6 @@
--- maybe :: a -> (b -> a) -> Maybe b -> a
 import Data.Maybe
+
+-- maybe :: a -> (b -> a) -> Maybe b -> a
 
 tt = maybe 3 negate ( lookup 4 [(1,10), (4,15)] ) 
 
