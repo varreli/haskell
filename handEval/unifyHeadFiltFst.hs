@@ -9,7 +9,7 @@ tt = head . (filter fst)
 -- unify:
 
 -- a ~ (s, t)
--- s ~ Bool 
+-- Bool ~ s 
 -- a = (Bool, t)
 
 -- Therefore filter fst has the type :
