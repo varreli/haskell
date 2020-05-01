@@ -1,0 +1,42 @@
+magic:
+
+unify join with (,)  :
+
+join has the signature:
+
+join :: Monad m => m (m a) -> m a
+
+(e -> a) can be written as:
+(->) e a
+
+so using prefix notation, where :
+
+m = (->) e
+
+
+we define join as :
+
+
+join :: (->) e ((->) e a) -> ((->) e) a
+
+rearrange to:
+
+join :: (e -> (e -> a)) -> (e -> a)
+
+rearrange to:
+
+join :: (e -> e -> a) -> e -> a
+
+then plug (,) into the first operand of join:
+
+(,) :: x -> y -> (x, y)
+
+x ~ e
+y ~ e
+a = (e, e)
+
+join :: e -> (e, e)
+
+ghci> join (,) 8
+(8,8)
+

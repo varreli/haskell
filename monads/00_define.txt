@@ -1,0 +1,5 @@
+The distinctive feature of Monad compared to other Functors 
+is that it can embed control flow into the extra structure. 
+The reason it can do this is that, unlike fmap which applies 
+a single flat function over the entire structure, (>>=) 
+inspects individual elements and builds new structure from that.
