@@ -1,0 +1,43 @@
+f g h x y = g (g x) (h y)
+
+g (g x) (h y) :: a      -- assign the expression to type a
+
+h y :: b                -- assign the first argument to type b
+
+g (g x) :: b -> a       -- expand
+
+g x :: c                -- expand again
+
+g :: c -> b -> a        
+
+x :: d                  -- expand g x again
+g :: d -> c
+
+So we have 2 signatures for g:
+
+g :: c -> b -> a
+g :: d -> c
+
+Inspecting the left operand, c and d are equivalent: ( c ~ d )
+Inspecting the right operand, c ~ b -> a
+
+Therefore       c ~ b -> a    and    d ~ b -> a
+
+Unifying   g :: d -> c   ,  we get:
+
+g :: (b -> a) -> b -> a
+
+y :: e
+h :: e -> b
+x :: b -> a              -- originally x :: d
+g :: (b -> a) -> b -> a  
+ 
+Substitute the most specific form of each type variable,
+thus substituting c and d for the more specific (b -> a)
+
+So the expression returns an a , as per the top expression:
+
+f :: ((b -> a) -> b -> a) -> (e -> b) -> (b -> a) -> e -> a
+
+-----------------------------------------------------------------
+https://stackoverflow.com/questions/50777884/manual-type-inference-in-haskell
