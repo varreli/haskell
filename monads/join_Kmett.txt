@@ -1,5 +1,6 @@
 magic:
 
+
 unify join with (,)  :
 
 join has the signature:
@@ -39,4 +40,3 @@ join :: e -> (e, e)
 
 ghci> join (,) 8
 (8,8)
-
