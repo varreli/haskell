@@ -70,3 +70,6 @@
 [2020-05-12T21:02:43-0700] End of /MOTD command.
 [2020-05-12T21:02:43-0700] crestfallen sets mode +Zi
 [2020-05-12T21:02:43-0700] This nickname is registered. Please choose a different nickname, or identify via /msg NickServ identify <password>.
+[2020-05-12T21:08:30-0700]  
+[2020-05-12T21:08:30-0700] ------------- End Session -------------
+[2020-05-12T21:08:30-0700]  

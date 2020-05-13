@@ -18,3 +18,6 @@
 [2020-05-12T21:06:36-0700] heatsink (~heatsink@2600:1700:bef1:5e10:19a1:2d61:3ca:d0e1) joined the channel
 [2020-05-12T21:07:07-0700] jamm_ (~jamm@unaffiliated/jamm) left IRC (Ping timeout: 260 seconds)
 [2020-05-12T21:07:26-0700] merijn (~merijn@83-160-49-249.ip.xs4all.nl) left IRC (Ping timeout: 260 seconds)
+[2020-05-12T21:08:30-0700]  
+[2020-05-12T21:08:30-0700] ------------- End Session -------------
+[2020-05-12T21:08:30-0700]  
