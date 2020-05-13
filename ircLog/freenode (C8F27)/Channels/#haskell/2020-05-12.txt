@@ -4,3 +4,17 @@
 [2020-05-12T20:59:15-0700]  
 [2020-05-12T20:59:15-0700] ------------- End Session -------------
 [2020-05-12T20:59:15-0700]  
+[2020-05-12T21:02:49-0700]  
+[2020-05-12T21:02:49-0700] ------------- Begin Session -------------
+[2020-05-12T21:02:49-0700]  
+[2020-05-12T21:02:49-0700] crestfallen (~textual@135-180-13-241.fiber.dynamic.sonic.net) joined the channel
+[2020-05-12T21:02:49-0700] Topic is https://www.haskell.org | https://wiki.haskell.org/IRC_channel | Paste code/errors: https://gist.github.com/ | Logs: http://tunes.org/~nef/logs/haskell/?C=M;O=D | https://www.reddit.com/r/haskell | Admin: #haskell-ops | Offtopic: #haskell-offtopic | https://downloads.haskell.org
+[2020-05-12T21:02:49-0700] Set by glguy on January 5, 2019 at 7:21:52 AM PST
+[2020-05-12T21:02:50-0700] Website is http://www.haskell.org/
+[2020-05-12T21:02:50-0700] Mode is +CLnt
+[2020-05-12T21:04:57-0700] JohnTalent (~john@unaffiliated/johntalent) left IRC (Quit: leaving)
+[2020-05-12T21:05:01-0700] nullifidian__ (~nullifidi@unaffiliated/nullifidian) left IRC (Ping timeout: 264 seconds)
+[2020-05-12T21:06:23-0700] heatsink (~heatsink@2600:1700:bef1:5e10:19a1:2d61:3ca:d0e1) left IRC (Remote host closed the connection)
+[2020-05-12T21:06:36-0700] heatsink (~heatsink@2600:1700:bef1:5e10:19a1:2d61:3ca:d0e1) joined the channel
+[2020-05-12T21:07:07-0700] jamm_ (~jamm@unaffiliated/jamm) left IRC (Ping timeout: 260 seconds)
+[2020-05-12T21:07:26-0700] merijn (~merijn@83-160-49-249.ip.xs4all.nl) left IRC (Ping timeout: 260 seconds)

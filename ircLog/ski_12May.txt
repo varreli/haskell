@@ -1,0 +1,74 @@
+crestfallen : you need some actions that does something interesting, to test with
+[20:08:06] ski crestfallen : e.g. `tick :: ST Int; tick = S (\n -> (n,n+1))' is a simple one
+[20:09:14] ski now you can try e.g. `map (app (fmap even tick)) [0 .. 9]' as a simple example
+[20:09:48] 	[rg] (~ricardo@sdbron9604w-grc-02-184-148-137-36.dsl.bell.ca) left IRC (Quit: Konversation terminated!)
+[20:10:25] electricityZZZZ koz: what would be the alternative to a scripting layer?
+[20:10:47] ski or even just `app tick 0' vs. `app (liftA2 (,) tick tick) 0'
+[20:10:48] crestfallen thanks kindly ski, working...
+[20:11:28] ski crestfallen : have you seen `liftA2' ? `sequence' (or `sequenceA') ? `replicateM' ?
+[20:12:32] 	hlisp (~hlisp@114.246.34.131) left IRC (Ping timeout: 256 seconds)
+[20:14:11] ski crestfallen : `app' is used to run a `ST'-action (being a value of type `ST T', for some type `T'. being a "state transformer", on the state type `State' (which is just `Int' here). note that such a value hasn't been given an initial state yet, to work with), giving it its initial state, so that it can compute a result (of type `T', say), and a final state
+[20:14:40] ski idly wonders whether `replicateM' will be renamed into `replicateA', at some point
+[20:14:59] crestfallen I think I've used sequenceA. I just can't keep all this stuff in my head. ski
+[20:15:10] ski crestfallen : could you describe in words, what `tick' does ?
+[20:15:30] crestfallen tick == increment
+[20:15:48] crestfallen it's a counter
+[20:15:57] ski yep. move the "clock" along one step. also giving back as result the previous value of the state
+[20:16:08] crestfallen cool
+[20:16:28] ski you could also think of it as allocating `Int's, and the state is the next unused `Int' that hasn't been allocated yet
+[20:17:07] crestfallen allocating Int's. ?
+[20:17:15] ski so, if you start by calling `app' on an action, with initial state `0', the first execution of `tick' will give back zero as first result. next execution will give back one, and so on
+[20:18:56] ski yea. e.g. you might be generating assembler code to work on a stack machine, and each time you need a new temporary (e.g. mutable) variable, you want a new position on the stack to hold it. so `tick' could be used to give the next unused position. and the final state is then the number of allocated stack slots, assuming you started counting at zero
+[20:20:04] ski any time you want to generate a fresh something, that's not equal to any previously generated thing, you could use something like `tick'
+[20:20:44] 	otto_s (~user@p4FF2763A.dip0.t-ipconnect.de) joined the channel
+[20:20:58] ski crestfallen : another example is to write a function `Tree a -> ST (Tree (a,Int))', where you label the elements of a `Tree' (pick any favorite reasonably kind of tree)
+[20:21:10] crestfallen above you said " start by calling `app' on an action "  . what is the action, is it say (fmap even tick). ?
+[20:22:00] crestfallen I only am used to action in re: to monads
+[20:22:01] ski writing such a function, using `ST', is less tedious (and less errorprone), than writing it explicitly (not hiding the state passing plumbing, that the operations at the link you provided performs)
+[20:22:33] ski yes. `tick' here would be an `ST'-action, and `fmap even tick' another `ST'-action
+[20:23:54] 	otto_s_ (~user@p4FF276EE.dip0.t-ipconnect.de) left IRC (Ping timeout: 240 seconds)
+[20:23:55] crestfallen PIH is extremely terse in this section. it makes me sad. 
+[20:24:07] ski (`fmap' here takes a function (on action execution results), and an action, and produces another action. when executed, the returned action will first execute the input action. then, it will call the callback post-processing function on the result of that, giving back the output of that as result of executing the returned action)
+[20:24:25] 	hlisp (~hlisp@114.246.34.131) joined the channel
+[20:24:58] ski (that's somewhat of a mouthful to state, but hopefully the idea should get across as not too involved)
+[20:25:33] crestfallen yeah I can't get my teeth into that one .. sorry
+[20:25:51] 	xerox_ (~xerox@unaffiliated/xerox) left IRC (Ping timeout: 258 seconds)
+[20:25:58] crestfallen but the examples are very helpful
+[20:26:30] ski it's more common to use the "collection" terminology/analogy with types `F' that are instances of `Functor'. however, your `ST' is already also an instance of `Applicative' and `Monad'. and, it's harder (or more of a stretch, if you prefer), to think of `ST T' as some kind of "collection" of `T's
+[20:27:22] ski so, i think the action/recipe analogy/terminology is better to use, with `ST' here, even when only using the `Functor' instance, not the `Applicative' or `Monad' one
+[20:27:39] 	samba1 (~samba1@modemcable194.12-58-74.mc.videotron.ca) joined the channel
+[20:27:59] ski crestfallen : you know `replicate', yes ?
+[20:28:04] crestfallen yes
+[20:28:13] ski > replicate 7 '*'
+[20:28:14] lambdabot  "*******"
+[20:28:16] ski consider
+[20:28:37] ski   replicateM :: Applicative i => Int -> i a -> i [a]
+[20:28:45] 	tromp (~tromp@2a02:a210:ca3:2800:dc03:ce71:fbdc:795e) joined the channel
+[20:28:50] ski   replicateM n act = sequenceA (replicate n act)
+[20:29:09] ski what does `replicateM 4 tick' do ?
+[20:29:11] 	hlisp (~hlisp@114.246.34.131) left IRC (Ping timeout: 256 seconds)
+[20:29:47] 	tdammers (~tdammers@unaffiliated/tdammers) left IRC (Ping timeout: 260 seconds)
+[20:30:22] 	jao (~jao@pdpc/supporter/professional/jao) left IRC (Remote host closed the connection)
+[20:31:46] 	wavemode_ is now known as wavemode
+[20:32:22] crestfallen I'm assuming [1111,2222,3333...]
+[20:33:24] ski well, `replicate 4 tick' will be a list `[tick,tick,tick,tick]', of type `[ST Int]'
+[20:33:30] 	samba1 (~samba1@modemcable194.12-58-74.mc.videotron.ca) left IRC (Ping timeout: 256 seconds)
+[20:33:52] 	tromp (~tromp@2a02:a210:ca3:2800:dc03:ce71:fbdc:795e) left IRC (Ping timeout: 260 seconds)
+[20:34:04] 	merijn (~merijn@83-160-49-249.ip.xs4all.nl) left IRC (Ping timeout: 256 seconds)
+[20:34:30] ski then, `sequenceA' has type `Applicative i => [i a] -> i [a]'. in this case, calling `sequenceA' on that list, the argument type `[i a]' would have to be equal to `[ST Int]', so `i' would be `ST' and `a' would be `Int', in this case
+[20:34:53] ski (and we know `Applicative ST' holds, because you made such an instance, so we're allowed to call `sequenceA' in this case)
+[20:34:54] 	cebola (~cebola@2804:14d:149a:a093:6cb4:22e4:9094:8d00) left IRC (Remote host closed the connection)
+[20:35:01] 	heebo (~user@cpc98594-croy24-2-0-cust48.19-2.cable.virginm.net) joined the channel
+[20:35:15] ski so, the result of calling it would have type `i [a]', which here would then be `ST [Int]'
+[20:35:36] 	cebola (~cebola@2804:14d:149a:a093:6cb4:22e4:9094:8d00) joined the channel
+[20:36:22] ski iow, `replicateM 4 tick' is `sequenceA (replicate 4 tick)' is `sequenceA [tick,tick,tick,tick]', and that last function call takes us from `[ST Int]' to `ST [Int]'
+[20:36:31] ski crestfallen : is this making any sense to you, so far ?
+[20:36:51] 	pera (~pera@unaffiliated/pera) joined the channel
+[20:38:32] crestfallen some parts very much so. if I may stop there. I need to get on a larger screen and go through these examples. thanks you're a natural teacher ski. really appreciate it.
+[20:39:53] 	heebo (~user@cpc98594-croy24-2-0-cust48.19-2.cable.virginm.net) left IRC (Ping timeout: 246 seconds)
+[20:39:53] ski anyway, this last call, to `sequenceA', takes us from a list of actions (which haven't been performed/executed/run yet, remember. they're just inert descriptions of something that could be executed, in the future. perhaps out of order, perhaps multiple times, perhaps none)
+[20:40:23] 	hlisp (~hlisp@114.246.34.131) joined the channel
+[20:40:28] ski .. takes us from a list of actions, to a single action -- whose execution will yield a result that is a list of `Int's
+[20:41:56] ski and, if you remember what `sequenceA' does, it takes its list of actions, and "glues" them together into a single large action. when (if) later executed, this action will execute, in the order given, all the actions in the list. and it will collect all the individual results of those executions, into a list, and yield this list as final result of executing the `sequenceA [...]' action
+[20:42:28] ski so .. in this case, `sequenceA [tick,tick,tick,tick]' will simply execute `tick' four times, and give back a list of the four results of each such execution
+[20:43:07] ski if you try e.g. `app (replicateM 4 tick) 10', you should be able to confirm that this appears to be the case (starting at ten rather than zero, just for variety)
