@@ -20,7 +20,8 @@ instance Applicative ST where
                                (x,s'') = app stx s' 
                                in (f x, s''))
                        
-
+tick :: ST Int
+tick = S (\n -> (n,n+1))
 
 -- re: instance Applicative ST :
 
