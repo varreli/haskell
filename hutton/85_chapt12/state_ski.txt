@@ -14,9 +14,11 @@ final state
 
 tick == increment
 it's a counter
-(move the "clock" along one step. also giving back as result the previous value of the state)
+(move the "clock" along one step. also giving back as result the 
+previous value of the state)
 
-it is allocating `Int's, and the state is the next unused `Int' that hasn't been allocated yet
+it is allocating `Int's, and the state is the next unused `Int' that 
+hasn't been allocated yet
 
 if you start by calling `app' on an action, with initial state `0', 
 the first execution of `tick' will give back zero as first result. 
@@ -32,11 +34,11 @@ any time you want to generate a fresh something, that's not equal to any
 previously generated thing, you could use something like `tick'
 
 another example is to write a function `Tree a -> ST (Tree (a,Int))', 
-where you label the elements of a `Tree' (pick any favorite reasonably 
-kind of tree)
+where you label the elements of a Tree
 
-writing such a function, using `ST', is less tedious (and less errorprone), than writing it explicitly (not hiding the state passing plumbing, that 
-the operations at the link you provided performs)
+writing such a function, using `ST', is less tedious (and less errorprone), 
+than writing it explicitly (not hiding the state passing plumbing, that the 
+operations at the link you provided performs)
 
 tick here would be an `ST'-action, and `fmap even tick' another 
 `ST'-action
@@ -90,7 +92,7 @@ sequenceA takes its list of actions, and "glues" them together into a
 single large action. when (if) later executed, this action will execute, 
 in the order given, all the actions in the list. and it will collect all 
 the individual results of those executions, into a list, and yield this 
-list as final result of executing the `sequenceA [...]' action
+list as the final result of executing the `sequenceA [...]' action
 
 sequenceA [tick,tick,tick,tick]' will simply execute `tick' four times, 
 and give back a list of the four results of each such execution

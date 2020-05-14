@@ -3,7 +3,8 @@ import Control.Monad
 -- Many things in haskell are just complicated ways to talk about state:
 
 type State = Int
-newtype ST a = S (State -> (a, State)) -- newtype requires 
+newtype ST a = S (State -> (a, State)) 
+                                       -- newtype requires 
                                        -- dummy constructor S
 
 app :: ST a -> State -> (a, State)
@@ -21,9 +22,18 @@ instance Applicative ST where
     stf <*> stx = S (\s -> let (f,s') = app stf s 
                                (x,s'') = app stx s' 
                                in (f x, s''))
+
                        
-tick :: ST Int
+tick :: ST Int 
 tick = S (\n -> (n,n+1))
+-- ghci> app tick 5
+-- (5,6)
+
+ 
+ticker n = app (replicateM n tick) 
+-- ghci> ticker 3 5
+-- ([5,6,7],8)
+
 
 -- re: instance Applicative ST :
 

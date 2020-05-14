@@ -1,0 +1,16 @@
+ λ > :r
+ [1 of 1] Compiling Main             ( state.hs, interpreted )
+
+ state.hs:6:49: error:
+     • No instance for (Show (State -> (a, State)))
+             arising from the first field of ‘S’ (type ‘State -> (a, State)’)
+                     (maybe you haven't applied a function to enough arguments?)
+                           Possible fix:
+                                   use a standalone 'deriving instance' declaration,
+                                             so you can specify the instance context yourself
+                                                 • When deriving the instance for (Show (ST a))
+                                                   |
+                                                   6 | newtype ST a = S (State -> (a, State)) deriving Show
+                                                     |                                                 ^^^^
+                                                     Failed, no modules loaded.
+                                                     <Paste>
