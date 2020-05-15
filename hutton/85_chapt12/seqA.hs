@@ -11,7 +11,7 @@ seqA [] = pure []
 seqA (x:xs) = pure (:) <*> x <*> seqA xs
 
 getChars' :: Int -> IO [Char] 
-getChars' n = seqA (replicate n getChar)
+getChars' n = seqA (replicate n getChar)  
 
 -- You can't show IO actions. If you want to see how seqA 
 -- proceeds, you will need to use an Applicative that can 
@@ -30,9 +30,9 @@ getChars' n = seqA (replicate n getChar)
 -- "Who likes ice crea"
 
 -- > pure ((*2) 5)
--- 15                             -- Integer IO applicative
+-- 10                             -- Integer IO applicative
 
--- > pure (*2) 5) :: [Integer]
+-- > pure ((*2) 5) :: [Integer]
 -- [10]                           -- explicit list return
 
 -- > pure "123"                   -- IO [Char] applicative
@@ -49,9 +49,6 @@ getChars' n = seqA (replicate n getChar)
 -- 15                           
 
 --------------------------------------- Trace study:
-
---  λ > import Data.Debug.Trace
---  *Main Debug.Trace
 
 --  λ > import Data.Typeable
 --  *Main Debug.Trace Data.Typeable
