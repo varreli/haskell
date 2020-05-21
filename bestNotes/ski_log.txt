@@ -1,0 +1,71 @@
+
+May 13 20:38:41 <crestfallen>	I found this upvoted post very helpful  https://stackoverflow.com/questions/3382210/monad-join-function
+May 13 20:48:27 <crestfallen>	yeah like i.e. join (,) is very strange. I only can understand it based on the unification.
+May 13 20:49:02 <ski>	yea, that's because `Monad (rho ->)' is a bit unfamiliar to use
+May 13 20:49:36 <ski>	it's basically `Monad (Reader rho)', but the absense of `data' constructors, when using the former, means that it's harder to see where "monad things" happen
+May 13 20:51:39 <ski>	sorry, it's a greek letter, corresponding to the latin `r'
+May 13 20:51:56 <ski>	in papers, people sometimes use that greek letter, when talking about this monad
+May 13 20:52:12 <ski>	presumably because it's the first letter in "read"
+May 13 20:52:50 <crestfallen>	I know zero about Reader
+May 13 20:53:28 <ski>	well, i was saying that `Reader rho' is practically the same thing as `(rho ->)'
+May 13 20:55:05 <ski>	what, in the latter, is written `join (,) 4' would, in the former, be written `runReader (join (reader (reader . (,)))) 4'
+May 13 20:55:41 <ski>	but if you pretend `runReader' and `reader' are both `id', then the latter of these two snippets of code actually becomes the former
+May 13 20:56:52 <ski>	in the former, we have `(,) :: rho -> (rho -> (rho,rho))', which is the same as `(,) :: (rho ->) ((rho ->) (rho,rho))' (here the monad `m' will be `(rho ->)', so that the type of `(,)' matches `m (m a)', with `a' being `(rho,rho)')
+May 13 20:57:38 <ski>	(in actual Haskell, you can't write a section of `->', like `(rho ->)'. you have to write `(->) rho'. but when talking, i write `(rho ->)' because it looks nicer)
+May 13 20:57:45 <crestfallen>	well the gist is here  http://ix.io/2lWP    ok working on that above..
+May 13 20:58:05 <ski>	in the latter, `reader (reader . (,))' has type `Reader rho (Reader rho (rho,rho))'
+May 13 20:58:14 <ski>	note that
+May 13 20:58:26 <ski>	  reader :: (rho -> a) -> Reader rho a
+May 13 20:58:38 <ski>	  runReader :: Reader rho a -> (rho -> a)
+May 13 20:59:34 <ski>	yes, what they wrote as `e' in that paste, i called `rho'. it's the same thing
+May 13 20:59:58 <ski>	(presumably `e' for "environment", which is another name for this monad)
+May 13 21:00:07 <crestfallen>	essentially the parallel in kmett's technique is (->) e a ; m = (->) e    ?
+May 13 21:00:31 <ski>	yes, it's the same thing, just phrased slightly differently
+May 13 21:00:35 <crestfallen>	interesting!
+May 13 21:01:16 <ski>	(this use of `join' might also be called "warbler", or `W')
+May 13 21:02:13 <ski>	"warbler" is a kind of bird
+May 13 21:03:08 <ski>	there's a book on combinatory logic (for kids, iirc), "How to Mock a Mockingbird", by Raymond Smullyan
+May 13 21:03:17 <crestfallen>	I heard of it
+May 13 21:03:54 <ski>	where he talks about computational combinators, like `S',`K',`I',`C',`B',`W',... using an analogy of bird in the forest
+May 13 21:04:05 <ski>	and he calls them by bird names
+May 13 21:05:07 <ski>	if you search for it, there's a webpage titled "How to Dissect a Mockingbird", which investigates this topic, how these combinators could be defined in the lambda calculus
+May 13 21:05:30 <ski>	and it introduces a "graphical notation" for lambda calculus, that might perhaps help a bit to understand it better
+May 13 21:05:47 <ski>	(at least i thought it helped me a bit, when i found that page, years ago)
+May 13 21:05:57 <ski>	`K' is for "throwing away stuff"
+May 13 21:06:56 <ski>	you can define `I' in terms of `S' and `K'
+May 13 21:07:23 <crestfallen>	K = const
+May 13 21:07:34 <ski>	yes
+May 13 21:07:58 <ski>	or, `K' is `return'/`pure', when using `(rho ->)'
+May 13 21:08:17 <ski>	also, `S' is `ap',`(<*>)', when using `(rho ->)'
+May 13 21:11:16 <ski>	<http://lambda-the-ultimate.org/node/533#comment-7712> is a quote from Haskell Brooks Curry, where he mentions that it (combinatory logic) is neither a calculus nor an algebra
+May 13 21:11:51 <ski>	according to his definition there, a calculus should involve bound variables (like with derivatives, limits, integrals, e.g.)
+May 13 21:12:45 <ski>	anyway, combinatory logic is probably more interesting from a theoretical viewpoint, than from a practical one
+May 13 21:31:19 <crestfallen>	oh you are being philosophical about learning? Or are you talking about 'K' , throwing stuff away?
+May 13 21:32:47 <ski>	well, `K' is for throwing away information, and `S' is for duplicating it
+May 13 21:33:06 <ski>	`K c x' evaluates to `c', forgetting, or throwing away, `x'
+May 13 21:33:23 <ski>	`S f g x' evaluates to `(f x) (g x)', duplicating `x'
+May 13 21:33:59 <ski>	if there's an input that you don't want to use, you need to use `K' to express that, in combinatory logic
+May 13 21:35:21 <crestfallen>	gg :: (a -> b) -> a -> c -> b ; gg f a c = f a   << sort of like this ..
+May 13 21:35:47 <ski>	that's one example of not using an input, yes
+May 13 21:36:39 <ski>	  gg = S (K (S (K K)) I
+May 13 21:37:34 <ski>	  gg = C K
+May 13 21:37:56 <ski>	using `C' and `B' (unless i mix them up, maybe that `C' should be `B' instead. sometimes i confuse them)
+May 13 21:39:30 <crestfallen>	excellent. yeah so gg = S (K (S (K K)) I     could you walk me through that?
+May 13 21:39:48 <ski>	well, you could try to compute it
+May 13 21:39:58 <ski>	     gg f a c
+May 13 21:40:09 <ski>	  =  S (K (S (K K)) I f a c
+May 13 21:40:34 <ski>	  =  K (S (K K) f (I f) a c
+May 13 21:40:36 <crestfallen>	@let gg f a c = f a
+May 13 21:40:49 <ski>	er, missing a bracket ..
+May 13 21:41:29 <ski>	  =  K (S (K K)) f (I f) a c  -- i think it was meant to be
+May 13 21:41:36 <ski>	  =  K (S (K K)) f f a c
+May 13 21:41:43 <ski>	  =  S (K K) f a c
+May 13 21:41:54 <ski>	  =  K K a (f a) c
+May 13 21:41:59 <ski>	  =  K (f a) c
+May 13 21:42:03 <ski>	  =  f a
+May 13 21:42:44 <ski>	yea, the original (which also was missing a bracket, mea culpa), should have been `gg = S (K (S (K K))) I'
+May 13 21:45:34 <ski>	anyway .. i don't think figuring out that your `gg' can be defined as `S (K (S (K K))) I' is that useful ..
+May 13 21:47:27 <crestfallen>	I think I like substitution like that. the same reason I like the unifying
+May 13 21:48:07 <ski>	did you see "Prerequisite for Learning Haskell" <http://www.vex.net/~trebla/haskell/prerequisite.xhtml>, btw ?
+May 13 21:48:52 <ski>	it talks about how being able to perform such substitutions and unifications are useful, for learning Haskell
+

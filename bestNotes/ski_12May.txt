@@ -14,9 +14,11 @@ final state
 
 tick == increment
 it's a counter
-(move the "clock" along one step. also giving back as result the previous value of the state)
+(move the "clock" along one step. also giving back as result the 
+previous value of the state)
 
-it is allocating `Int's, and the state is the next unused `Int' that hasn't been allocated yet
+it is allocating `Int's, and the state is the next unused `Int' that 
+hasn't been allocated yet
 
 if you start by calling `app' on an action, with initial state `0', 
 the first execution of `tick' will give back zero as first result. 
@@ -35,7 +37,8 @@ another example is to write a function `Tree a -> ST (Tree (a,Int))',
 where you label the elements of a `Tree' (pick any favorite reasonably 
 kind of tree)
 
-writing such a function, using `ST', is less tedious (and less errorprone), than writing it explicitly (not hiding the state passing plumbing, that 
+writing such a function, using `ST', is less tedious (and less errorprone), 
+than writing it explicitly (not hiding the state passing plumbing, that 
 the operations at the link you provided performs)
 
 tick here would be an `ST'-action, and `fmap even tick' another 
