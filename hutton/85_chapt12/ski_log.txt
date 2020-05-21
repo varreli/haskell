@@ -1,0 +1,213 @@
+**** BEGIN LOGGING AT Wed May 13 18:32:44 2020
+
+[ski has address ~ski@remote11.chalmers.se]
+May 13 18:32:44 <ski>	oh ?
+May 13 18:32:55 <ski>	(sorry, didn't notice your PM, until now)
+May 13 18:35:26 <crestfallen>	well mono.chrom is mean-hearted. I walk away sometimes.. :)
+May 13 18:35:58 <ski>	yes, monochrom can be harsh
+May 13 18:36:10 <ski>	(although, i'm sure they mean well)
+May 13 18:36:52 <crestfallen>	or they mean mean
+May 13 18:37:52 <crestfallen>	but man printing is always different it seems. esp. when something looks right and compiles..
+May 13 18:38:15 <ski>	i don't think so .. but it may be they don't always realize how they come across. or it may be they consider it a price worth paying, to "wake up" people
+May 13 18:38:33 <ski>	i'm still not sure what you wanted to print
+May 13 18:39:04 <ski>	(although, i'd prefer to keep technical conversation in the channel, where other people may also contribute, and other people may also lurk and learn)
+May 13 18:39:22 <crestfallen>	well here   replicateM n act = sequenceA (replicate n act)   ,   act would be tick, correct?
+May 13 18:39:48 <crestfallen>	but that is an equality right?
+May 13 18:40:10 <ski>	(do you mind asking that, in the channel ?)
+May 13 18:40:31 <crestfallen>	sure thanks, I'm a bit flustered sorry. THANKS
+May 13 18:40:47 <ski>	no worry
+May 13 18:50:08 <ski>	(you don't want to ?)
+May 13 19:30:26 <ski>	hm, now i recall talking to you about being intimidated, last year or so
+May 13 19:31:19 *	ski walks away for a little bit
+May 13 19:40:41 <crestfallen>	don't worry. If there's one person like you around I'm more than happy. There are some characters who act like cops, you ever get that?
+May 13 20:09:06 <ski>	(unfortunately, sometimes that can be warranted)
+May 13 20:17:38 <crestfallen>	but do you mean in my case? I try to be polite, I'm trying to learn to the best of my ability. Sometimes perhaps I rely too much on others, but in this context its quite hard to figure out what's going on, even if the concept is quite simple. much is lost in the correspondence itself. I've had some instruction in person, and it is far different. I just *get it* in person.. 
+May 13 20:17:54 <ski>	no, i don't mean in your case
+May 13 20:18:14 *	ski nods
+May 13 20:21:27 <crestfallen>	If I could tell you a little secret. edward Kmett lives a mile from my house, and I've met with him twice. He broke down the "core" of haskell on a white board, and I'm pretty certain I followed about 80 of it. He was just scribbling. it was very strange, but I was able to follow it.
+May 13 20:21:46 <crestfallen>	80%
+May 13 20:21:56 <ski>	that's nice :)
+May 13 20:23:00 <crestfallen>	I was elated. hey I appreciate it so much ski . are you located in Scandinavia ?
+May 13 20:23:06 <ski>	i've been around, in the channel, from maybe 2001, or 2000
+May 13 20:23:09 <ski>	yes
+May 13 20:24:05 <crestfallen>	why did I think that? excellent.
+May 13 20:25:55 <ski>	i don't doubt your sincerity, and you trying your best. however, sometimes there are people in the channel, who seem to expect the channel to do their homework for them, or (sometimes) to try to troll the channel, or otherwise being deemed likely to be able to do better (perhaps after pointing out issues in their communication styles)
+May 13 20:26:47 <crestfallen>	could you reword this please?  :   otherwise being deemed likely to be able to do better (perhaps after pointing out issues in their communication styles)
+May 13 20:27:00 <ski>	so, although i don't tend to lean in that direction, i'm thankful that there are people like e.g. monochrom, who're able to put on some more strict or harsh words, when it can be warranted
+May 13 20:27:34 <ski>	(but of course people can be mistaken about motives, or just generally tired or cranky, as well)
+May 13 20:29:56 <ski>	well, sometimes there's people who seem more interested in discussing other things than Haskell (which can be nice, as long as it doesn't take over the channel too much/often, and interests enough of the channel population at the time), and doesn't seem interested in participating in making the channel a useful place for discussing Haskell
+May 13 20:32:00 <ski>	or, there has been some, who seem more interested in badmouthing Haskell (while not really contributing much of technical criticism, or at least not new ones). of course, there are things that one can feel frustrated about, but if it seems someone doesn't appear to find anything positive in Haskell, one may wonder why they spend time hanging around in a Haskell channel ..
+May 13 20:33:24 <crestfallen>	well-taken thanks. I've learned so much about *how I actually learn*. I seeps in very slowly, I read blogs and get little bits and pieces, and keep thinking, "I'm going to get this, even the category theory part and the type theory. I really enjoy unification. I followed one of mr. kmett's unification exercises on (join (,)). rather simple but really struck a chord. and your help with (>>= id) *blew my 
+May 13 20:33:24 <crestfallen>	mind* because it was the first time I really got insight into why id is so important in category theory. because I was able to see the profound effect id had on unifying with (>>=) 
+May 13 20:33:25 <ski>	or, some may be so bad at motivating their situations that they want to talk about, or communicate about it, and also seem to feel no regrets about ranting about it, while others have a hard time understanding anything about what they're trying to do
+May 13 20:34:56 <ski>	`id' is of similar importance to functions, as `0' is to numbers
+May 13 20:35:27 <ski>	(well, perhaps not quite as much, but it's still important to learn to not disparage such "trivial" cases)
+May 13 20:36:55 <crestfallen>	but in the case of join id, it's not trivial , right? at least when you're looking at how they unify, where id extracts the inner monad structure from the outer structure.
+May 13 20:37:30 <crestfallen>	if I may ask you:
+May 13 20:37:40 <ski>	whenever writing a function which takes a list as input, it's useful to ask oneself whether it would make sense to figure out whether the function could sensibly be applied to the empty list
+May 13 20:38:41 <crestfallen>	I found this upvoted post very helpful  https://stackoverflow.com/questions/3382210/monad-join-function
+May 13 20:38:53 <crestfallen>	oh ok back to your last post ^
+May 13 20:39:00 <ski>	(also, if you find yourself having defined the function also for singleton lists, it's then useful to ask if you can remove that case, whether singleton lists are already handled correctly by the other cases .. perhaps after some accomodation has been made for that)
+May 13 20:42:22 <crestfallen>	ok yeah the singleton ties into my studies with join. but in that SO post above, they say that join is where all the magic happens. (>>=) is just for convenience. (first line) so..
+May 13 20:43:51 <crestfallen>	some members were saying to forget join, that they never use it, etc. but I had an epiphany with join (actually unifying (>>= id)
+May 13 20:43:53 <ski>	yes, you can define `join' from `(>>=)', as you've seen
+May 13 20:44:08 <ski>	and, you can recover `(>>=)', from `join' and `fmap'
+May 13 20:44:48 <ski>	conceptually, i think `join' can be easier to grasp
+May 13 20:45:02 <ski>	it's type isn't quite as involved as that of `(>>=)'
+May 13 20:45:05 <crestfallen>	but why did the upvoted writer say that was the magic.. they emphasized it.. while members were discounting it
+May 13 20:45:27 <crestfallen>	ok yeah I see
+May 13 20:46:16 <ski>	now, when making a type an instance of `Monad', in some cases, it may be simpler to define `join', and then define `(>>=)' in terms of it and `fmap' (or at least, figure out how to define `(>>=)' from how `join' was defined)
+May 13 20:46:48 <ski>	however, i think more commonly it's simpler to define `(>>=)', and that defining `join' in those cases tend to feel less natural
+May 13 20:47:28 <crestfallen>	interesting ok, it's a nuance that requires a lot of thought
+May 13 20:47:29 <ski>	so, it's one thing to think about it at an abstract conceptual level, and another thing to define it
+May 13 20:47:59 <ski>	further, when doing actual programming with a monad, i think it more often feels natural to use `(>>=)', than to use `join'
+May 13 20:48:21 <ski>	(there are exceptions, where `join' may feel natural to use, though)
+May 13 20:48:27 <crestfallen>	yeah like i.e. join (,) is very strange. I only can understand it based on the unification.
+May 13 20:49:02 <ski>	yea, that's because `Monad (rho ->)' is a bit unfamiliar to use
+May 13 20:49:36 <ski>	it's basically `Monad (Reader rho)', but the absense of `data' constructors, when using the former, means that it's harder to see where "monad things" happen
+May 13 20:50:13 <crestfallen>	to me, that was a good sign, to understand how a function works *strictly* on the type. :)      oh you're saying right hand operand?
+May 13 20:50:45 <ski>	hm, i didn't follow "to understand how a function works *strictly* on the type" ?
+May 13 20:50:59 <ski>	hm, right hand operand of what ?
+May 13 20:51:16 <crestfallen>	no rho the acronym
+May 13 20:51:27 <crestfallen>	what does it mean/
+May 13 20:51:27 <ski>	oh
+May 13 20:51:29 <crestfallen>	?
+May 13 20:51:39 <ski>	sorry, it's a greek letter, corresponding to the latin `r'
+May 13 20:51:56 <ski>	in papers, people sometimes use that greek letter, when talking about this monad
+May 13 20:52:12 <ski>	presumably because it's the first letter in "read"
+May 13 20:52:25 <crestfallen>	oh yeah, mr. kmett explains it in an easy manner.
+May 13 20:52:38 <crestfallen>	ok now you're opening a different kettle of fish!
+May 13 20:52:50 <crestfallen>	I know zero about Reader
+May 13 20:53:28 <ski>	well, i was saying that `Reader rho' is practically the same thing as `(rho ->)'
+May 13 20:55:05 <ski>	what, in the latter, is written `join (,) 4' would, in the former, be written `runReader (join (reader (reader . (,)))) 4'
+May 13 20:55:41 <ski>	but if you pretend `runReader' and `reader' are both `id', then the latter of these two snippets of code actually becomes the former
+May 13 20:56:19 <crestfallen>	hmm ok going to study that tomorrow. I'm looking for the tutorial on join (,) to show you how he sets it up...
+May 13 20:56:52 <ski>	in the former, we have `(,) :: rho -> (rho -> (rho,rho))', which is the same as `(,) :: (rho ->) ((rho ->) (rho,rho))' (here the monad `m' will be `(rho ->)', so that the type of `(,)' matches `m (m a)', with `a' being `(rho,rho)')
+May 13 20:57:38 <ski>	(in actual Haskell, you can't write a section of `->', like `(rho ->)'. you have to write `(->) rho'. but when talking, i write `(rho ->)' because it looks nicer)
+May 13 20:57:45 <crestfallen>	well the gist is here  http://ix.io/2lWP    ok working on that above..
+May 13 20:58:05 <ski>	in the latter, `reader (reader . (,))' has type `Reader rho (Reader rho (rho,rho))'
+May 13 20:58:14 <ski>	note that
+May 13 20:58:26 <ski>	  reader :: (rho -> a) -> Reader rho a
+May 13 20:58:38 <ski>	  runReader :: Reader rho a -> (rho -> a)
+May 13 20:59:34 <ski>	yes, what they wrote as `e' in that paste, i called `rho'. it's the same thing
+May 13 20:59:58 <ski>	(presumably `e' for "environment", which is another name for this monad)
+May 13 21:00:07 <crestfallen>	essentially the parallel in kmett's technique is (->) e a ; m = (->) e    ?
+May 13 21:00:31 <ski>	yes, it's the same thing, just phrased slightly differently
+May 13 21:00:35 <crestfallen>	interesting!
+May 13 21:01:16 <ski>	(this use of `join' might also be called "warbler", or `W')
+May 13 21:01:37 <crestfallen>	if a person were to just keep learning unification, the type system is going to make complete sense, right?
+May 13 21:01:40 <crestfallen>	warbler?
+May 13 21:02:00 <ski>	well, unification is one important part of type inference and type checking
+May 13 21:02:13 <ski>	"warbler" is a kind of bird
+May 13 21:02:25 <crestfallen>	right outside my window seriously
+May 13 21:02:36 <crestfallen>	every morning
+May 13 21:03:08 <ski>	there's a book on combinatory logic (for kids, iirc), "How to Mock a Mockingbird", by Raymond Smullyan
+May 13 21:03:17 <crestfallen>	I heard of it
+May 13 21:03:54 <ski>	where he talks about computational combinators, like `S',`K',`I',`C',`B',`W',... using an analogy of bird in the forest
+May 13 21:04:05 <ski>	and he calls them by bird names
+May 13 21:04:42 <crestfallen>	yeah I got a bit into SKI calculus. 
+May 13 21:04:55 <crestfallen>	K is not needed essentially right?
+May 13 21:05:07 <ski>	if you search for it, there's a webpage titled "How to Dissect a Mockingbird", which investigates this topic, how these combinators could be defined in the lambda calculus
+May 13 21:05:30 <ski>	and it introduces a "graphical notation" for lambda calculus, that might perhaps help a bit to understand it better
+May 13 21:05:47 <ski>	(at least i thought it helped me a bit, when i found that page, years ago)
+May 13 21:05:57 <ski>	`K' is for "throwing away stuff"
+May 13 21:06:23 <crestfallen>	one of the ski letters are not needed right? excellent, definitely going to check it out, the discussion of lambda calculus in "first principles" didn't sit well with me.
+May 13 21:06:28 <crestfallen>	throwing away stuff? 
+May 13 21:06:30 <ski>	note that, from an physical implementation point of view of information, it takes energy to forget information
+May 13 21:06:48 <ski>	o
+May 13 21:06:49 <ski>	oh
+May 13 21:06:56 <ski>	you can define `I' in terms of `S' and `K'
+May 13 21:07:04 <crestfallen>	oh its I then
+May 13 21:07:23 <crestfallen>	K == const
+May 13 21:07:32 <ski>	s/==/=/
+May 13 21:07:34 <ski>	yes
+May 13 21:07:58 <ski>	or, `K' is `return'/`pure', when using `(rho ->)'
+May 13 21:08:17 <ski>	also, `S' is `ap',`(<*>)', when using `(rho ->)'
+May 13 21:08:28 <crestfallen>	yeah I like the SKI . but in the big picture I haven't been able to "see" it while coding examples.
+May 13 21:08:52 <crestfallen>	ok man that's a lot to work on...
+May 13 21:09:22 <ski>	btw, it's not a calculus
+May 13 21:09:22 <crestfallen>	sorry what do you mean?   from an physical implementation point of view of information, it takes energy to forget information
+May 13 21:09:46 <crestfallen>	oh shoot, they call it a calculus
+May 13 21:10:06 <ski>	yea, i know. but i think that's an unlucky name, so i don't call it that
+May 13 21:11:16 <ski>	<http://lambda-the-ultimate.org/node/533#comment-7712> is a quote from Haskell Brooks Curry, where he mentions that it (combinatory logic) is neither a calculus nor an algebra
+May 13 21:11:51 <ski>	according to his definition there, a calculus should involve bound variables (like with derivatives, limits, integrals, e.g.)
+May 13 21:12:45 <ski>	anyway, combinatory logic is probably more interesting from a theoretical viewpoint, than from a practical one
+May 13 21:13:56 <crestfallen>	yeah its a topic where I think just that: some day I'll look closely at it but presently I need to learn haskell as its written.
+May 13 21:17:20 <crestfallen>	hey if you have time one last thing: not certain about this:   from an physical implementation point of view of information, it takes energy to forget information
+May 13 21:29:05 <ski>	(back)
+May 13 21:29:53 <crestfallen>	oh cool just wondering about your comment I posted just above
+May 13 21:30:10 <ski>	freeing up memory space to make room takes energy
+May 13 21:30:48 <ski>	"forgetting" information, at the quantum level, really means getting rid of it, somewhere else, and that takes energy
+May 13 21:31:19 <crestfallen>	oh you are being philosophical about learning? Or are you talking about 'K' , throwing stuff away?
+May 13 21:31:52 <ski>	there's some ideas about one possibly being able to make a computer, which uses reversible computation (which doesn't forget information), to a higher degree, and therefore also uses less energy (generates less heat which must be cooled in some way)
+May 13 21:32:15 <ski>	but i think that's mostly at the theoretical stage
+May 13 21:32:47 <ski>	well, `K' is for throwing away information, and `S' is for duplicating it
+May 13 21:33:06 <ski>	`K c x' evaluates to `c', forgetting, or throwing away, `x'
+May 13 21:33:23 <ski>	`S f g x' evaluates to `(f x) (g x)', duplicating `x'
+May 13 21:33:59 <ski>	if there's an input that you don't want to use, you need to use `K' to express that, in combinatory logic
+May 13 21:35:21 <crestfallen>	gg :: (a -> b) -> a -> c -> b ; gg f a c = f a   << sort of like this ..
+May 13 21:35:47 <ski>	that's one example of not using an input, yes
+May 13 21:36:39 <ski>	  gg = S (K (S (K K)) I
+May 13 21:37:34 <ski>	  gg = C K
+May 13 21:37:56 <ski>	using `C' and `B' (unless i mix them up, maybe that `C' should be `B' instead. sometimes i confuse them)
+May 13 21:38:38 <crestfallen>	 btw your English is perfect. Is it your first language or second?
+May 13 21:38:55 <crestfallen>	just curious
+May 13 21:39:02 <ski>	second
+May 13 21:39:30 <crestfallen>	excellent. yeah so gg = S (K (S (K K)) I     could you walk me through that?
+May 13 21:39:48 <ski>	well, you could try to compute it
+May 13 21:39:58 <ski>	     gg f a c
+May 13 21:40:09 <ski>	  =  S (K (S (K K)) I f a c
+May 13 21:40:34 <ski>	  =  K (S (K K) f (I f) a c
+May 13 21:40:36 <crestfallen>	@let gg f a c = f a
+May 13 21:40:49 <ski>	er, missing a bracket ..
+May 13 21:41:29 <ski>	  =  K (S (K K)) f (I f) a c  -- i think it was meant to be
+May 13 21:41:36 <ski>	  =  K (S (K K)) f f a c
+May 13 21:41:43 <ski>	  =  S (K K) f a c
+May 13 21:41:54 <ski>	  =  K K a (f a) c
+May 13 21:41:59 <ski>	  =  K (f a) c
+May 13 21:42:03 <ski>	  =  f a
+May 13 21:42:44 <ski>	yea, the original (which also was missing a bracket, mea culpa), should have been `gg = S (K (S (K K))) I'
+May 13 21:43:34 <crestfallen>	that's interesting.    how to input 'let gg f a c = f a' I thought it was @let
+May 13 21:44:26 <ski>	yea, but that only works if lambdabot sees it
+May 13 21:44:27 >#lamdabot<	let gg f a c = f a
+May 13 21:44:29 <ski>	this is in PM
+May 13 21:44:42 <crestfallen>	oh it's not here ok
+May 13 21:45:02 >lamdabot<	let gg f a c = f a
+May 13 21:45:34 <ski>	anyway .. i don't think figuring out that your `gg' can be defined as `S (K (S (K K))) I' is that useful ..
+May 13 21:46:11 <crestfallen>	thanks I can follow that SKI non-Calculus regardless. It's cool. at one point I thought I *must* learn that...
+May 13 21:46:14 <ski>	in any case, i hope you've some more food for thought, now
+May 13 21:46:22 <ski>	nah
+May 13 21:46:50 <crestfallen>	yeah thanks this is great. you inspire me to go on. sometimes I want to quit and just play guitar
+May 13 21:46:56 <ski>	i'd guess most people who talk more in #haskell probably doesn't know it that well
+May 13 21:47:27 <crestfallen>	I think I like substitution like that. the same reason I like the unifying
+May 13 21:48:07 <ski>	did you see "Prerequisite for Learning Haskell" <http://www.vex.net/~trebla/haskell/prerequisite.xhtml>, btw ?
+May 13 21:48:52 <ski>	it talks about how being able to perform such substitutions and unifications are useful, for learning Haskell
+May 13 21:49:08 <crestfallen>	ski << your moniker is not after SKI , more likely the downhill variety?
+May 13 21:49:18 <crestfallen>	no haven't seen that. will check it tomm.
+May 13 21:49:32 <ski>	it's named after the SKI combinators, yes
+May 13 21:49:56 <crestfallen>	really? Nice.
+May 13 21:50:15 <ski>	i happened to've recently looked into them, when i started chatting on IRC .. sometimes in 2001, or maybe 2000
+May 13 21:50:44 <ski>	and now people know me by this nickname, so it seems a shame to change it now
+May 13 21:50:57 <ski>	(also, i'm bad at comping up with any better one)
+May 13 21:51:11 <crestfallen>	cool. do you know the word crestfallen? 
+May 13 21:51:12 <ski>	(s/comping/coming/)
+May 13 21:51:42 <ski>	i think "crest" is what some male birds have on top of their heads ?
+May 13 21:52:40 <ski>	(anyway, i'm used to people thinking my nickname has something to do with snow)
+May 13 21:52:42 <crestfallen>	well yes, it pertains to animals who are depressed, especially used with horses who have been broken or beaten. I started using it when I got frustrated learning CS  :)
+May 13 21:52:50 <ski>	oh, okay
+May 13 21:53:06 <ski>	i know i've seen you around #haskell, for some time
+May 13 21:53:12 <ski>	maybe several years, i'm not sure
+May 13 21:53:21 <ski>	at least since last year
+May 13 21:53:49 <crestfallen>	yeah like 3 years now. I really am terrible at it, I know!
+May 13 21:54:10 <ski>	it's okay, different people learn in different ways, at different speeds
+May 13 21:54:30 <ski>	you can't do better than your best
+May 13 21:54:48 <crestfallen>	but also crestfallen in English is a very beautiful word, so I just love it.  yeah thanks, I have the time to work harder. really appreciate you.
+May 13 21:55:20 <ski>	mm
+May 13 21:55:32 <ski>	i think i may need to catch some rest, now
+May 13 21:55:47 <crestfallen>	also I drop it and come back, and forget stuff. ok good night THANKS
+May 13 21:55:52 *	ski nods
+May 13 21:55:58 <ski>	no problem
+May 13 21:56:54 Python interface unloaded
+May 13 21:56:54 FiSHLiM plugin unloaded
+**** ENDING LOGGING AT Wed May 13 21:56:54 2020
+

@@ -1,0 +1,275 @@
+May 15 19:55:37 <wavemode>	:t (<$)
+May 15 19:55:38 <lambdabot>	Functor f => a -> f b -> f a
+May 15 19:55:39 <wavemode>	:t (<$>)
+May 15 19:55:41 <lambdabot>	Functor f => (a -> b) -> f a -> f b
+May 15 19:56:00 <oats>	crestfallen: you use <$  when you want to insert a value into a functor
+May 15 19:56:07 <oats>	<$> lets you map a function over it
+May 15 19:56:18 <oats>	but sometimes there's just a plain value you want to put in instead
+May 15 19:56:32 <oats>	% (+1) <$> Just 5
+May 15 19:56:45 <wavemode>	> 5 <$ [1, 2, 3, 4]
+May 15 19:56:47 <lambdabot>	 [5,5,5,5]
+May 15 19:57:00 <monochrom>	Could you simply always expand <$ to its definition whenever you see it used?  After 10 times you will get it.
+May 15 19:57:10 <oats>	> 5 <$ Just "howdy"
+May 15 19:57:12 <lambdabot>	 Just 5
+May 15 19:57:39 <monochrom>	This practical experience is much better than any wordy explanation from 3rd parties or from yourself.
+May 15 19:58:04 <MarcelineVQ>	% :q
+May 15 19:58:04 <yahb>	MarcelineVQ: 
+May 15 19:58:21 <crestfallen>	what do you mean "expand it to its definition" monochrom ?
+May 15 19:58:36 <wavemode>	(<$) = fmap . const
+May 15 19:59:07 <oats>	or `value <$ functor = const value <$> functor`
+May 15 19:59:17 <oats>	params can add clarity :)
+May 15 19:59:23 <wavemode>	true x)
+May 15 19:59:44 <crestfallen>	ok thanks never saw it till now!
+May 15 19:59:44 <monochrom>	a <$ xs = fmap (const a) xs
+May 15 20:00:10 <crestfallen>	> fmap (const 10) [3,4,5]
+May 15 20:00:12 <lambdabot>	 [10,10,10]
+May 15 20:00:17 <crestfallen>	fair enough thanks
+May 15 20:01:02 <oats>	crestfallen: when in doubt, read the source and the types
+May 15 20:01:15 <oats>	if it still doesn't make sense, pull up a repo
+May 15 20:01:18 <oats>	*repl
+May 15 20:01:24 <oats>	rinse and repeat :)
+May 15 20:01:28 <monochrom>	the doc has "The default definition is fmap . const"
+May 15 20:01:58 <crestfallen>	yeah I just started on typeclassopedia as per suggestion of wavemode, that's the *first* thing they cover
+May 15 20:03:08 <crestfallen>	@let ff = fmap . const
+May 15 20:03:09 <lambdabot>	 Defined.
+May 15 20:03:26 <crestfallen>	> ff 4 [1,2,3]
+May 15 20:03:28 <lambdabot>	 [4,4,4]
+May 15 20:04:30 <oats>	we put the “Fun” in “Functor!”
+May 15 20:05:22 <crestfallen>	I wonder if I'll finally get haskell if I go through typeclassopedia
+May 15 20:05:33 <MarcelineVQ>	No
+May 15 20:05:46 <MarcelineVQ>	You get haskell by writing it, not reading it.
+May 15 20:05:49 <oats>	crestfallen: the best way to learn haskell is to write haskell
+May 15 20:05:57 <oats>	so pick a little problem and try to solve it :)
+May 15 20:06:20 <wavemode>	after the compiler has yelled at you enough times, you eventually learn how to get on its good side
+May 15 20:06:24 <monochrom>	generally all of computer science.
+May 15 20:06:48 <monochrom>	generally all of STEM
+May 15 20:07:00 <MarcelineVQ>	keep going
+May 15 20:07:55 <crestfallen>	monochrom you were talking about how some people cannot do formalism. I do like unifying types. I find that enriching. do you consider that formalism?
+May 15 20:07:57 <monochrom>	generally all of STEM and painting, sculping, music, dancing
+May 15 20:08:14 <monochrom>	Yes.
+May 15 20:10:15 <monochrom>	There are also people who can do it but they first need to decide that they must do it.
+May 15 20:10:16 <Welkin>	there is a tipping point with all programming languages (and all tools)
+May 15 20:10:35 <Welkin>	find a good project you can throw yourself into and you will learn very fast
+May 15 20:11:09 <Welkin>	I always use a project, like building an app I actually want to make
+May 15 20:11:25 <Welkin>	it will drive youto learn things you never considered
+May 15 20:11:52 <Welkin>	sometimes I do this with a new language, get some value from it, then never touch the language again
+May 15 20:12:13 <oats>	crestfallen: is there any bridge in particular you're having trouble crossing atm?
+May 15 20:12:38 <crestfallen>	thanks MarcelineVQ and Welkin thanks monochrom .. so I just did the unification for (>>= id) and (join (,)), and I enjoyed doing the  head . (filter first) some time ago.   some others also  what would be an instructive unification to go through/attempt?
+May 15 20:12:58 <Welkin>	crestfallen: flip const
+May 15 20:13:02 <Welkin>	and (.).(.)
+May 15 20:13:15 <monochrom>	(.).(.) is very mean.
+May 15 20:13:30 <oats>	:t (.).(.)
+May 15 20:13:32 <lambdabot>	(b -> c) -> (a1 -> a2 -> b) -> a1 -> a2 -> c
+May 15 20:13:32 <crestfallen>	oh yeah I think I looked at the owl eyes.
+May 15 20:13:35 <monochrom>	I reserve such mean problems to exams.
+May 15 20:13:44 <crestfallen>	ha!
+May 15 20:14:03 <oats>	oh, is that `over`?
+May 15 20:14:18 <oats>	@let over = (.).(.)
+May 15 20:14:19 <lambdabot>	 Defined.
+May 15 20:14:49 <Welkin>	I mean, const id and flip const
+May 15 20:14:52 <oats>	:t show `over` (+)
+May 15 20:14:53 <lambdabot>	error:
+May 15 20:14:53 <lambdabot>	    Ambiguous occurrence ‘over’
+May 15 20:14:53 <lambdabot>	    It could refer to either ‘Lens.over’,
+May 15 20:15:00 <oats>	bleh
+May 15 20:15:04 <Welkin>	never used over
+May 15 20:15:09 <Welkin>	I haven't touched lens really
+May 15 20:15:16 <oats>	> (show ((.).(.)) (+)) 1 2
+May 15 20:15:17 <monochrom>	but do it to every definition of polymorphic functions you care about. I think that's good enough. Plus you actually care about those definitions, not some contrived meant-to-be-mean puzzles like (.).(.).(.)
+May 15 20:15:19 <lambdabot>	 error:
+May 15 20:15:19 <lambdabot>	     • Couldn't match expected type ‘(Integer -> Integer -> Integer)
+May 15 20:15:19 <lambdabot>	                                     -> Integer -> Integer -> t’
+May 15 20:15:22 <crestfallen>	Welkin I wanted to do a project that actually teaches haskell basics (to intermediate?) .. is that a worthy project?
+May 15 20:15:23 <oats>	:<
+May 15 20:15:29 <Welkin>	(.).(.) isn't mean
+May 15 20:15:41 <Welkin>	it's my favorite exercise in haskell
+May 15 20:15:46 <Welkin>	it took me a day to do it
+May 15 20:16:01 <Welkin>	I finally realized I had to writ =e it all out step by step, lie a proof
+May 15 20:16:06 <Welkin>	like*
+May 15 20:16:10 <Welkin>	it was fun
+May 15 20:16:24 <Welkin>	there is a step-by-step way to do type unification by hand
+May 15 20:16:30 <Welkin>	as well as eta reduction and eta expansion
+May 15 20:16:53 <ski>	@let infixr 9 .:; (.:) :: (c0 -> c1) -> ((a -> b -> c0) -> (a -> b -> c1)); (.:) = (.) . (.)
+May 15 20:16:55 <lambdabot>	 Defined.
+May 15 20:17:03 <ski>	> (show .: (+)) 1 2
+May 15 20:17:05 <lambdabot>	 "3"
+May 15 20:17:52 <crestfallen>	well Welkin unification is sort of like proofs.. it has that feel anyway, right?
+May 15 20:18:08 <oats>	http://hackage.haskell.org/package/data-aviary-0.4.0/docs/Data-Aviary-Birds.html
+May 15 20:18:12 <ski>	a bit more like solving an equation system, i'd say
+May 15 20:18:14 <oats>	module of similar combinators
+May 15 20:18:34 <oats>	fun stuff
+May 15 20:18:43 <ski>	ah, nice module, oats :)
+May 15 20:19:02 <oats>	(.).(.) looks closest to the "blackbird"
+May 15 20:19:25 <Welkin>	another good one is const . const
+May 15 20:19:36 <Welkin>	and fmap fmap fmap
+May 15 20:19:40 <Welkin>	and fmap . fmap . fmap
+May 15 20:19:44 <oats>	lol
+May 15 20:19:57 <Welkin>	there are many surprises in there
+May 15 20:20:01 <crestfallen>	you always resolve the left hand side, but which function you plug into the lh operand, it's interchangeable right? you don't look at one and determine it is a better start than the other..
+May 15 20:20:05 <Welkin>	delightful surprises about how these things relate
+May 15 20:20:25 <oats>	interesting, (fmap fmap fmap) == (fmap . fmap)
+May 15 20:20:36 <Welkin>	guess why?
+May 15 20:20:45 <Welkin>	fmap is related to .
+May 15 20:20:47 <ski>	it used to be the case that in lambdabot, `(.) = fmap' and `flip f x = fmap ($ x) f'
+May 15 20:21:12 <oats>	(fmap fmap fmap) == (fmap <$> fmap) == (fmap . fmap)
+May 15 20:21:14 <oats>	I think
+May 15 20:21:22 <Welkin>	not what I'm going for, but sure
+May 15 20:21:30 <oats>	Welkin: what were you getting at?
+May 15 20:21:37 <Welkin>	it has to do with -> being a constructor for functions
+May 15 20:21:40 <monochrom>	Try this question: Which Functor instance is it using?
+May 15 20:21:48 <monochrom>	Darn. That, yes.
+May 15 20:22:07 <Welkin>	sorry I spilled the beans
+May 15 20:22:13 <monochrom>	It's OK.
+May 15 20:22:24 <oats>	Functor ((->) r)
+May 15 20:22:33 <ski>	crestfallen : hm, i didn't follow
+May 15 20:22:36 <monochrom>	This is why while (.) . (.) is mean, it is not mean enough.  I always say, let's up the game, consider fmap fmap fmap.
+May 15 20:22:39 <Welkin>	that blew my mind
+May 15 20:22:45 <Welkin>	haskell has blown my mind for years
+May 15 20:22:50 <oats>	https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#line-969
+May 15 20:22:55 <oats>	fmap = (.) \o/
+May 15 20:23:03 <ski>	@quote is.the.solution
+May 15 20:23:03 <lambdabot>	quicksilver says: head-explosion is the solution, not the problem.
+May 15 20:23:03 <oats>	(celebration not included in function definition)
+May 15 20:24:00 <wavemode>	> (*) <*> (+5) $ 10
+May 15 20:24:03 <lambdabot>	 150
+May 15 20:24:24 <crestfallen>	ski well you unify the first parameter of the first two functions you start off with. so in the case of   head . (filter first)     ...
+May 15 20:24:26 <crestfallen>	working
+May 15 20:25:50 <oats>	wavemode: if I ever see that during a code review I will hunt down those responsible
+May 15 20:25:54 <crestfallen>	so you first unify (.) head  
+May 15 20:26:17 <crestfallen>	[a] -> a ~ (b -> c)
+May 15 20:28:31 <oats>	:t (.) <*> (.)
+May 15 20:28:33 <lambdabot>	((a -> c) -> c) -> (a -> a -> c) -> c
+May 15 20:33:19 <ski>	rename the type variables of the signatures of the identifiers, 
+                        so that no two different signatures share the same name of a type variable
+
+May 15 20:33:37 <ski>	  head :: [a] -> a
+May 15 20:33:50 <ski>	  (.) :: (b -> c) -> (a -> b) -> (a -> c)
+
+May 15 20:35:11 <ski>	the reason is that the `a' in the signature of `head' need have nothing to do with the `a' in the signature for `(.)'
+May 15 20:42:07 <crestfallen>	do the unification for (filter first) first. that gets rid of a
+                                in that part at least
+May 15 20:43:29 <crestfallen>	filter :: (a -> Bool) -> [a] -> [a]  ~  fst    :: (s, t) -> s
+May 15 20:43:58 <crestfallen>	[(Bool,t)] -> [(Bool,t)]
+                                does one always start in the same place, given x functions to be unified?
+May 15 20:48:11 <ski>	        one doesn't have to, no
+
+May 15 20:52:09 <ski>	well, consider e.g. `map (map ord)'
+May 15 20:52:16 <ski>	@type ord
+May 15 20:52:17 <lambdabot>	Char -> Int
+
+May 15 20:55:57 <crestfallen>	> ord 't'
+May 15 20:55:59 <lambdabot>	 116
+
+May 15 21:01:06 <ski>	if we list the signatures for these three, we have
+May 15 21:01:15 <ski>	  map :: (a -> b) -> [a] -> [b]
+May 15 21:01:18 <ski>	  map :: (a -> b) -> [a] -> [b]
+May 15 21:01:23 <ski>	  ord :: Char -> Int
+
+May 15 21:02:41 <ski>	> map (map ord) [['0','1','2','3'],['4','5','6'],['7','8'],['9'],[]]
+May 15 21:02:42 <lambdabot>	 [[48,49,50,51],[52,53,54],[55,56],[57],[]]
+
+May 15 21:03:45 <ski>	the first `map' deals with the outer list. the second `map' deals with each of the inner lists
+
+May 15 21:04:58 <ski>	anyway, the signature of `map' really includes `forall's, which usually are implicit (not spelled out). these `forall's are what's claiming that `map' is polymorphic. if we spell them out, we get
+May 15 21:05:14 <ski>	  map :: forall a b. (a -> b) -> [a] -> [b]
+May 15 21:05:17 <ski>	  map :: forall a b. (a -> b) -> [a] -> [b]
+May 15 21:05:24 <ski>	  ord :: Char -> Int
+
+May 15 21:06:10 <ski>	so, first thing we do now, is to remove `forall's, and 
+                        simultaneously rename the corresponding tyvars
+
+May 15 21:06:35 <ski>	  map :: (_a0 -> _b0) -> [_a0] -> [_b0]
+May 15 21:06:42 <ski>	  map :: (_a1 -> _b1) -> [_a1] -> [_b1]
+May 15 21:06:45 <ski>	  ord :: Char -> Int
+May 15 21:07:16 <ski>	so, we're making sure that no two different signatures here share a variable name
+May 15 21:07:59 <ski>	I've also prefixed them with `_' to highlight that they're "placeholders" (aka 
+                        meta-variables, or logic variables), stands for yet-unknown actual types, that we're to figure out
+May 15 21:09:00 <ski>	these placeholders only occur during type 
+                        checking/inference, never in actual type signatures that one writes in the program
+May 15 21:09:54 <ski>	so, looking at `map (map ord)', we could focus first on the `map ord' part
+May 15 21:10:48 <ski>	that way, we'll figure out the type (possibly still 
+                        containing placeholders) of that subexpression `map ord', which is to be an actual parameter of the first `map'
+
+May 15 21:11:11 <ski>	so, we're currently looking at just
+May 15 21:11:14 <ski>	  map :: (_a1 -> _b1) -> [_a1] -> [_b1]
+May 15 21:11:17 <ski>	  ord :: Char -> Int
+May 15 21:11:25 <ski>	(the second `map' signature from above)
+May 15 21:12:57 <ski>	so i can't handle the expression `map (map ord)' 
+                        before i've handled its two immediate subexpressions `map' and `map ord'. 
+                        the first is already handled, since it's an identifier (we did those 
+                        first). so `map ord' is next
+
+May 15 21:13:14 <crestfallen>	I mean , logically it makes sense to start with ord ~ map in the parens
+May 15 21:13:18 <ski>	well, `map ord' is also a function .. but that expression is not an identifier
+May 15 21:14:09 <ski>	anyway, the type of the formal parameter (the expected 
+                        argument type), which is `_a1 -> _b1', has to match the type of the actual 
+                        parameter (the actual argument type), which is `Char -> Int'
+May 15 21:18:05 <ski>	so, in the case where `map :: (_a1 -> _b1) -> [_a1] -> [_b1]' and `ord :: Char -> Int', 
+                        when checking `map ord', this rule tells us that we must have
+May 15 21:18:14 <ski>	  _a1 -> _b1  =  Char -> Int
+May 15 21:18:18 <ski>	  and that
+May 15 21:18:25 <ski>	  map ord :: [_a1] -> [_b1]
+May 15 21:20:01 <ski>	at this point, we could try to solve that type equation. i
+                        but we can also just leave all generated equations until the end, and solve all of them in one go. let's do that here
+
+May 15 21:20:03 <crestfallen>	[_a1] -> [_b1] is the remainder after we've resolved the formal ~ actual parameter on the left
+May 15 21:20:28 <ski>	so, recalling the signature of the first `map', we now know
+May 15 21:20:34 <ski>	  map :: (_a0 -> _b0) -> [_a0] -> [_b0]
+May 15 21:20:40 <ski>	  map ord :: [_a1] -> [_b1]
+May 15 21:21:04 <ski>	so, now we're considering applying `map' to `map ord', that is we're considering the application `map (map ord)'
+May 15 21:21:15 <ski>	again, formal and actual parameter types must match :
+May 15 21:21:15 <crestfallen>	ok
+May 15 21:21:23 <ski>	  _a0 -> _b0  =  [_a1] -> [_b1]
+May 15 21:21:36 <ski>	and the type of the application is the return type of the function :
+May 15 21:21:48 <ski>	  map (map ord) :: [_a0] -> [_b0]
+May 15 21:21:59 <crestfallen>	got that
+May 15 21:22:21 <ski>	so, now we're traversed the whole of this (small) expression. summarizing what we've concluded so far :
+May 15 21:22:31 <ski>	  _a1 -> _b1  =  Char -> Int
+May 15 21:22:32 <ski>	  _a0 -> _b0  =  [_a1] -> [_b1]
+May 15 21:22:35 <ski>	  map (map ord) :: [_a0] -> [_b0]
+May 15 21:22:52 <ski>	this should always be a bunch of type equations, and a signature for the whole expression
+May 15 21:23:14 <crestfallen>	then its just substitution
+May 15 21:23:22 <ski>	(in cases where we have type class constraints, we may also here have some constraints)
+May 15 21:23:37 <ski>	well, the first equation can be simplified into / replaced by
+May 15 21:23:42 <crestfallen>	oh yeah never considered constraints
+May 15 21:23:45 <ski>	  _a1  =  Char
+May 15 21:23:53 <ski>	  _b1  =  Int
+May 15 21:24:00 <crestfallen>	yeah break it down a bit further
+May 15 21:24:04 <ski>	and the second equation above can be reduced to
+May 15 21:24:13 <ski>	  _a0  =  [_a1]
+May 15 21:24:17 <ski>	  _b0  =  [_b1]
+May 15 21:24:55 <ski>	we can remove the first two of these four, by replacing every other occurance of the placeholder by the concrete type, and then remove that equation
+May 15 21:24:58 <ski>	that gives us
+May 15 21:25:05 <ski>	  _a0  =  [Char]
+May 15 21:25:10 <ski>	  _b0  =  [Int]
+May 15 21:25:16 <ski>	  map (map ord) :: [_a0] -> [_b0]
+May 15 21:25:27 <ski>	substituting again, we get just
+May 15 21:25:36 <ski>	  map (map ord) :: [[Char]] -> [[Int]]
+May 15 21:25:41 <ski>	which is the final answer
+May 15 21:25:46 <crestfallen>	that's sweet
+May 15 21:26:07 <ski>	in this case, we ended up with no placeholders left in the signature for the whole expression
+May 15 21:26:33 <crestfallen>	so it is type correct
+May 15 21:26:46 <ski>	if we do, we'd have to generalize the type, on the remaining placeholders, replacing them by (ordinary) type variables, and introducing `forall's for those, just after the `::'
+May 15 21:27:22 <ski>	for `map (map reverse)', you should end up with something like
+May 15 21:27:36 <ski>	map (map reverse) :: [[_a2]] -> [[_a2]]
+May 15 21:27:45 <ski>	and the final step then is to go from this to
+May 15 21:27:55 <ski>	map (map reverse) :: forall a. [[a]] -> [[a]]
+May 15 21:28:18 <ski>	@type even
+May 15 21:28:20 <lambdabot>	Integral a => a -> Bool
+May 15 21:28:39 <ski>	if you try `map (map even)', you should end with
+May 15 21:28:48 <ski>	  Integral _a2
+May 15 21:29:03 <ski>	  map (map even) :: [[_a2]] -> [[Bool]]
+May 15 21:29:12 <ski>	and then the last step would be to replace this with
+May 15 21:29:25 <ski>	  map (map even) :: forall a. Integral a => [[a]] -> [[Bool]]
+May 15 21:29:45 <ski>	crestfallen : is this making any sense ?
+May 15 21:29:56 <crestfallen>	much , however..
+May 15 21:30:03 <ski>	btw, when starting with
+May 15 21:30:12 <ski>	  even :: forall a. Integral a => a -> Bool
+May 15 21:30:19 <ski>	the first step on this is to replace it with
+May 15 21:30:24 <ski>	  Integral _a2
+May 15 21:30:32 <ski>	  even :: _a2 -> Bool
+May 15 21:30:35 <ski>	(say)
+May 15 21:31:15 <ski>	so, that's where these items like `Integral _a2' come from, namely 
+                        when you replace `forall's and type variables by placeholders
+
+May 15 21:31:50 <ski>	`forall' is what's expressing polymorphism
