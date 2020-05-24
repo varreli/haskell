@@ -1,0 +1,155 @@
+[2020-05-23T21:39:09-0700]  
+[2020-05-23T21:39:09-0700] ------------- Begin Session -------------
+[2020-05-23T21:39:09-0700]  
+[2020-05-23T21:39:09-0700] crestfallen (~textual@135-180-13-241.fiber.dynamic.sonic.net) joined the channel
+[2020-05-23T21:39:09-0700] Topic is https://www.haskell.org | https://wiki.haskell.org/IRC_channel | Paste code/errors: https://gist.github.com/ | Logs: http://tunes.org/~nef/logs/haskell/?C=M;O=D | https://www.reddit.com/r/haskell | Admin: #haskell-ops | Offtopic: #haskell-offtopic | https://downloads.haskell.org
+[2020-05-23T21:39:09-0700] Set by glguy on January 5, 2019 at 7:21:52 AM PST
+[2020-05-23T21:39:09-0700] Mode is +CLnt
+[2020-05-23T21:39:09-0700] Website is http://www.haskell.org/
+[2020-05-23T21:39:35-0700] <fog> basically, you just need, eg. for HGet, a way to get the type of the head and tail of a Hcontainer
+[2020-05-23T21:40:10-0700] o1lo01ol1o (~o1lo01ol1@bl8-213-81.dsl.telepac.pt) left IRC (Ping timeout: 260 seconds)
+[2020-05-23T21:40:35-0700] <fog> and then its still unclear if this should abstract over the kind like; [Type] -> * , or just make the instances over types of kind *
+[2020-05-23T21:40:42-0700] <crestfallen> @let divisibleBy = (( 0 == ) . ) . mod
+[2020-05-23T21:40:43-0700] <lambdabot>  Defined.
+[2020-05-23T21:41:06-0700] <crestfallen> can't get my head around this (pointfree?) function
+[2020-05-23T21:41:21-0700] merijn (~merijn@83-160-49-249.ip.xs4all.nl) left IRC (Ping timeout: 265 seconds)
+[2020-05-23T21:41:46-0700] <fog> :t ((.).(.))
+[2020-05-23T21:41:47-0700] <lambdabot> (b -> c) -> (a1 -> a2 -> b) -> a1 -> a2 -> c
+[2020-05-23T21:42:01-0700] <crestfallen> oh no please don't
+[2020-05-23T21:42:03-0700] <awpr> :t on
+[2020-05-23T21:42:05-0700] <lambdabot> (b -> b -> c) -> (a -> b) -> a -> a -> c
+[2020-05-23T21:42:16-0700] <wavemode_> @pointful divisibleBy = (( 0 == ) . ) . mod
+[2020-05-23T21:42:16-0700] <lambdabot> divisibleBy x x0 = 0 == mod x x0
+[2020-05-23T21:42:37-0700] <ja> oh that's cool, didn't know there was a pointful too
+[2020-05-23T21:42:49-0700] <crestfallen> yeah I understand the pointful 
+[2020-05-23T21:43:08-0700] <fog> :t \f -> (f.(.))
+[2020-05-23T21:43:09-0700] <lambdabot> (((a -> b) -> a -> c1) -> c2) -> (b -> c1) -> c2
+[2020-05-23T21:43:13-0700] <crestfallen> but is that partial application with mod in the pointfree vers?
+[2020-05-23T21:43:30-0700] <awpr> `(f .) . g` is a somewhat ugly way to write "take two arguments, pass them to g, and pass the result to f"
+[2020-05-23T21:43:49-0700] <ja> crestfallen: how can it be partial application if there is no arguments after mod?
+[2020-05-23T21:44:10-0700] <fog> :t \f g -> (f .) . g
+[2020-05-23T21:44:11-0700] <lambdabot> (b -> c) -> (a1 -> a2 -> b) -> a1 -> a2 -> c
+[2020-05-23T21:44:12-0700] <awpr> the partial application is referring to the type that the outermost `.` is working on
+[2020-05-23T21:45:01-0700] <awpr> i.e. if you chop up that definition into functions that are composed together, it's `mod :: Int -> (Int -> Int)` and `((==0) .) :: (Int -> Int) -> (Int -> Bool)`
+[2020-05-23T21:45:21-0700] <wavemode_> (f .) . g => you call g on a value, then compose the resulting function with f
+[2020-05-23T21:45:50-0700] <crestfallen> so g takes a single value first say
+[2020-05-23T21:45:51-0700] mac10688 (~mac10688@c-76-115-116-76.hsd1.or.comcast.net) joined the channel
+[2020-05-23T21:46:13-0700] <crestfallen> > (mod 10) 5
+[2020-05-23T21:46:15-0700] <lambdabot>  0
+[2020-05-23T21:46:25-0700] falafel_ (~falafel@096-041-126-019.res.spectrum.com) joined the channel
+[2020-05-23T21:46:25-0700] vonfry (~user@183.192.228.252) left IRC (Remote host closed the connection)
+[2020-05-23T21:46:38-0700] <crestfallen> in this case:
+[2020-05-23T21:46:39-0700] <fog> ((f .) . g) a b = (((f .) . g) a) b = ((f .) (g a)) b = (f . (g a)) b = f (g a b)
+[2020-05-23T21:46:40-0700] urodna (~urodna@unaffiliated/urodna) left IRC (Quit: urodna)
+[2020-05-23T21:47:01-0700] <crestfallen> :t \f g -> (f . ) . g
+[2020-05-23T21:47:02-0700] <lambdabot> (b -> c) -> (a1 -> a2 -> b) -> a1 -> a2 -> c
+[2020-05-23T21:47:26-0700] <wavemode_> mod takes two arguments, so calling it on one value returns a function that is still awaiting one argument. you then compose that function with (0 ==)
+[2020-05-23T21:48:14-0700] <crestfallen> yeah so for a second there it is partial application, like mod x
+[2020-05-23T21:48:28-0700] <fog> ((f . ) . g)  a = f . (g a)
+[2020-05-23T21:48:33-0700] <crestfallen> then it is composed ..
+[2020-05-23T21:48:36-0700] <awpr> there are many compose-twice functions lying around that might make this clearer; let's see if lambdabot knows them:
+[2020-05-23T21:48:41-0700] <awpr> :t compose2
+[2020-05-23T21:48:42-0700] <lambdabot> error:
+[2020-05-23T21:48:43-0700] <lambdabot>     • Variable not in scope: compose2
+[2020-05-23T21:48:43-0700] <lambdabot>     • Perhaps you meant ‘icompose’ (imported from Control.Lens)
+[2020-05-23T21:48:47-0700] <awpr> :t (.:)
+[2020-05-23T21:48:48-0700] <lambdabot> error:
+[2020-05-23T21:48:49-0700] <lambdabot>     • Variable not in scope: .:
+[2020-05-23T21:48:49-0700] <lambdabot>     • Perhaps you meant one of these:
+[2020-05-23T21:48:49-0700] lembot (~lembot@179.8.181.71) left IRC (Ping timeout: 264 seconds)
+[2020-05-23T21:49:12-0700] salumu (~sMuNiX@142.118.29.224) joined the channel
+[2020-05-23T21:49:15-0700] <awpr> @let (.:) = (.).(.)
+[2020-05-23T21:49:16-0700] <lambdabot>  Defined.
+[2020-05-23T21:49:17-0700] falafel (~falafel@2600:6c50:547f:99bb:d9b1:d513:2e96:8f8c) left IRC (Ping timeout: 260 seconds)
+[2020-05-23T21:49:17-0700] danso (~dan@2001:1970:52e7:d000:96b8:6dff:feb3:c009) left IRC (Ping timeout: 260 seconds)
+[2020-05-23T21:49:27-0700] <awpr> :t (==0) .: mod
+[2020-05-23T21:49:28-0700] <lambdabot> Integral a => a -> a -> Bool
+[2020-05-23T21:49:48-0700] <awpr> there: compose equality with zero past two arguments
+[2020-05-23T21:50:38-0700] fog (b9d4ab25@gateway/web/cgi-irc/kiwiirc.com/ip.185.212.171.37) left IRC (Quit: Connection closed)
+[2020-05-23T21:51:52-0700] justsomeguy (~justsomeg@unaffiliated/--/x-3805311) left IRC
+[2020-05-23T21:52:03-0700] <ja> @pointful divisibleBy2 = (==0) .: mod
+[2020-05-23T21:52:03-0700] <lambdabot> divisibleBy2 = (\ a0 -> a0 == 0) .: mod
+[2020-05-23T21:52:18-0700] sMuNiX (~sMuNiX@142.118.29.224) left IRC (Ping timeout: 256 seconds)
+[2020-05-23T21:52:54-0700] day_ (~Unknown@unaffiliated/day) joined the channel
+[2020-05-23T21:53:49-0700] dddddd (~dddddd@unaffiliated/dddddd) left IRC (Ping timeout: 272 seconds)
+[2020-05-23T21:53:56-0700] <ja> > 17 `divisibleBy2` -1
+[2020-05-23T21:53:58-0700] <lambdabot>  error:
+[2020-05-23T21:53:58-0700] <lambdabot>      • Variable not in scope: divisibleBy2 :: Integer -> Integer -> t
+[2020-05-23T21:53:58-0700] <lambdabot>      • Perhaps you meant ‘divisibleBy’ (line 180)
+[2020-05-23T21:54:01-0700] <ja> > 17 `divisibleBy2` (-1)
+[2020-05-23T21:54:02-0700] <lambdabot>  error:
+[2020-05-23T21:54:02-0700] <lambdabot>      • Variable not in scope: divisibleBy2 :: Integer -> Integer -> t
+[2020-05-23T21:54:02-0700] <lambdabot>      • Perhaps you meant ‘divisibleBy’ (line 180)
+[2020-05-23T21:54:11-0700] <ja> oh
+[2020-05-23T21:54:24-0700] ddellacosta (~dd@86.106.121.168) joined the channel
+[2020-05-23T21:56:06-0700] <crestfallen> wavemode_ ja awpr   yeah thanks it's sinking in...
+[2020-05-23T21:56:20-0700] day (~Unknown@unaffiliated/day) left IRC (Ping timeout: 256 seconds)
+[2020-05-23T21:56:21-0700] day_ is now known as day
+[2020-05-23T21:56:50-0700] <crestfallen> I was trying to do this in ghci :
+[2020-05-23T21:57:26-0700] <crestfallen> > ((0 ==) . ) 4 . mod 2
+[2020-05-23T21:57:29-0700] <lambdabot>  <Integer -> Bool>
+[2020-05-23T21:58:09-0700] <crestfallen> what's that output?
+[2020-05-23T21:58:36-0700] <crestfallen> > ((0 ==) . ) 2 . mod 4
+[2020-05-23T21:58:38-0700] <lambdabot>  <Integer -> Bool>
+[2020-05-23T21:58:58-0700] <crestfallen> weird
+[2020-05-23T21:59:00-0700] <MarcelineVQ> some function expecting an Integer and giving a Bool
+[2020-05-23T21:59:10-0700] <awpr> it appears to be confused, in that it just ignored some constraints that won't actually be solvable
+[2020-05-23T21:59:27-0700] <wavemode_> actually, that's not really valid
+[2020-05-23T21:59:42-0700] fragamus_ (b8faf60c@gateway/web/cgi-irc/kiwiirc.com/ip.184.250.246.12) joined the channel
+[2020-05-23T21:59:47-0700] <MarcelineVQ> it's really valid
+[2020-05-23T21:59:50-0700] <awpr> I think its algorithm is: default things aggressivel, ignore constraints, and print the type in brackets
+[2020-05-23T22:00:06-0700] <MarcelineVQ> ((0 ==) . ) 2 . mod 4 :: (Integral a1, Num a2, Num (a1 -> a2), Eq a2) => a1 -> Bool
+[2020-05-23T22:00:07-0700] <awpr> because there's secretly a `Num (Integer -> a2)` constraint in there
+[2020-05-23T22:00:33-0700] <ja> in lambdabot? or haskell generallt?
+[2020-05-23T22:00:37-0700] lizzard (uid440745@gateway/web/irccloud.com/x-zwzuxmszdiuhmzlf) left IRC (Quit: Connection closed for inactivity)
+[2020-05-23T22:00:40-0700] <wavemode_> ski made a num instance for functions in lambdabot
+[2020-05-23T22:00:40-0700] <MarcelineVQ> All you need is an instance for Num (a1 -> a2) and we can get a Bool, just because Prelue doesn't have one doesn't mean it's not valid
+[2020-05-23T22:00:46-0700] <crestfallen> > ((0 ==) . ) 2 . mod 4
+[2020-05-23T22:00:48-0700] <lambdabot>  <Integer -> Bool>
+[2020-05-23T22:01:06-0700] <crestfallen> so at least in principle that is how you would write it to get True
+[2020-05-23T22:01:34-0700] <awpr> not really; that's highly misleading output on lambdabot's part
+[2020-05-23T22:01:38-0700] <wavemode_> no, it wouldn't work in general
+[2020-05-23T22:01:54-0700] <awpr> > ((0==) .) . mod) 4 2
+[2020-05-23T22:01:54-0700] jacks2 (~bc811c6f@217.29.117.252) left IRC (Quit: http://www.okay.uz/ (Session timeout))
+[2020-05-23T22:01:56-0700] <lambdabot>  <hint>:1:16: error: parse error on input ‘)’
+[2020-05-23T22:01:56-0700] <crestfallen> ok, well it is interesting
+[2020-05-23T22:02:38-0700] <crestfallen> > ((0 ==) . )  . (mod 4 2)
+[2020-05-23T22:02:40-0700] <lambdabot>  error:
+[2020-05-23T22:02:40-0700] <lambdabot>      • Could not deduce (Integral (a1 -> a2 -> a0))
+[2020-05-23T22:02:40-0700] <lambdabot>          (maybe you haven't applied a function to enough arguments?)
+[2020-05-23T22:02:48-0700] <awpr> if I could manage to type the right number of parens, that'd be the way to apply it
+[2020-05-23T22:03:19-0700] ddellacosta (~dd@86.106.121.168) left IRC (Ping timeout: 272 seconds)
+[2020-05-23T22:03:59-0700] <ja> % (((0 ==) . ) . mod) 4 2
+[2020-05-23T22:03:59-0700] <yahb> ja: True
+[2020-05-23T22:05:42-0700] <crestfallen> > (((0 ==) . )  . mod )4 2
+[2020-05-23T22:05:44-0700] <lambdabot>  True
+[2020-05-23T22:06:19-0700] <crestfallen> so 2 hangs out until (mod 4) is composed with the rest of it
+[2020-05-23T22:06:50-0700] Anthaas (~Anthaas@unaffiliated/anthaas) left IRC (Ping timeout: 264 seconds)
+[2020-05-23T22:07:02-0700] <crestfallen> is that essentially correct ? ^
+[2020-05-23T22:07:14-0700] <ja> what do you mean hangs out? the four is applied first, not the two
+[2020-05-23T22:07:35-0700] Anthaas (~Anthaas@unaffiliated/anthaas) joined the channel
+[2020-05-23T22:07:35-0700] merijn (~merijn@83-160-49-249.ip.xs4all.nl) joined the channel
+[2020-05-23T22:07:56-0700] <crestfallen> yeah that's what I mean . 2 is passed in to the composed function with argument 4
+[2020-05-23T22:08:13-0700] mac10688 (~mac10688@c-76-115-116-76.hsd1.or.comcast.net) left IRC (Quit: WeeChat 2.7.1)
+[2020-05-23T22:08:24-0700] <crestfallen> yeah that's what I mean . 2 is passed in to the (composed function with argument 4)
+[2020-05-23T22:08:50-0700] mac10688 (~mac10688@c-76-115-116-76.hsd1.or.comcast.net) joined the channel
+[2020-05-23T22:08:53-0700] • hackage: web3 0.9.0.0 - Web3 API for Haskell.  https://hackage.haskell.org/package/web3-0.9.0.0 (akru)
+[2020-05-23T22:08:54-0700] Maxdamantus (~Maxdamant@unaffiliated/maxdamantus) left IRC (Ping timeout: 265 seconds)
+[2020-05-23T22:09:09-0700] YongJoon (~Thunderbi@121.67.187.140) left IRC (Quit: YongJoon)
+[2020-05-23T22:09:34-0700] sand_dull (~theuser@45.141.153.199) left IRC (Ping timeout: 240 seconds)
+[2020-05-23T22:10:36-0700] Maxdamantus (~Maxdamant@unaffiliated/maxdamantus) joined the channel
+[2020-05-23T22:10:52-0700] monochrom (trebla@216.138.220.146) left IRC (Quit: NO CARRIER)
+[2020-05-23T22:12:31-0700] merijn (~merijn@83-160-49-249.ip.xs4all.nl) left IRC (Ping timeout: 260 seconds)
+[2020-05-23T22:17:34-0700] monochrom (trebla@216.138.220.146) joined the channel
+[2020-05-23T22:18:43-0700] LevelChart8 (~reallymem@pool-100-2-25-229.nycmny.fios.verizon.net) left IRC (Quit: LevelChart8)
+[2020-05-23T22:20:45-0700] thelounge0259 (c972d10f@gateway/web/thelounge/ip.201.114.209.15) joined the channel
+[2020-05-23T22:21:36-0700] thelounge0259 (c972d10f@gateway/web/thelounge/ip.201.114.209.15) left IRC (Client Quit)
+[2020-05-23T22:23:34-0700] broda_ (~brada@85.255.234.227) left IRC (Ping timeout: 272 seconds)
+[2020-05-23T22:24:53-0700] DirefulSalt (DirefulSal@gateway/vpn/privateinternetaccess/direfulsalt) left IRC (Remote host closed the connection)
+[2020-05-23T22:25:18-0700] chew97 (ac5c8e6d@172.92.142.109) joined the channel
+[2020-05-23T22:27:05-0700] nbloomf (~nbloomf@2600:1700:83e0:1f40:c5cd:3438:a47f:2c15) left IRC (Quit: My MacBook has gone to sleep. ZZZzzz…)
+[2020-05-23T22:31:18-0700] _ht (~Thunderbi@82.169.194.8) joined the channel
+[2020-05-23T22:34:47-0700] wavemode_ (~wavemode@2603:9009:503:b300:7972:f212:9ebd:7880) left IRC (Ping timeout: 260 seconds)
+[2020-05-23T22:37:51-0700] FreeBirdLjj (~freebirdl@101.87.172.216) joined the channel
+[2020-05-23T22:39:06-0700] merijn (~merijn@83-160-49-249.ip.xs4all.nl) joined the channel
+[2020-05-23T22:42:59-0700] zebrag (~inkbottle@alagny-155-1-18-215.w83-200.abo.wanadoo.fr) left IRC (Quit: Konversation terminated!)
