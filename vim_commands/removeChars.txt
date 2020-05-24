@@ -12,4 +12,8 @@ To remove all lines starting with a single Char 'A':
 To remove n characters from beginning of line, such as the 
 timestamps in log:
 
-:%s/^.\{n}//g 
+:4,10s/^.\{0,12}//g
+
+this removes the timestamps from lines 4 to 10.
+
+ 

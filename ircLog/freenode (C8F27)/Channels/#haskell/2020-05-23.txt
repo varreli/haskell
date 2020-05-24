@@ -153,3 +153,6 @@
 [2020-05-23T22:37:51-0700] FreeBirdLjj (~freebirdl@101.87.172.216) joined the channel
 [2020-05-23T22:39:06-0700] merijn (~merijn@83-160-49-249.ip.xs4all.nl) joined the channel
 [2020-05-23T22:42:59-0700] zebrag (~inkbottle@alagny-155-1-18-215.w83-200.abo.wanadoo.fr) left IRC (Quit: Konversation terminated!)
+[2020-05-23T22:44:33-0700]  
+[2020-05-23T22:44:33-0700] ------------- End Session -------------
+[2020-05-23T22:44:33-0700]  
