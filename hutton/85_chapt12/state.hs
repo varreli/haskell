@@ -15,6 +15,21 @@ instance Functor ST where
   fmap g st = S (\s -> let (x,s') = app st s
                            in (g x, s'))
 
+
+                       
+tick :: ST Int 
+tick = S (\n -> (n,n+1))
+-- ghci> app tick 5
+-- (5,6)
+ 
+ticker n = app (replicateM n tick) 
+-- ghci> ticker 3 5
+-- ([5,6,7],8)
+
+evenTick = map (app (fmap even tick)) [0 .. 3] -- (fmap even
+                                               -- tick) is state
+----------------------------------------------------------------
+
 instance Applicative ST where
  -- pure :: a -> ST a
     pure x = S (\s -> (x,s))
@@ -22,17 +37,6 @@ instance Applicative ST where
     stf <*> stx = S (\s -> let (f,s') = app stf s 
                                (x,s'') = app stx s' 
                                in (f x, s''))
-
-                       
-tick :: ST Int 
-tick = S (\n -> (n,n+1))
--- ghci> app tick 5
--- (5,6)
-
- 
-ticker n = app (replicateM n tick) 
--- ghci> ticker 3 5
--- ([5,6,7],8)
 
 
 -- re: instance Applicative ST :
