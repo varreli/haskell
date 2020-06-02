@@ -1,5 +1,0 @@
--- Find any word in directory recursively
-
-cd /path/to/dir
-
-$ find . -type f -exec grep -l 'word' {} +

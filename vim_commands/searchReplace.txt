@@ -1,6 +1,0 @@
-:%s/foo/bar/g  -- search and replace all in file
-
-:s/foo/bar/g -- search and replace on single line.
-
-:%s/\<foo\>/bar/gc 
--- search and replace exact word only
