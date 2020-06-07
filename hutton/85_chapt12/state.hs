@@ -26,7 +26,7 @@ ticker n = app (replicateM n tick)
 -- ghci> ticker 3 5
 -- ([5,6,7],8)
 
-evenTick = map (app (fmap even tick)) [0 .. 3] -- (fmap even
+evenTick = map (app (fmap even tick)) [0..3]   -- (fmap even
                                                -- tick) is state
 ----------------------------------------------------------------
 
