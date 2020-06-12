@@ -1,7 +1,5 @@
 import Control.Monad
 
--- Many things in haskell are just complicated ways to talk about state:
-
 type State = Int
 newtype ST a = S (State -> (a, State)) 
                                        -- newtype requires 
@@ -15,7 +13,6 @@ instance Functor ST where
   fmap g st = S (\s -> let (x,s') = app st s
                            in (g x, s'))
 
-
                        
 tick :: ST Int 
 tick = S (\n -> (n,n+1))
@@ -26,8 +23,8 @@ ticker n = app (replicateM n tick)
 -- ghci> ticker 3 5
 -- ([5,6,7],8)
 
-evenTick = map (app (fmap even tick)) [0..3]   -- (fmap even
-                                               -- tick) is state
+evenTick = map (app (fmap even tick))        -- (fmap even tick)
+                                             -- is state
 ----------------------------------------------------------------
 
 instance Applicative ST where
@@ -38,6 +35,8 @@ instance Applicative ST where
                                (x,s'') = app stx s' 
                                in (f x, s''))
 
+-- ghci> Just evenTick <*> Just [0..3]               -- example
+-- Just [(True,0), (False,1), (True,2), (False,3)]
 
 -- re: instance Applicative ST :
 
@@ -52,6 +51,8 @@ instance Applicative ST where
 -- called x. the last thing we do is apply our function 
 -- f to our value x because that's what our type signature 
 -- requires, and bundle that with the last state.
+
+----------------------------------------------------------------
 
 instance Monad ST where
 -- (>>=) :: ST a -> (a -> ST b) -> ST b
