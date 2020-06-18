@@ -6,7 +6,7 @@ import Control.Monad
 (|>) = flip (.)
 
 
-(!>) :: (a -> m b) -> (b -> m c) -> (a -> m c)
+(!>) :: Monad m => (a -> m b) -> (b -> m c) -> (a -> m c)
 (!>) f g = f |> fmap g |> join 
 
 
