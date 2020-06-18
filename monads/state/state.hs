@@ -57,4 +57,4 @@ instance Applicative ST where
 instance Monad ST where
 -- (>>=) :: ST a -> (a -> ST b) -> ST b
   st >>= f = S (\s -> let (x,s') = app st s
-                        in app (f x) s')
+                          in app (f x) s')
