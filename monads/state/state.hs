@@ -1,5 +1,7 @@
 import Control.Monad
 
+-- Many things in haskell are just complicated ways to talk about state:
+
 type State = Int
 newtype ST a = S (State -> (a, State)) 
                                        -- newtype requires 
@@ -13,6 +15,7 @@ instance Functor ST where
   fmap g st = S (\s -> let (x,s') = app st s
                            in (g x, s'))
 
+
                        
 tick :: ST Int 
 tick = S (\n -> (n,n+1))
@@ -23,8 +26,8 @@ ticker n = app (replicateM n tick)
 -- ghci> ticker 3 5
 -- ([5,6,7],8)
 
-evenTick = map (app (fmap even tick))        -- (fmap even tick)
-                                             -- is state
+evenTick = map (app (fmap even tick))          -- (fmap even
+                                               -- tick) is state
 ----------------------------------------------------------------
 
 instance Applicative ST where
@@ -35,8 +38,12 @@ instance Applicative ST where
                                (x,s'') = app stx s' 
                                in (f x, s''))
 
--- ghci> Just evenTick <*> Just [0..3]               -- example
--- Just [(True,0), (False,1), (True,2), (False,3)]
+-- ghci> Just evenTick <*> Just [0..3]
+-- Just [(True,1),(False,2),(True,3),(False,4)]
+
+-- with Applicatives, an action can't depend on a 
+-- value from a previous action; in monad it can.
+
 
 -- re: instance Applicative ST :
 
@@ -52,9 +59,27 @@ instance Applicative ST where
 -- f to our value x because that's what our type signature 
 -- requires, and bundle that with the last state.
 
-----------------------------------------------------------------
+---------------------------------------------------------------
+
+{-- In this manner the bind operator for the state monad 
+integrates the sequencing of state transformers with the 
+processing of their result values. Note that within the 
+definition for >>= we produce a new state transformer f x , 
+whose behaviour may depend on the result value of the first 
+argument x, whereas with <*> we are restricted to using state 
+transformers that are explicitly supplied as arguments. As 
+such, using the >>= operator provides extra flexibility. --} 
 
 instance Monad ST where
 -- (>>=) :: ST a -> (a -> ST b) -> ST b
   st >>= f = S (\s -> let (x,s') = app st s
                           in app (f x) s')
+
+-- :t getLine >>= putStrLn
+-- IO ()
+
+-- ghci> getLine >>= putStrLn
+-- dog                         -- first action getLine (result value
+-- dog                         -- putStrLn depends on previous action)
+
+
