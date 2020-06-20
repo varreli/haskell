@@ -1,3 +1,4 @@
+module StateTree where
 import Control.Monad
 
 -- Many things in haskell are just complicated ways to talk about state:
