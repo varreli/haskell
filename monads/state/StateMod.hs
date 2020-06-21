@@ -16,19 +16,6 @@ instance Functor ST where
   fmap g st = S (\s -> let (x,s') = app st s
                            in (g x, s'))
 
-
-                       
-tick :: ST Int 
-tick = S (\n -> (n,n+1))
--- ghci> app tick 5
--- (5,6)
- 
-ticker n = app (replicateM n tick) 
--- ghci> ticker 3 5
--- ([5,6,7],8)
-
-evenTick = map (app (fmap even tick))          -- (fmap even
-                                               -- tick) is state
 ----------------------------------------------------------------
 
 instance Applicative ST where
@@ -38,9 +25,6 @@ instance Applicative ST where
     stf <*> stx = S (\s -> let (f,s') = app stf s 
                                (x,s'') = app stx s' 
                                in (f x, s''))
-
--- ghci> Just evenTick <*> Just [0..3]
--- Just [(True,1),(False,2),(True,3),(False,4)]
 
 -- with Applicatives, an action can't depend on a 
 -- value from a previous action; in monad it can.
@@ -75,12 +59,4 @@ instance Monad ST where
 -- (>>=) :: ST a -> (a -> ST b) -> ST b
   st >>= f = S (\s -> let (x,s') = app st s
                           in app (f x) s')
-
--- :t getLine >>= putStrLn
--- IO ()
-
--- ghci> getLine >>= putStrLn
--- dog                         -- first action getLine (result value
--- dog                         -- putStrLn depends on previous action)
-
 
