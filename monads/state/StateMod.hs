@@ -19,8 +19,9 @@ instance Functor ST where
 
 instance Applicative ST where
  -- pure :: a -> ST a
-    pure x = S (\s -> (x,s))
+    pure x = S (\s -> (x,s))              -- pure won't modify state
  -- (<*>) :: ST (a -> b) -> ST a -> ST b
+
     (S fx) <*> (S gx) = S $ \s ->                -- this from evTurn
       let (f, s')  = fx s
           (x, s'') = gx s'
