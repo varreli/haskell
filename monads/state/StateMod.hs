@@ -13,7 +13,7 @@ app (S st) x = st x
 
 instance Functor ST where
 --  fmap :: (a -> b) -> ST a -> ST b
-  fmap g st = S (\s -> let (x,s') = app st s
+    fmap g st = S (\s -> let (x,s') = app st s
                            in (g x, s'))
 
 

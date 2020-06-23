@@ -23,7 +23,9 @@ tree2 :: Tree Int
 tree2 = Node (Node (Leaf 1) (Leaf 2)) (Leaf 3)
 
 -- examples:
-
 rlabel = reLabel tree
-labelA = app (aLabel tree2) 4    -- Show error without app.
+first = fst (rlabel 0)
+second = snd (rlabel 5)
+
+labelA = app (aLabel tree2) 4    -- error here without app.
 
