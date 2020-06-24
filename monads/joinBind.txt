@@ -21,8 +21,10 @@ pass in as right operand : id
                     m   b ->   (d   ->  d ) -> m c 
                                 
     note ^ d = m a = m c .  so a = c  (return value is (m a))
+    Since the return value is (m a), and m is applied to (m a)
+    in the left operand, this is an Endofunctor/Endomorphism.
 
-          note also: ma >>= return === ma
+    note also: ma >>= return === ma
 ----------------------------------------------------------------
 ghci> let mma = Just (Just 1) in   do {ma <- mma; ma}
 Just 1
