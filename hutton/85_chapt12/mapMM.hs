@@ -9,6 +9,8 @@ mapMM f (x:xs) = do y <- f x
 
 -- Note the return type m [b] 
 -- This will return a nested list:  [] : [b]  --> [[b]]
+-- Or, the Maybe constructor replaces the outer [] in the unification:
+-- Just [b]
 
 conv :: Char -> Maybe Int
 conv c | isDigit c = Just (digitToInt c)
