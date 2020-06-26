@@ -1,5 +1,4 @@
 import Control.Monad
-import Data.Char
 
 filterMM :: Monad m => (a -> m Bool) -> [a] -> m [a]
 filterMM p [] = return []
