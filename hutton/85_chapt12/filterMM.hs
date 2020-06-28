@@ -20,7 +20,7 @@ filtM p = foldr (\x -> liftA2 (\flg -> if flg then (x:) else id) (p x)) (pure []
 filtMM p = foldr (\x acc -> liftA2 (\flg1  accx -> if flg1 then (x:accx) else accx) (p x) acc) (pure [])
 
 
--- applicative version with foldr, on list [4,5] :
+-- foldr on list [4,5] :
 
 ------------------------
 

@@ -1,0 +1,38 @@
+The monad composition operator (also known as the Kleisli 
+composition operator) is defined in Control.Monad:
+
+(>=>) :: Monad m => (a -> m b) -> (b -> m c) -> a -> m c
+(m >=> n) x = do
+              y <- m x
+              n y
+
+Using this operator, the three laws can be written:
+
+Left identity:	
+return >=> g ≡ g
+
+Right identity:	
+f >=> return ≡ f	
+ 
+Associativity:	
+(f >=> g) >=> h ≡ f >=> (g >=> h)
+
+It's now easy to see that monad composition is an associative 
+operator with left and right identities.
+
+This is a very important way to express the three monad laws, 
+because they are precisely the laws that are required for 
+monads to form a mathematical category. So the monad laws can 
+be summarised in convenient Haiku form:
+
+Monad axioms:
+Kleisli composition forms
+a category
+
+Think of return as id and (<=<) as (.)  -- reverse kleisli 
+                                        -- operator.
+
+
+-- See https://wiki.haskell.org/Monad_laws    **
+
+-- https://stackoverflow.com/questions/20570633/associativity-of-monads
