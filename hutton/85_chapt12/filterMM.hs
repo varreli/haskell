@@ -20,51 +20,6 @@ filtM p = scanr (\x -> liftA2 (\flg -> if flg then (x:) else id) (p x)) (pure []
 filtMM p = foldr (\x acc -> liftA2 (\flg1  accx -> if flg1 then (x:accx) else accx) (p x) acc) (pure [])
 
 
--- foldr on list [4,5] :
 
-------------------------
-
--- For the value of 5:
-
--- x = 5
--- acc = [[]]
--- flags = [True, False]
-
-------------------------
--- accx []
--- flg1 True
--- result = 5:[] => [5]
-------------------------
--- accx []
--- flg1 False
--- result => []
-
--- newacc = [[5], []]
-
-------------------------
-
--- For the value of 4:
-
--- x = 4
--- acc = [[5], []]
--- flags = [True, False]
-
-------------------------
--- accx [5]
--- flg1 True
--- result = 4:[5] => [4,5]
-------------------------
--- accx []
--- flg1 True
--- result = 4:[] => [4]
-------------------------
--- accx [5]
--- flg1 False
--- result => [5]
-------------------------
--- accx []
--- flg1 False
--- result => []
--------------------------------
-
--- newacc = [[4,5],[4],[5], []]
+-- Cale evaluation:
+-- http://dpaste.com/05223GW
