@@ -1,0 +1,305 @@
+<crestfallen> Hi I'm looking at the evaluation order from filterM powerset [4,5]. This is a textbook example. Online I found the applicative version with the evaluation written out. It's calling the list elements "flags," like flg1 flg2. I understand the bools create a cartesian product of the "powerset", but I don't follow precisely what is happening in the evaluation (the paste includes the handwritten evaluation) There's no step in the evaluation where flg2 
+<crestfallen> (False?) is included. https://termbin.com/i9eq   thanks for any explanation
+* merijn has quit (Ping timeout: 265 seconds)
+* conal_ (~conal@66.115.157.156) has joined
+<Cale> That's a really confusing choice of name for (const [True, False])
+<crestfallen> so since the applicative version uses foldr, the output would be different, but in any case I cannot follow the evaluation, or imagine what the order would look like with the Monad version
+<Cale> But yeah, when you use filterM, it's going to construct the powerset
+<Cale> The idea is that in the list monad, "running" a list means picking an element from it in all possible ways (and collecting a list of the eventual results)
+* conal has quit (Ping timeout: 246 seconds)
+* codygman has quit (Read error: Connection reset by peer)
+<dsal> "evaluation order" is not something I think about much in Haskell.
+<Cale> and so, when you apply the predicate for the items in your list
+<Cale> it tells you "take it or leave it"
+<Cale> and so you do this in all possible ways
+* heatsink has quit (Remote host closed the connection)
+<Cale> and collect up a list of the possible results of keeping or dropping each element
+* adam_wespiser (~adam_wesp@209.6.42.110) has joined
+<crestfallen> thanks Cale I figured that much, but why is there no case where flg2 (False) is mentioned there?
+<Cale> What's flg2?
+* puffnfresh1 (~puffnfres@180-150-39-44.b49627.bne.nbn.aussiebb.net) has joined
+<crestfallen> flags = [True,False], so I was assuming that False was flg2
+* codygman (~codygman@47-184-107-46.dlls.tx.frontiernet.net) has joined
+<Cale> I see you have flg1 as a parameter to the lambda in filtMM
+<Cale> I don't know why it's flg1
+<Cale> Weird names
+<crestfallen> so I guess I cannot follow each step from starting with [[]] 
+* heatsink (~heatsink@2600:1700:bef1:5e10:54b1:232:c027:ec33) has joined
+* conal_ has quit (Client Quit)
+<crestfallen> one moment pls
+* mbox has quit (Read error: Connection reset by peer)
+<crestfallen> the applicative version comes from this blog: https://blog.ssanj.net/posts/2018-04-10-how-does-filterm-work-in-haskell.html
+<Cale> Let's simplify the first definition of filterMM by specialising p = (\x -> [True, False])
+<Cale> So m is the list monad
+<Cale> filterMM (\x -> [True, False]) [] = return [] = [[]]
+<Cale> filterMM (\x -> [True, False]) (x:xs) = do
+<Cale>   b <- [True, False]
+<Cale>   ys <- filterMM (\x -> [True, False]) xs
+<Cale>   return (if b then x:ys else ys)
+<crestfallen> ok
+<Cale> So, assuming that filterMM (\x -> [True, False]) xs will compute the powerset of xs
+<Cale> This means that ys will be chosen to be an arbitrary subset of xs
+* tscholak_ has quit (Quit: My MacBook has gone to sleep. ZZZzzz…)
+* bobey has quit (Quit: Ping timeout (120 seconds))
+<Cale> (or to be more precise, a sub-list)
+* bobey (~bobey@cpe-70-94-44-250.kc.res.rr.com) has joined
+<crestfallen> arbitrary? so this is a cartesian product right?
+* puffnfresh1 has quit (Ping timeout: 265 seconds)
+<Cale> Not exactly...
+<Cale> Though you can do stuff like:
+* fog (6df9b8f8@gateway/web/cgi-irc/kiwiirc.com/ip.109.249.184.248) has joined
+<Cale> > replicateM 3 [True, False]
+<lambdabot>  [[True,True,True],[True,True,False],[True,False,True],[True,False,False],[Fa...
+<Cale> This is a Cartesian product
+<Cale> > do x <- [1,2,3]; y <- [4,5]; z <- [6,7,8]; return (x,y,z)
+<lambdabot>  [(1,4,6),(1,4,7),(1,4,8),(1,5,6),(1,5,7),(1,5,8),(2,4,6),(2,4,7),(2,4,8),(2,...
+<Cale> But yeah, in some sense, there's a Cartesian product taking place, and then some other stuff
+* hackage parse-gcstats 0.1.0.0 - Parse machine-readable GHC GC stats.  https://hackage.haskell.org/package/parse-gcstats-0.1.0.0 (MateuszKowalczyk)
+<crestfallen> but [True,False] is a full inclusion and full exclusion of all combinations of the list
+<Cale> It's like we're taking the Cartesian product of [True, False] and (filterMM (\x -> [True, False]) xs)
+<Cale> and then for each pair (b, ys)
+<Cale> if b is True, we turn that into (x:ys)
+<Cale> and if b is False, we produce ys
+<fog> ezzieyguywuf: dont be put off by the tldr.. mostly im just trying to ask a question that needs an answer, but after i post it, a kind of answer seems more obvious after reading the explanations i give to try and make it eaiser for people to understand. so, if it takes me several minutes of thought to add a line of text that could take 2 seconds to
+<fog> skim read - its probably just that you need to take it slower
+<crestfallen> so the blogs uses "flg1" but not flg2, is that why I'm thrown off?
+<Cale> Maybe?
+<Cale> There's no flg2 in that code anyway
+<Cale> For some reason, they named one of their variables flg1
+<crestfallen> but there are two flags True and False right?
+<Cale> It's a completely arbitrary name, feel free to change it
+<Cale> flg1 doesn't refer to True or something
+<Cale> (well, sometimes it will, sometimes it'll refer to False)
+* seanparsons has quit (Ping timeout: 260 seconds)
+* hendi__ has quit (Ping timeout: 260 seconds)
+* hendi_ (~quassel@200116b8043cf600b54d71556ce92172.dip.versatel-1u1.de) has joined
+<Cale> I don't know why they weren't consistent and didn't just stick with b
+<Cale> all the way
+<crestfallen> what would be a better name? I thought each bool in the list would be a flag with a name
+<Cale> Well, do you understand what liftA2 does?
+* doublex has quit (Read error: Connection reset by peer)
+* mirk0 has quit (Ping timeout: 264 seconds)
+* doublex_ (~doublex@c-73-117-99-12.hsd1.oh.comcast.net) has joined
+<Cale> (in this context)
+<fog> a good way to contribute is to confirm any understanding you can glean, while also offering a breakdown of it that could help other people understand it too
+<crestfallen> essentially returns a cartesian product of list members, I thought
+<Cale> Yeah, in some sense
+* d3lxa has quit (Ping timeout: 256 seconds)
+<crestfallen> yeah there's so much going on here, sorry for the confusion
+<Cale> liftA2 f xs ys will apply f to each combination of elements from xs and ys
+<Cale> i.e.  liftA2 f xs ys = [f x y | x <- xs, y <- ys] -- if you like list comprehensions
+<fog> MarcelineVQ: yeah, i wouldnt be asking if i understood, and i wouldnt be trying to explain if i thought it was comprehensible... 
+<Cale> and the first argument to liftA2 here is (p x)
+* doublex_ has quit (Read error: Connection reset by peer)
+* Arjan has quit (Ping timeout: 256 seconds)
+<Cale> and if p is (\x -> [True, False]), then (p x) is [True, False]
+* doublex (~doublex@c-73-117-99-12.hsd1.oh.comcast.net) has joined
+* fog has quit (Quit: Connection closed)
+* tscholak_ (~tscholak@mtrlpq02huw-lp140-01-76-69-235-149.dsl.bell.ca) has joined
+<Cale> So, flg1 will be bound to both True and False at various points, as the liftA2 goes over all the possible combinations
+* d3lxa (~d3lxa@vneko.ch) has joined
+<Cale> This version isn't especially readable
+* Arjan (arjan@adriaan.se) has joined
+* doublex has quit (Read error: Connection reset by peer)
+<Cale> Also, "acc" is similarly a bad name, since it gives the impression that something is being accumulated there
+* doublex (~doublex@c-73-117-99-12.hsd1.oh.comcast.net) has joined
+* doublex has quit (Read error: Connection reset by peer)
+<crestfallen> thanks Cale so do you mind showing the Monad version's output, since it's not using TWO accumulators acc and accx  ?
+<Cale> But that simply refers to the result of processing the remainder of the list
+* doublex (~doublex@c-73-117-99-12.hsd1.oh.comcast.net) has joined
+<Cale> > filterM (\_ -> [True, False]) [1,2,3]
+<lambdabot>  [[1,2,3],[1,2],[1,3],[1],[2,3],[2],[3],[]]
+<Cale> You'll notice that in the first half of this list, all the lists contain 1, and in the second half, they all don't
+* doublex has quit (Read error: Connection reset by peer)
+<crestfallen> I meant the "trace" of [4,5] just to keep it short
+* seanparsons (~sean@cpc145086-gill21-2-0-cust312.20-1.cable.virginm.net) has joined
+<crestfallen> for the Monad version. oh would scanr work for the applicative version..just thought of that..
+* luto1 (~luto@185.189.114.11) has joined
+* cebola (~cebola@2804:14d:149a:a093:6cf0:89ad:73b0:6ddb) has joined
+* doublex (~doublex@c-73-117-99-12.hsd1.oh.comcast.net) has joined
+* lawr3nce has quit (Quit: Leaving)
+* jespada has quit (Ping timeout: 260 seconds)
+* efm (~efm@vpn.tummy.com) has joined
+* luna9 (cc0b9e81@204.11.158.129) has joined
+* fog (6df9b8f8@gateway/web/cgi-irc/kiwiirc.com/ip.109.249.184.248) has joined
+<fog> 16:45:03 <fog> this new datatype should be :: (f :: g s) -> (xs :: FList g (xs :: [s])) -> *
+<fog> thats clearly wrong
+<fog> (f :: g s -> *) -> (xs :: FList g (xs :: [s])) -> *
+<fog> seems more likely
+* fog has quit (Client Quit)
+* merijn (~merijn@83-160-49-249.ip.xs4all.nl) has joined
+* jespada (~jespada@94.9.107.183) has joined
+* cebola has quit (Ping timeout: 272 seconds)
+* slack1256 (~slack1256@dvc-100-156-101-190.movil.vtr.net) has joined
+<slack1256> exit
+* slack1256 has quit (Remote host closed the connection)
+* metadave (~metadave@pool-71-186-235-231.bflony.fios.verizon.net) has joined
+* merijn has quit (Ping timeout: 260 seconds)
+* John_Ivan__ has quit (Ping timeout: 240 seconds)
+* nbloomf (~nbloomf@2600:1700:83e0:1f40:8cda:90a:f178:4fcf) has joined
+<Cale> crestfallen: http://dpaste.com/05223GW
+<Cale> crestfallen: I took some liberties with the evaluation, just doing it in whatever order seemed convenient
+<Cale> All evaluation orders which terminate are guaranteed to produce the same result in Haskell anyway
+<Cale> I also took some liberty when it came to unfolding the (>>=) for the list monad
+<Cale> xs >>= f = concat (map f xs)
+<crestfallen> one moment thanks so much Cale
+* stef204 (~stef204@unaffiliated/stef-204/x-384198) has joined
+<Cale> So, I just did the map by hand quickly, and left the concat
+<Cale> There are actually a whole lot more steps that I'm skipping there
+* nbloomf has quit (Client Quit)
+<Cale> (but reading through the evaluation of map would be boring)
+<crestfallen> I'm using scanr in the FiltM program and it seems like it (also!) skips steps
+<Cale> But also, this isn't at all how I think about the meaning of this program
+<crestfallen> wow really?
+<Cale> It's foolish to unfold recursive functions manually in this way
+* mossplix (~mossplix@197.239.4.164) has joined
+<crestfallen> that's a drag.. this is how I try to think of programs
+<Cale> If you understand what they're meant to do, it's much much easier to simply assume they're going to do what is intended on all smaller inputs
+<Cale> and simply try to convince yourself that they do what is required on an input of the given size
+* nbloomf (~nbloomf@2600:1700:83e0:1f40:6587:ef8c:5122:95f7) has joined
+<Cale> i.e. you would prove that a recursive function is correct as a proof by induction
+<Cale> So it also makes sense to reason about it that way
+<Cale> So, when we get to the point of needing to evaluate filterM (\_ -> [True, False]) on the tail of our input list, we can just assume it does the thing we want, and produces a list of all the possible combinations of that tail
+<Cale> and then we just need to check that the result will be a list of all the possible combinations of elements of the entire list
+* osukup_ (mimi1vx@nat/suse/x-xhqpvczerpylyvfk) has joined
+<Cale> which it will be, because every combination of (x:xs) will either include x or it won't, and apart from that, will consist of a combination of xs
+* heatsink has quit (Remote host closed the connection)
+<Cale> So when we pick b from [True, False], we're saying "either include x or don't"
+<Cale> and then we pick ys to be some combination of xs
+* mimi_vx has quit (Read error: Connection reset by peer)
+<Cale> and then we produce the combination x:ys if we meant to keep x, and ys if we didn't mean to keep x
+* hackage optparse-generic 1.4.1 - Auto-generate a command-line parser for your datatype  https://hackage.haskell.org/package/optparse-generic-1.4.1 (GabrielGonzalez)
+<crestfallen> but the thing is, is that you *know* how to do that (beautiful!) evaluation, so you *do* know what's happening under the hood. I don't but think I may know that I can study your extremely kind solution Cale
+<Cale> If you're at the highest level of trusting that things are going to behave as they ought to, filterM (\_ -> [True, False]) [1,2,3] just reads:
+<crestfallen> now* that I can study
+<Cale> For each element of [1,2,3], take it or leave it (in all possible ways)
+<Cale> (regardless of what the value of the list element is)
+<crestfallen> yeah I essentially knew that from the textbook, but is there not an advantage to see what haskell is doing?
+<Cale> > filterM (\x -> if odd x then [True, False] else [True]) [1,2,3]
+<lambdabot>  [[1,2,3],[1,2],[2,3],[2]]
+<Cale> ^^ "if x is odd, then take it or leave it, otherwise, be sure to keep it"
+<Cale> > filterM (\x -> if odd x then [True] else [False]) [1,2,3] -- this is just a normal filter now
+<lambdabot>  [[1,3]]
+<Cale> (kind of)
+* carldd has quit (Ping timeout: 265 seconds)
+* Przem1605 (~Przemek@ip-91-244-231-0.simant.pl) has joined
+<crestfallen> thanks very kindly Cale for your patience. I understand it on the surface .Can't wait to tear into this. 
+* alp has quit (Quit: Leaving)
+<crestfallen> I was thinking about it at night... and tbh the blog evaluation did seem wrong or lacking...
+<Cale> Well, even though I gave a fair amount of detail, my evaluation steps are not correctly ordered for how GHC is going to evaluate things, or how a generic lazy evaluator would.
+<Cale> and I skipped a lot of steps as well
+<Cale> But the nice thing about languages like Haskell where evaluation is pure is that it doesn't matter what order you evaluate things in if all you care about is the result (and you're smart enough not to pick an order which never terminates)
+* Przem1605 (~Przemek@ip-91-244-231-0.simant.pl) has left
+<Cale> Also: If any evaluation order terminates, the order where you evaluate outermost-first will terminate
+<crestfallen> pardon?
+<Cale> Maybe I should do my example for evaluation orders :)
+<Cale> Suppose we have
+<Cale> double x = x + x
+<Cale> and we want to evaluate  double (double 5)
+<crestfallen> k
+<Cale> We could evaluate this innermost-first:
+<Cale> double (double 5)
+<Cale> -> double (5 + 5)
+<Cale> -> double 10
+<Cale> -> 10 + 10
+<Cale> -> 20
+* Alleria_ has quit (Ping timeout: 240 seconds)
+<Cale> This is "eager evaluation"
+<Cale> (also sometimes "strict evaluation")
+<crestfallen> copy that
+<Cale> We could also evaluate the outermost double first:
+<Cale> double (double 5)
+<Cale> -> (double 5) + (double 5)
+<Cale> -> (5 + 5) + (double 5)
+<Cale> -> 10 + (double 5)
+<Cale> -> 10 + (5 + 5)
+<Cale> -> 10 + 10
+<Cale> -> 20
+<Cale> This is sometimes called "normal order evaluation"
+<Cale> You might notice a problem with this -- it can be quite wasteful
+* pfurla has quit (Quit: gone to sleep. ZZZzzz…)
+<Cale> We evaluated double 5 twice
+<crestfallen> right
+<Cale> because x occurred more than once in the body of the definition of double
+<Cale> so we duplicated work
+* Alleria_ (~AllahuAkb@2604:2000:1484:26:7cb8:f07b:c42a:df48) has joined
+<Cale> So as an optimisation to this, we have lazy evaluation, which is like outermost-first evaluation, except that whenever we bind a variable, we share any work evaluating it between the occurrences
+<crestfallen> so is foldr more efficient always or is that a leap?
+<Cale> I'm not talking about foldr here
+<Cale> But it's not *always* more efficient, just sometimes better
+<Cale> So, with lazy evaluation, using "let" syntax to represent the sharing of work:
+<Cale> double (double 5)
+* pfurla (~pfurla@ool-182ed2e2.dyn.optonline.net) has joined
+<Cale> -> let x = double 5 in x + x -- note that we still evaluated the outermost double first
+<Cale> -> let x = 5 + 5 in x + x
+<Cale> -> let x = 10 in x + x
+<Cale> -> 10 + 10
+<Cale> -> 20
+<Cale> So now we avoided repeating work
+<crestfallen> that's good info
+<crestfallen> thanks!!
+<Cale> and, something not obvious from this example is that outermost-first evaluation can also avoid doing some work altogether
+<Cale> In innermost-first evaluation, if the argument to a function goes unused by the function, then you already wasted effort evaluating it
+<crestfallen> I find let statements tough, esp when the result is on the lhs
+<Cale> oh
+<Cale> Is it not clear what is meant there?
+<Cale> Really what happens in memory is that there's a graph structure built of pointers
+<Cale> and reduction is manipulating these expression graphs
+<crestfallen> no I meant in like applicative state, the result of threading state is written on the lhs
+<Cale> hm
+<Cale> In any case, in innermost first evaluation, we evaluate each of the arguments to the function exactly once
+<Cale> In outermost first evaluation, we evaluate each of the arguments to a function zero or more times -- we can skip evaluating them sometimes, but sometimes work is duplicated
+<Cale> In lazy evaluation, we evaluate each argument to a function zero or one times as needed.
+<crestfallen> like    stf <*> stx = S (\s -> let (f,s') = app stf s (x,s'') = app stx s' in (f x, s''))
+<crestfallen> sorry poor sending there
+<Cale> I mostly find that hard to read because of the terrible variable names
+* seanparsons has quit (Ping timeout: 260 seconds)
+<crestfallen> thank you yes I thought they were off!!
+<Cale> and the fact that runState has been renamed to app
+<Cale> errr
+<Cale> yeah...
+<Cale> and it... doesn't typecheck
+<Cale> oh, you left out a ;
+<Cale> stf <*> stx = S (\s -> let (f,s') = app stf s; (x,s'') = app stx s' in (f x, s''))
+* mbox (~mbox@pool-108-26-180-81.bstnma.fios.verizon.net) has joined
+<crestfallen> oh god, I've been on that section of the book for months.   https://termbin.com/eagr   how should it be written?
+* DirefulSalt (DirefulSal@gateway/vpn/privateinternetaccess/direfulsalt) has joined
+<Cale> Which book is this?
+<crestfallen> hutton
+<Cale> ah, hm
+<Cale> Okay, so
+<Cale> I would usually introduce the State monad as:
+* merijn (~merijn@83-160-49-249.ip.xs4all.nl) has joined
+* pfurla has quit (Ping timeout: 260 seconds)
+<crestfallen> the Applicative instance I'm still struggling with there
+<Cale> newtype State s a = S (s -> (s,a))
+<Cale> Though often we name the data constructor of the newtype the same as the type constructor (i.e. you can use State for both)
+<Cale> It *is* more convenient when learning/teaching to rename the data constructor like this
+<Cale> It's possibly confusing to call this ST though, because there is an ST monad, but it's not this
+<Cale> and usually the function:
+<Cale> runState :: State s a -> s -> (s,a)
+<Cale> is called runState
+<Cale> Also, there's a choice of convention about whether the pairs are (s,a) or (a,s) -- it obviously doesn't really matter as long as you're consistent :)
+<Cale> (but (s,a) is theoretically nicer)
+<Cale> I think it's easier to go past the Applicative instance, and just do Monad first, and then never worry about Applicative, because every Monad is an Applicative for free
+<crestfallen> catching up ...
+* JesseL has quit (Remote host closed the connection)
+* ajnieset (~ajnieset@162.154.145.52) has joined
+* ajnieset (~ajnieset@162.154.145.52) has left
+* JesseL (~xxx@2400:8902::f03c:92ff:fe60:98d8) has joined
+<crestfallen> yeah thanks you did suggest that once before Cale
+* gushys (~ajnieset@162.154.145.52) has joined
+<crestfallen> plenty to work on tonight.. thanks kindly Cale
+<Cale> cool
+* jedws has quit (Quit: My MacBook has gone to sleep. ZZZzzz…)
+<Cale> If you want, I can take you through the State monad in detail at some point
+<gushys> Maybe im doing something incorrect, but isnt aeson part of the standard library? I tried importing Data.Aeson and was getting a not found error
+<crestfallen> absolutely if you have time now Cale I'm game
+<Cale> gushys: Nope, it's part of the aeson package
+<crestfallen> in pm should we?
+<Cale> I didn't get enough sleep last night, I'm going to pass out early :)
+<Cale> But maybe at some point tomorrow
+<crestfallen> sweet many thanks. sleep well
+* carldd (~carldd@90-224-49-113-no56.tbcn.telia.com) has joined
+<Cale> g'night!
+<crestfallen> pax
