@@ -92,15 +92,23 @@
 <Cale> So it also makes sense to reason about it that way
 <Cale> So, when we get to the point of needing to evaluate filterM (\_ -> [True, False]) on the tail of our input list, we can just assume it does the thing we want, and produces a list of all the possible combinations of that tail
 <Cale> and then we just need to check that the result will be a list of all the possible combinations of elements of the entire list
-<Cale> which it will be, because every combination of (x:xs) will either include x or it won't, and apart from that, will consist of a combination of xs
+
+
+Every combination of (x:xs) will either include x or it won't, 
+and apart from that, will consist of a combination of xs.
+
+
 <Cale> So when we pick b from [True, False], we're saying "either include x or don't"
+
 <Cale> and then we pick ys to be some combination of xs
+
 <Cale> and then we produce the combination x:ys if we meant to keep x, and ys if we didn't mean to keep x
 <crestfallen> but the thing is, is that you *know* how to do that (beautiful!) evaluation, so you *do* know what's happening under the hood. I don't but think I may know that I can study your extremely kind solution Cale
 <Cale> If you're at the highest level of trusting that things are going to behave as they ought to, filterM (\_ -> [True, False]) [1,2,3] just reads:
 <crestfallen> now* that I can study
 <Cale> For each element of [1,2,3], take it or leave it (in all possible ways)
 <Cale> (regardless of what the value of the list element is)
+
 <crestfallen> yeah I essentially knew that from the textbook, but is there not an advantage to see what haskell is doing?
 <Cale> > filterM (\x -> if odd x then [True, False] else [True]) [1,2,3]
 <lambdabot>  [[1,2,3],[1,2],[2,3],[2]]
