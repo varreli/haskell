@@ -7,6 +7,7 @@ body = (\ff n -> if n <= 1 then 1 else n * ff (n - 1))
 fixx :: (t -> t) -> t
 fixx f = f (fixx f) 
 
+
 -- fixx :: ((s -> t) -> s -> t) -> s -> t
 -- fixx f x = body (fixx body) x
 
@@ -35,3 +36,4 @@ fixx f = f (fixx f)
 
 
 factt n = product [1..n]
+
