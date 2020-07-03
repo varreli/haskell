@@ -221,3 +221,15 @@
  <Cale> and execState as well, but it gives you the 's' part of the pair
  <crestfallen> excellent, glad to know that, thanks
  <Cale> These things decompose State actions, while get, put and return either are or produce State actions
+
+
+ChaiTRex on Cale's use of "record fields" :
+
+ Record fields: Records are just a way to name the parts of a piece of data.
+ Not referring to databases.
+ Like `data T = T Int` has an Int, but it's not given a name.
+ You can do something like `data T = T { countOfBats :: Int }` and now it's called `countOfBats`.
+ The field is given a name.
+ Field is just a name for data that's part of a bigger piece of data.
+ Like the information about a cup in a game might have its contents as one field, its location as another field.
+ So, the cup might be on the table (one field) halfway filled with coffee (another field)
