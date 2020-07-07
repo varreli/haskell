@@ -141,7 +141,8 @@ the given value of type a as its result
  <Cale> x >>= f = S ...
  <Cale> and that wants a function which takes the initial state, and is going to ultimately produce a pair of the final state and result
  <Cale> x >>= f = S (\s -> ...)
- <Cale> and now we said, we want to first run x :: State s a on the initial state. When we do that, we'λ  get some new state and result, so let's give those names:
+ <Cale> and now we said, we want to first run x :: State s a on the initial state. 
+ When we do that, we'λ  get some new state and result, so let's give those names:
  <Cale> x >>= f = S (\s -> let (s', v) = runState x s; ...)
  <Cale> So s' is our new state, and v is the result of running x
  <Cale> and then we wanted to run (f v) on the new state, getting some final state and result
@@ -163,35 +164,11 @@ the given value of type a as its result
  <crestfallen> where at the bottom of the paste I have monadLab = app (mlabel tree) 4
  <crestfallen> so that is causing me some confusion
  <crestfallen> re: app, you said above "  he's thinking in terms of applying the function " .. which function are you referring to?
- <jusss`> there's a list [1,2,[3,4],[3,[5,6,[7]]]], who to let every element in it plus 1?
- <jusss`> make (+1) work on every elemement on this list?
  <Cale> crestfallen: the contained function of type s -> (a,s) (or (s,a))
- <Cale> jusss`: That's not a valid list, unless you have some way to interpret 6 as being of the same type as [7]
  <Cale> (so you'd need a way to interpret numbers as lists, which I suppose you could have via a Num instance)
  <crestfallen> I think some members didn't like the name st , is that truly a bad name? 
  <crestfallen> I feel that I agree
- <ChaiTRex> jusss`: Usually.
- <jusss`> but that should be valid in dynamic languages like python
  <Cale> crestfallen: It wouldn't be a terrible name except there's already something else called ST in Haskell, it's a similar but different thing
- <Cale> jusss`: All the elements of a Haskell list must have the same type
- <Cale> jusss`: If we want a tree, we'λ  use a tree data type
- <jusss`> Cale: like that binary tree?
- <jusss`> can this list turn to a tree, and how to solve it?
- <Cale> For example,  data Tree a = Branch a [Tree a]
- <Cale> Or perhaps we should go with something like
- <Cale> data Tree a = Nil | Cons a (Tree a) | Subtree (Tree a) (Tree a)
- <Cale> Then we can encode your nested thing like:
- <Cale> Cons 1 (Cons 2 (Subtree (Cons 3 (Cons 4 Nil)) (Subtree (Cons 3 (Subtree (Cons 5 (Cons 6 (Subtree (Cons 7 Nil) Nil))) Nil)) Nil)))
- <Cale> You can check the parens for me :P
- <jusss`> right
- <Cale> We can write a function which applies a function to all the elements of such a thing
- <Cale> and in fact, while we're at it, might as well make it a Functor instance :)
- <Cale> instance Functor Tree where
- <Cale>   fmap f = g
- <Cale>     where
- <Cale>       g Nil = Nil
- <Cale>       g (Cons x t) = Cons (f x) (g t)
- <Cale>       g (Subtree t t') = Subtree (g t) (g t')
  <crestfallen> ok thanks, the way we did state with get, put and return, what distinguishes that from the ST approach?
  <Cale> crestfallen: You mean the approach in Hutton's book?
  <Cale> I believe Hutton eventually gets to get and put and return
@@ -200,24 +177,17 @@ the given value of type a as its result
  <Cale> How things are named is pretty much the only difference
  <Cale> I didn't like his names, so my explanation doesn't use them
  <Cale> (especially "app")
- <crestfallen> yes thank you, the names I feel have been killing me. I just don't understand them
- <crestfallen> thanks a lot Cale  ,  I'm getting there. I want to resolve the name issue and see if it gets more clear
+
+ 
  <crestfallen> also I'm still staring at these two functions evalState and execState. they seem close to what we were doing with put and return   Cale
- <crestfallen> evalState :: s a -> s -> a
+ <crestfallen> evalState :: State s a -> s -> a
  <crestfallen> execState :: State s a -> s -> s
- <crestfallen> did I get that right?
  <Cale> evalState and execState are just the two halves of runState
- <ChaiTRex> crestfallen: s a is probably an invalid type.
  <Cale> runState produces a pair
- <Cale> That as well
- <Cale> That should be State s a
  <crestfallen> yeah thanks.. the 2 halves of runState ?
- <crestfallen> yeah ok copy that!
- <crestfallen> thanks kindly Cale.. plenty to work on
  <Cale> runState :: State s a -> s -> (s,a)
  <Cale> evalState is just that, except that it takes the 'a' part of the pair
  <Cale> and execState as well, but it gives you the 's' part of the pair
- <crestfallen> excellent, glad to know that, thanks
  <Cale> These things decompose State actions, while get, put and return either are or produce State actions
 
 
