@@ -1,4 +1,4 @@
- <Cale> In order to be able to build up some abstraction around 
+ <Cale> In order to be able to build up some abstraction 
  we use a newtype:
  <Cale> newtype State s a = S (s -> (s,a))
  <Cale> and because of our choice of representation, the function 
@@ -7,8 +7,11 @@
  
  <Cale> runState :: State s a -> s -> (s,a)
  <Cale> runState (S f) s = f s
- <Cale> or simply:
- <Cale> runState (S f) = f
+ 
+ or simply:
+ 
+ runState (S f) = f
+ 
  <Cale> We can also build that into the definition of the type, by 
  making use of the fact that if we use record syntax, we 
  automatically get functions which extract the fields:
@@ -19,11 +22,8 @@
  type s -> (s,a) from it
  
  <Cale> i.e. runState :: State s a -> s -> (s,a) as before
- <crestfallen> field extractor and record syntax, actually terms I'm new to..
- <Cale> That part isn't essential
- <crestfallen> I've seen newtype State s a = S { runState :: s -> (s, a) }  before
  <Cale> Right, so that defines it as a record having one field called runState
- <Cale> and as such, you automatically get a function called 
+ and as such, you automatically get a function called 
  runState which will extract the field from the record
  
  <Cale> Just as if you'd defined  
@@ -60,14 +60,17 @@
  no matter what value the initial state was, will set the current state to 
  the given value (and produce an empty tuple).
 
- <Cale> put :: s -> State s ()
- <Cale> and the goal is that after running  put v  the final state will 
- be v, regardless of what the initial state was
- <crestfallen> put val = S (\s -> (val, ()))
+ and the goal is that after running  put v  the final state will 
+ be v, regardless of what the initial state was:
+ 
+ put val = S (\s -> (val, ()))
+ 
  <Cale> So, now, we also want a way to produce an action which 
  "does nothing" except to have a given value as its result
- <Cale> return :: a -> State s a
- <Cale> will be the computation which does nothing to the current state 
+ 
+ return :: a -> State s a
+ 
+ will be the computation which does nothing to the current state 
  (i.e. the final state will be the same as the initial state), but has 
  the given value of type a as its result:
 
@@ -88,14 +91,15 @@
  <Cale> The idea is that x >>= f will be the State s b action 
  which, when run, will first run x on the initial state, producing 
  some intermediate state, and then if the result of that is v
- 
- <Cale> it will then run (f v) on the new intermediate state, producing 
+ it will then run (f v) on the new intermediate state, producing 
  some final state and result which will be its own final state and result
 
- <Cale> So, it's like we run x, and get to use its result somehow to decide what to do next
+ <Cale> So, it's like we run x, and get to use its result somehow 
+ to decide what to do next
+ 
  <Cale> and f is the function which tells us what to do next based on the result of x
- <Cale> Make sense?
  <Cale> So, for example
+ 
  <Cale> get >>= \n -> put (n+1)
  <Cale> will be the action which increments the current state
  <crestfallen> ok
@@ -109,7 +113,7 @@
  going to ultimately produce a pair of the final state and result
  <Cale> x >>= f = S (\s -> ...)
  <Cale> and now we said, we want to first run x :: State s a on 
- the initial state. When we do that, we'λ  get some new state and 
+ the initial state. When we do that, we'd get some new state and 
  result, so let's give those names:
  
  <Cale> x >>= f = S (\s -> let (s', v) = runState x s; ...)
