@@ -42,8 +42,9 @@
  state as its result as well
  
  get = S (\n -> (n,n)) 
- <Cale> We don't have many ways yet to make values of type State s a apart from using S
- <Cale> So, we might as well use it:
+ <Cale> We don't have many ways yet to make values of type State s a 
+ apart from using S
+ 
  Also its argument has type s -> (s,s), so it might as well be a lambda:
  get = S (\s -> ...)
  
@@ -51,8 +52,11 @@
  so there's one obvious thing to do:
  <Cale> get = S (\s -> (s,s))
  
- <Cale> To go along with that, we need put :: s -> State s ()
- <Cale> which, given a value of type s, will produce the State action that, 
+ To go along with that, we need 
+
+ put :: s -> State s ()
+  
+ which, given a value of type s, will produce the State action that, 
  no matter what value the initial state was, will set the current state to 
  the given value (and produce an empty tuple).
 
