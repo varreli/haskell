@@ -1,12 +1,10 @@
 import Control.Monad.Trans.State.Lazy
 ff = runState (return 'X') 1
+gg = runState (return "van") 2
 
 -- > :t ff 
 -- ff :: (Char, Int)
 -- (returns both result and state though state is unchanged:)
-
--- > ff 
--- ('X',1)
 
 -- > :t (return 'X') 
 -- (return 'X') :: Monad m => m Char   
