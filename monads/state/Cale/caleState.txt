@@ -72,7 +72,7 @@
  
  will be the computation which does nothing to the current state 
  (i.e. the final state will be the same as the initial state), but has 
- the given value of type a as its result:
+ the given value of type g as its result:
 
  give g = S (\s -> (s,g))   
 
