@@ -1,4 +1,4 @@
-import StateMod
+import StateHutton
 
 data Tree a = Leaf a | Node (Tree a) (Tree a) deriving Show
 
