@@ -52,8 +52,9 @@
  <Cale> get = S (\s -> (s,s))
  <Cale> To go along with that, we'λ  want  put :: s -> State s ()
  <crestfallen> So the () is that like unit?
- <Cale> which, given a value of type s, will produce the State action that, no matter what value the initial state was, will set the current state to the given value
- <Cale> (and produce an empty tuple)
+ <Cale> which, given a value of type s, will produce the State action that, 
+ no matter what value the initial state was, will set the current state to the given value
+ (and produce an empty tuple)
  <crestfallen> is that related to:    f = runState (return 'X') 1
  <crestfallen> ('X',1)
  <Cale> In what way?
@@ -68,10 +69,11 @@
  <Cale> I'm introducing them
  <crestfallen> ok
  <Cale> Want me to write put?
- <crestfallen> Cale re: your above comment " Our first goal will be to get away from having to use the S constructor by building up enough basic operations for reading and writing the state and chaining together actions of type State s a "
- <Cale> yeah
- <crestfallen> ok so..
- <Cale> So, get will be a thing that "reads" the current state, and put will be a thing that "writes" it
+ <crestfallen> Cale re: your above comment " Our first goal will be 
+ to get away from having to use the S constructor by building up 
+ enough basic operations for reading and writing the state and 
+ chaining together actions of type State s a "
+ So, get will be a thing that "reads" the current state, and put will be a thing that "writes" it
  <crestfallen> hutton is using a state transformer with this construction S the dummy constructor
  <crestfallen> are we trying to not use the ST model?
  <Cale> I introduced everything we need
