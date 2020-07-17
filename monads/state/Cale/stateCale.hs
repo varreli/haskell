@@ -9,7 +9,7 @@ instance Applicative (State s) where    -- |
     pure  = return
     (<*>) = ap
 
-
+--------------------------------------------------------------
 newtype State s a = S { runState :: s -> (s, a) } 
 
 -- runState :: State s a -> s -> (s,a)
@@ -19,10 +19,10 @@ get :: State s s
 get = S (\s -> (s, s))
 
 put :: s -> State s ()
-put val = S (\s -> (val, ()))
+put val = S (\s -> (val, ()) )
 
 give :: a -> State s a
-give g = S (\s -> (s, g))
+give g = S (\s -> (s,g))
 
 
 
