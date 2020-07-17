@@ -15,7 +15,7 @@ newtype State s a = S { runState :: s -> (s,a) }
 -- runState :: State s a -> s -> (s,a)
 -- runState (S f) s = f s
 
-get :: State a a
+get :: State Int Int 
 get = S (\n -> (n,n))
 
 put :: s -> State s ()
@@ -35,10 +35,5 @@ instance Monad (State s) where
                          in (s'', w))
 
 
-data Tree a = Leaf a | Node (Tree a) (Tree a) deriving Show
-
-tree  :: Tree Integer 
-tree = Node (Node (Leaf 1) (Leaf 2)) (Leaf 3)
-
-gett = get  >>= \n -> put (n+1)
+-- get  >>= \n -> put (n+1)
 
