@@ -1,0 +1,59 @@
+<Cale> I seem to recall ST was just a particular State monad, without a polymorphic state type parameter
+<Cale> Also, ST in the Haskell standard library is not a monad transformer either, it's just a very different monad, which allows for imperative mutable references
+<Cale> So yeah, what he's calling ST there is the same thing as  State Int  in your new code
+<Cale> I think the documentation for Control.Monad.State even includes that one
+<Cale> Perhaps a better name for that is 'increment'
+<Cale> since it increments the current state
+<Cale> crestfallen: So, to run it, you can use runState on it, and then you'd get a function to which you can pass the initial state you want to use
+<Cale> So like,  runState increment 5
+<Cale> and you should expect to see (6,())
+<Cale> the final state will be one more than the provided initial state, and the result will be () because the last action was a put, and put always produces () as its result
+<crestfallen> ok thanks , trying that.   also I'm trying to see connection with hutton's 'fresh' function and our 'increment' function
+<crestfallen> Cale, do you think I should disregard hutton's example for a time - and focus on the example you and I wrote?
+<Cale> crestfallen: yes
+<Cale> crestfallen: His example is the same as ours, but with more confusing names for things
+<ski> crestfallen : your three pastes look okay, to me
+<crestfallen> ski yeah thanks Ca.le just agreed I should drop the hu.tton version for now
+<ski> crestfallen : you understand `reLabel' ?
+<crestfallen> ski so yeah newtype State s a = S { runState :: s -> (s,a) }   that result is reversed, compared with the hutton declaration of ST: newtype ST a = S (State -> (a,State))       
+<crestfallen> right?
+<crestfallen> the dummy constructor, the Removal of the dummy constructor, the naming ST, it's all confusing me. 
+<ski> crestfallen : yes, reversed
+<crestfallen> so yeah I'd like to master the application we wrote together before looking at hutton's again Cale
+<crestfallen> and we have this function get , put , and give
+<crestfallen> *these functions
+<ski> `give' looks like `pure'/`return'
+<ski> (perhaps `give' is what Hutton called it, in that chapter)
+<crestfallen> so it's all quite new. I am not in a position to see how this is similar to hutton's with 'fresh'.. as the increment function?
+<ski> crestfallen : s/function/action/
+<crestfallen> ski no I named that without full comprehension. oh ok yeah action
+<ski> in this case they were applied to an identifier
+<crestfallen> right yes so give is like return. so ski only the state is altered there?
+<crestfallen> or is neither altered?
+<ski> rather, the state is not touched, by `return'/`pure'/`give'
+<crestfallen> ski I think that would help me out
+<crestfallen> ski Cale I just plugged in give in this function 'purre' https://termbin.com/acuz    now what's it doing?
+<Cale> Well, that's getting the current state and then, if the current state was n, it's returning (n+1)
+<Cale> give was your renaming of return
+<Cale> You might want to actually define return in the instance
+<ski> crestfallen : `purre = fmap (+1) get'
+<ski> crestfallen : generally, `ma >>= \a -> return (f a)' is equal to `fmap f ma'
+<crestfallen> ok thanks. is using give in that purre function a good example? I just sort of plugged it in to see if it would compile.
+<ski> it's good to play around a bit, to try to learn about how the pieces can fit together, and what they'λ  do
+<crestfallen> what about Cale 's suggestion, to define return in the instance? not sure I get that
+<Cale> crestfallen: Take the definition of "give", rename it "return" and put it in the Monad instance there
+<Cale> crestfallen: Currently your Monad instance is missing a definition for return, even though the Applicative instance defines pure to be the same as whatever return is
+<Cale> I believe the default implementation in Monad will define return to be whatever pure is, so currently it'λ  just loop
+<Cale> There are two methods in Monad
+<Cale> (>>=) and return
+<crestfallen> ok the indentation is crucial there I believe
+<Cale> Yeah, it should be indented 2 spaces to line up with the x in "x >>= f = ..."
+<Cale> because both definitions are part of the 'where' clause for the instance
+<crestfallen> thanks Cale, I have it like this now     https://termbin.com/e7by
+<crestfallen> but it seems like the purre function returns the incremented state in the second position of the tuple, so I'm a bit fuzzy Cale
+<ski> good, crestfallen
+<ski> crestfallen : the second position (for the definition of `State' you have there) is the "result value" (as opposed to the "output state")
+<crestfallen> oh yeah the output state is unchanged ski
+<ski> note that `put' replaces the state. discarding the input state, letting the output state be the explicit parameter of `put'
+<ski> (and for `put', the "result value" is just `()', a "nothing interesting here" value)
+<ski> while `return'/`pure' (you previous `give') keeps the state, using the input state as the output state. while using the explicit parameter of `return' as the "result value"

@@ -23,7 +23,7 @@ instance Applicative ST where
     pure x = S (\s -> (x,s))
  -- (<*>) :: ST (a -> b) -> ST a -> ST b
     stf <*> stx = S (\s -> let (f,s') = app stf s 
-                               (x,s'') = app stx s' 
+                               (x,s'') = app stx s'
                                in (f x, s''))
 
 -- with Applicatives, an action can't depend on a 
