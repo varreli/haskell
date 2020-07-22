@@ -21,8 +21,8 @@ get = S (\s -> (s, s))
 put :: s -> State s ()
 put val = S (\s -> (val, ()) )
 
-give :: a -> State s a
-give g = S (\s -> (s,g))
+-- give :: a -> State s a
+-- give g = S (\s -> (s,g))
 
 
 
@@ -34,6 +34,10 @@ instance Monad (State s) where
                          (s'', w) = runState (f v) s' 
                          in (s'', w))
 
+  return g = S (\s -> (s,g)) 
 
 
-vv = get >>= \n -> put (n+1) 
+purre = get >>= \n -> return (n+1)
+increment = get >>= \n -> put (n+1) 
+-- ghci> runState increment 5
+-- (6, ())
