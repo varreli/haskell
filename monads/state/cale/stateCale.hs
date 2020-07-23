@@ -1,6 +1,6 @@
-import Control.Applicative
-import Control.Monad (liftM, ap)
-
+import Control.Applicative      
+import Control.Monad (liftM, ap) 
+import Data.Char
 
 instance Functor     (State s) where    -- |
     fmap = liftM                        -- |  minimal instance
@@ -9,21 +9,18 @@ instance Applicative (State s) where    -- |
     pure  = return
     (<*>) = ap
 
---------------------------------------------------------------
-newtype State s a = S { runState :: s -> (s,a) }
+---------------------------------------------------------------
+
+newtype State s a = S { runState :: s -> (s, a) } 
 
 -- runState :: State s a -> s -> (s,a)
 -- runState (S f) s = f s
 
-get :: State a a
-get = S (\n -> (n,n))
+get :: State s s
+get = S (\s -> (s, s))
 
 put :: s -> State s ()
-put val = S (\s -> ( val, ()) )
-
-give :: a -> State s a
-give g = S (\s -> (s,g))
-
+put val = S (\s -> (val, ()) )
 
 
 instance Monad (State s) where
@@ -34,11 +31,12 @@ instance Monad (State s) where
                          (s'', w) = runState (f v) s' 
                          in (s'', w))
 
+  return g = S (\s -> (s,g)) 
 
-data Tree a = Leaf a | Node (Tree a) (Tree a) deriving Show
 
-tree  :: Tree Integer 
-tree = Node (Node (Leaf 1) (Leaf 2)) (Leaf 3)
+increment = get >>= \n -> put (n+1)   -- ghci> runState increment 5
+                                      -- (6, ())
 
-gett = get  >>= \n -> put (n+1)
+pure'  = get >>= \n -> return (n+5)   -- ghci> runState pure' 2
+                                      -- (2,3) 
 
