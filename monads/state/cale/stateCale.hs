@@ -1,6 +1,5 @@
 import Control.Applicative      
 import Control.Monad (liftM, ap) 
-import Data.Char
 
 instance Functor     (State s) where    -- |
     fmap = liftM                        -- |  minimal instance
