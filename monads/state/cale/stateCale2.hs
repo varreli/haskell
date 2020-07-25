@@ -1,7 +1,7 @@
 import StateCaleMod2 
 
 
-increment = get >>= \n -> put (n+1)   
+tick = get >>= \n -> put (n+1)   
                                      
 pure' = get >>= \n -> return (n+5) 
                                    
@@ -16,3 +16,6 @@ pure' = get >>= \n -> return (n+5)
 -- to 'pure' and 'fmap' is really:
 
 -- ' ap . pure ' 
+
+
+
