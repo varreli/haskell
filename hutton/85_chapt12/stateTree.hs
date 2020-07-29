@@ -1,7 +1,16 @@
 import StateHutton
 
-data Tree a = Leaf a | Node (Tree a) (Tree a) deriving Show
+-- exercise: Node contains data:  ----------------------------
 
+data Tree2 a = Leaf | Node (Tree2 a) a (Tree2 a) deriving Show
+
+instance Functor Tree where
+  fmap f (Node l x r) = Node (fmap f l) (f x) (fmap f r)
+  fmap _ Leaf         = Leaf
+
+--------------------------------------------------------------
+
+data Tree a = Leaf a | Node (Tree a) (Tree a) deriving Show
 
 reLabel :: Tree a -> Int -> (Tree Int, Int)
 reLabel (Leaf _) n = (Leaf n, n+1)
