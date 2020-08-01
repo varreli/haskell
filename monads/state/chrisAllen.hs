@@ -34,3 +34,4 @@ rollDieThreeTimes = do
       (d2, s2) = randomR (1,6) s1
       (d3, _ ) = randomR (1,6) s2
   (intToDie d1, intToDie d2, intToDie d3)
+
