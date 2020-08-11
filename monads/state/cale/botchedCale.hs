@@ -10,27 +10,27 @@ instance Applicative (State s) where    -- |
     pure  = return
     (<*>) = ap
 ---------------------------------------------------------------
-newtype State s a = S { runState :: s -> (s, a) } 
+newtype State s a = S { runState :: s -> (a, s) } 
 
 get :: State s s
 get = S (\s -> (s, s))
 
 put :: s -> State s ()
-put val = S (\s -> (val, ()) )
+put val = S (\s -> ((), val) )
 
 
 instance Monad (State s) where
 
 -- (>>=) :: State s a -> (a -> State s b) -> State s b
-  x >>= f = S (\s -> let (s', v) = runState x s 
-                         in runState (f v) s' )
+  x >>= f = S (\s -> let (v, s') = runState x s 
+                         in runState (f v) s')
 
 
-  return g = S (\s -> (s,g)) 
+  return g = S (\s -> (g, s)) 
 
 
 tick = get >>= \n -> put (n+1)   
-                                   
+                                     
 pure' = get >>= \n -> return (n+5) 
 
 -- ghci> runState pure' 3 == runState (fmap (+5) get) 3
