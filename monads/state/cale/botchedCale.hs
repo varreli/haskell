@@ -10,7 +10,7 @@ instance Applicative (State s) where    -- |
     pure  = return
     (<*>) = ap
 ---------------------------------------------------------------
-newtype State s a = S { runState :: s -> (a, s) } 
+newtype State s a = S { runState :: s -> (a,s) } 
 
 get :: State s s
 get = S (\s -> (s, s))
@@ -38,7 +38,7 @@ pure' = get >>= \n -> return (n+5)
 
 -- evaluation of tick:
 
--- tick = S (\s -> let (s', v) = runState get s in runState (put (v+1)) s')
+-- tick = S (\s -> let (v, s') = runState get s in runState (put (v+1)) s')
 
 -- tick = S (\s -> runState (put (s+1)) s)
 
