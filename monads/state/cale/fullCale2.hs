@@ -38,12 +38,12 @@ pure' = get >>= \n -> return (n+5)
 
 -- evaluation of tick:
 
--- tick = S (\s -> let (v, s') = runState get s in runState (put (v+1)) s')
+-- tick = S (\s -> let (v, s') = runState get s in runState s' (put (v+1)))
 
--- tick = S (\s -> runState (put (s+1)) s)
+-- tick = S (\s -> runState s (put (s+1)) )
 
--- tick = S (\s -> runState (S (\s -> (s+1, ())) s)
+-- tick = S (\s -> runState (S (\s -> ((), s+1) ) s)
 
--- tick = S (\s -> (s+1, ()))
+-- tick = S (\s -> ((), s+1))
 
 

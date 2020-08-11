@@ -1,4 +1,4 @@
-module StateCaleMod2 where
+module StateCaleMod1 where
 
 import Control.Applicative      
 import Control.Monad (liftM, ap) 
@@ -26,7 +26,7 @@ instance Monad (State s) where
                          in runState (f v) s' )
 
 
-  return g = S (\s -> (s,g)) 
+  return g = S (\s -> (s, g)) 
 
 
 tick = get >>= \n -> put (n+1)   
