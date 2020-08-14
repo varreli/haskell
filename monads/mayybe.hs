@@ -11,7 +11,7 @@ h x = case f x of
         Just n -> g n
         Nothing -> Nothing
  
-h' :: Int -> Maybe Int
-h' x = do n <- f x
+hh :: Int -> Maybe Int
+hh x = do n <- f x
           g n
 
