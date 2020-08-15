@@ -1,6 +1,5 @@
-module RandomMonad where
+module RandomExample2 where
 
-import RandomExample (Die, intToDie)
 import Control.Applicative (liftA3)
 import Control.Monad (replicateM)
 import Control.Monad.Trans.State
@@ -23,16 +22,3 @@ infiniteDie = repeat <$> rollDie
 
 nDie :: Int -> State StdGen [Die]
 nDie n = replicateM n rollDie
-
-rollsToGetTwenty :: StdGen -> (Int, [Die])
-rollsToGetTwenty = rollsToGetN 20
-
-rollsToGetN :: Int -> StdGen -> (Int, [Die])
-rollsToGetN n g = go 0 (0, []) g
-  where
-    go :: Int -> (Int, [Die]) -> StdGen -> (Int, [Die])
-    go sum (count, rolls) gen
-      | sum >= n = (count, rolls)
-      | otherwise =
-        let (die, nextGen) = randomR (1, 6) gen
-        in go (sum + die) ((count + 1), rolls ++ [intToDie die]) nextGen
