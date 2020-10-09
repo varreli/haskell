@@ -1,4 +1,4 @@
--- Study only, do not compile:
+-- will not compile:
 
 infixl 1  >>, >>=
 class  Monad m  where
@@ -15,7 +15,7 @@ class  Monad m  where
        -- used when the function does not need the value 
        -- produced by the first monadic operator:
 
-       m >> k           = m >>= \_ -> k
+                 m >> k       =       m >>= \_ -> k
 
 
 

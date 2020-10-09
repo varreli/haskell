@@ -1,0 +1,53 @@
+The distinctive feature of Monad compared to other Functors 
+is that it has added structure in which control flow can be 
+embedded. The reason it can do this is that, unlike fmap 
+which applies a single flat function over the entire structure, 
+(>>=) inspects individual elements and builds new structure 
+from that. This adds an imperative style; a notion of "happens
+before," and describes computations that have an order of 
+evaluation, such as in the State monad. 
+
+Monads are similar to function composition. We are composing 
+structures when we use the "bind" operator >>= .
+
+
+class  Monad m  where
+       (>>=) :: m a -> (a -> m b) -> m b
+
+       ma >>= \v -> mb combines a monadic value 
+       ma (possibly State) containing values of 
+       type a , and a function which operates on a 
+       value v of type a, returning the monadic 
+       value mb.
+
+       \v is lambda syntax for a function ; this
+       is shown in the type signature above as
+       (a -> m b)
+
+--------------------------------------------------------------
+class Functor f where
+    fmap :: (a -> b) -> f a -> f b
+
+
+The Functor class has simplier structures such as List. Note that
+the structure of List [] does not change once operated on. 
+
+fmap simply maps a function over each element [3,4,5] :
+
+ghci> fmap (+10) [3,4,5]
+[13,14,15]
+
+ghci> import Data.Char
+ghci> fmap toUpper "dog"
+"DOG"
+
+note fmap infix operator: 
+
+ghci> toUpper <$> "dog"
+"DOG"
+
+and note the prefix notation with <$>  :
+
+ghci> (<$>) toLower "RaLpH"
+"ralph"
+
