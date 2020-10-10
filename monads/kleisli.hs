@@ -11,17 +11,23 @@ import Control.Monad
 
 
 
-vv = map toLower |> map toUpper -- |> map toLower
+vv = map toLower |> map toUpper
+ww = (|>) (map toLower) (map toUpper) 
 
--- note average is (a -> b)
+xx = (map toLower) . (map toUpper)
+yy = (map toUpper) . (map toLower)
+
+qq = (/2) . (*100)
+uu = (flip (.)) (/2) (*100) 
+
+
+-- note average is (a -> b) ------------------------------
 average :: [Double] -> Double
 
 average n = sum n / fromIntegral (length n)
 
 -- review now! :
 -- https://www.schoolofhaskell.com/user/Lkey/kleisli
-
-
 
 -- solutions to category theory for the programmer:
 -- http://danshiebler.com/2018-11-10-category-solutions/
