@@ -42,7 +42,7 @@ foldl (flip (:)) :: Foldable t => [a] -> t a -> [a]
 foldl :: ([t] -> t -> [t]) -> [t] -> [t] -> [t]
 foldl (flip (:)) :: [t] -> [t] -> [t]
 
--- b unifies with [t], a unifies with t 
+-- b unifies with [t], a unifies with t    (see line 26)
 
 -- (flip (:)) is handed the current base (b) and a list 
 -- element (a) and produces a new base (b). You provide
