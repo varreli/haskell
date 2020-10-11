@@ -14,7 +14,8 @@
 a -> [a] -> [a] 
 -- featured in our exercise: 1:[2] -> [1,2]
 
--- the correct pattern for foldl is (flip (:)) 
+-- the correct pattern for foldl is (flip (:)) ,
+-- requiring the parameters of (:) to be flipped 
 -- (compare with line 14) :
 
 [a] -> a -> [a]
