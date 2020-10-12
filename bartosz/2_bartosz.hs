@@ -1,5 +1,5 @@
 v1 :: String -> Int
-v1 = length . filter (not . null) . lines
+v1 = length . filter (not . null) . lines 
 
 v2 :: String -> Int
 v2 = fg . lines

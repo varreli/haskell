@@ -16,16 +16,13 @@ main = do
 -- --------------------------------------
 
     putStrLn "\nThese are equal:"
-    print $ "Hello there!" <>  mempty <> " Monoids are"  <> " neat!" <> mempty
-    print $ "Hello there!" <> (mempty <> " Monoids are") <> " neat!" <> mempty
-    print $ foldr (<>) mempty ["Hello, ", "Monoids are ", mempty, "Cool"] 
+    print $ "Hi!" <>  mempty <> " Monoids"  <> " rock!" <> mempty
+    print $ "Hi!" <> (mempty <> " Monoids") <> " rock!" <> mempty
+    print $ foldr (<>) mempty ["Hi, ", "Monoids ",mempty,"work"] 
 
 ff = flip (++)
 tt = (<>) (Just "Peace") (Just " Out")  -- (<>) is mappend
-
--- note:
--- > tt <> mempty <> Nothing <> Just " Dude"
--- Just "Peace Out Dude"
+uu = tt <> mempty <> Nothing <> Just " Dude"
 
 numbers :: Maybe [Int]
 numbers = readMay "[1,2,3]" <> readMay "[90" <> readMay "[4,5,6]" <> mempty 
