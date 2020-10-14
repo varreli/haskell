@@ -1,6 +1,15 @@
 f g h x y = g (g x) (h y)
 
-g (g x) (h y) :: a      -- assign the expression to type a
+assign the full rhs expression to type a, because we need a name 
+for the result of the whole expressioni. This will be
+the ultimate return type of f :
+
+g (g x) (h y) :: a
+
+So far we only know that:
+
+f :: ? -> ? -> ? -> ? -> a
+
 
 h y :: b                -- assign the first argument to type b
 
@@ -13,9 +22,9 @@ g :: c -> b -> a
 x :: d                  -- expand g x again
 g :: d -> c
 
-So we have 2 signatures for g:
+So we've built constraints from two different applications of g:
 
-g :: c -> b -> a
+g :: c -> (b -> a)
 g :: d -> c
 
 Inspecting the left operand, c and d are equivalent: ( c ~ d )
