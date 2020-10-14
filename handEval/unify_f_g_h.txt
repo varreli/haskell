@@ -1,7 +1,7 @@
 f g h x y = g (g x) (h y)
 
 assign the full rhs expression to type a, because we need a name 
-for the result of the whole expressioni. This will be
+for the result of the whole expression. This will be
 the ultimate return type of f :
 
 g (g x) (h y) :: a
