@@ -48,10 +48,23 @@ is the definition of (>>=) for Maybe
 
 So compare to line 42-43:
 
-> Just (Just 5) >>= id = id (Just 5)
+> Just (Just 5) >>= id
 Just 5
 
-> Nothing >>= id = id Nothing
+The alpha equivalent is:
+
+> Just (Just 5) >>= (\just5 -> just5) 
+Just 5
+
+And the full evaluation is:
+
+> Just (Just 5) >>=          id 
+               (>>=) (\just5 -> just5) (Just 5)
+                  (\(Just 5) -> (Just 5))
+Just 5
+
+
+> Nothing >>= id
 Nothing
 -------------------------------------------------------------------
 ghci> let x = Just (Just 1) in x >>= id
@@ -63,3 +76,6 @@ join :: Monad m => m (m a) -> m a
 ghci> :t (>>= id)
 (>>= id) :: Monad m => m (m b) -> m b
 
+
+
+https://wiki.haskell.org/Typeclassopedia#do_notation
