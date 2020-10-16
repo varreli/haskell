@@ -79,3 +79,6 @@ ghci> :t (>>= id)
 
 
 https://wiki.haskell.org/Typeclassopedia#do_notation
+
+STUDY LOG:
+http://tunes.org/~nef/logs/haskell/20.10.15          18:30:15
