@@ -27,24 +27,24 @@ So we've built constraints from two different applications of g:
 g :: c -> (b -> a)
 g :: d -> c
 
-Inspecting the left operand, c and d are equivalent: ( c ~ d )
-Inspecting the right operand, c ~ b -> a
-
-Therefore       c ~ b -> a    and    d ~ b -> a
-
-Unifying   g :: d -> c   ,  we get:
+Inspecting the left operand, c and d must be the same type: c ~ d .
+This is because of referential transparency: g must take inputs of 
+the same type, so let's call it c :                        
+          
+                          g :: c -> c
+           
+Proving that g :: id    
+we can now substitute c with the more specific (b -> a) :
 
 g :: (b -> a) -> b -> a
 
+Let's assign type e to our y; we now know all the types:
+
 y :: e
 h :: e -> b
-x :: b -> a              -- originally x :: d
-g :: (b -> a) -> b -> a  
+x :: b -> a        -- because originally x :: d
  
-Substitute the most specific form of each type variable,
-thus substituting c and d for the more specific (b -> a)
-
-So the expression returns an a , as per the top expression:
+So f returns an a , as per the top expression:
 
 f :: ((b -> a) -> b -> a) -> (e -> b) -> (b -> a) -> e -> a
 

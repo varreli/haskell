@@ -1,0 +1,84 @@
+Type unification for join:
+
+join x = x >>= id
+join (m (m a)) = (m (m a)) >>= id
+
+
+(>>=) :: Monad m => m b -> (b -> m c) -> m c
+
+
+pass in as left operand : m (m a)
+
+(>>=) :: Monad m => m (m a) -> (m a -> m c) -> m c
+                    m   b   -> (b   -> m c) -> m c
+
+
+
+pass in as right operand : id 
+
+(>>=) :: Monad m => m (m a) -> (m a -> m a) -> m a
+                    m   b ->   ( d  ->  d ) -> m c 
+                                
+    note ^ d = m a = m c .  so a = c  (return value is (m a))
+
+          note also: ma >>= return >>= ma
+-------------------------------------------------------------------
+ghci> let mma = Just (Just 1) in do {ma <- mma; ma}
+Just 1
+
+ghci> let x = Just (Just 1) in do {y <- x; y}
+Just 1
+
+ghci> let x = Just (Just 1) in do {y <- x; z <- y; return z}
+Just 1
+
+Note:
+
+ma <- mma 
+
+is suggestive of “extracting” a single ma from mma.
+
+And the meaning of the binding notation, generalized as {x <- m; x} 
+is entirely dependent on the implementation of (>>=)  :
+
+Just a >>= f = f a 
+Nothing >>= _ = Nothing  
+
+is the definition of (>>=) for Maybe
+
+So compare to line 42-43:
+
+> Just (Just 5) >>= id
+Just 5
+
+The alpha equivalent is:
+
+> Just (Just 5) >>= (\just5 -> just5) 
+Just 5
+
+And the full evaluation is:
+
+> Just (Just 5) >>=          id 
+               (>>=) (\just5 -> just5) (Just 5)
+                  (\(Just 5) -> (Just 5))
+Just 5
+
+
+> Nothing >>= id
+Nothing
+-------------------------------------------------------------------
+ghci> let x = Just (Just 1) in x >>= id
+Just 1
+
+ghci> :t join
+join :: Monad m => m (m a) -> m a
+
+ghci> :t (>>= id)
+(>>= id) :: Monad m => m (m b) -> m b
+
+
+
+https://wiki.haskell.org/Typeclassopedia#do_notation
+
+STUDY LOG:
+http://tunes.org/~nef/logs/haskell/20.10.15          18:30:15
