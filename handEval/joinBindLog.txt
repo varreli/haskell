@@ -38,7 +38,8 @@ ma <- mma
 
 is suggestive of “extracting” a single ma from mma.
 
-And the meaning of the binding notation, generalized as {x <- m; x} 
+And the meaning of the binding notation, generalized as 
+{x <- m; x} 
 is entirely dependent on the implementation of (>>=)  :
 
 Just a >>= f = f a 

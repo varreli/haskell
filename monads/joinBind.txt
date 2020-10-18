@@ -35,8 +35,6 @@ Just 1
 ghci> let x = Just (Just 1) in do {y <- x; z <- y; return z}
 Just 1
 
-          note: we can define (>>=) using (>>= id) 
-
 ghci> let x = Just (Just 1) in x >>= id
 Just 1
 
