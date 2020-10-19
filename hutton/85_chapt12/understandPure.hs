@@ -37,8 +37,11 @@ fmap ((:) 2) (pure []) :: (Num a, Applicative f) => f [a]
 λ> Just ((:) 4) <*> (Just []) 
 Just [4]
 
-λ> Just ((:) 4) <*> (pure []) 
-Just [4]
+λ> Just ((:)'2') <*> (pure ['b'])
+Just "2b"                          -- ??
+
+λ> Just ((:) 4) <*> (pure [40]) 
+Just [4,40]                        -- ??
 
 -- KEY:
 
