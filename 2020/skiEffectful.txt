@@ -2,29 +2,45 @@
 The effect allows "absense of a value/result". non-effect in this 
 case is presence
 
-<ski> in the case list `[]' (so lists), being effectful means having 
-zero, or more than one result, in the list. non-effect means having 
+<ski> With list `[]' (so lists), being effectful means having zero, 
+or more than one result, in the list. non-effect means having 
 just one result.
 
-<ski> in the case of `State s'. effectful means that the result may 
+<ski> in the case of   State s   effectful means that the result may 
 depend on the input state, and/or the output state may change (be 
 different from the input state), or both. non-effect means that the 
 input state is the same as the output state, and the result doesn't 
 depend on the state.
 
-does that mean Nothing is an Effect?  -- yes
+----------------------------------------------------------------------
+An effect is the structural information of a Functor, the part 
+that's not parametric. Does that mean a Nothing is effectual ?  
+
+-- yes
+
+Applicative is almost the same as monads, except that effects cannot 
+depend on previous results.
+----------------------------------------------------------------------
 
 <ski> to get a better understanding of the (elusive) thing we mean, 
 when we say "effect", and what sequencing in a monad (or in an idiom) 
-means, you should get quite familiar with basic examples like `Maybe',
-'Either e',`[]',`Writer w',`Reader r',`State s', Cont o. Then you can 
-try combinations of these basic patterns. that is monad transformers.
+means, you should get quite familiar with basic examples like
+
+Maybe
+Either e
+[]
+Writer w
+Reader r
+State s 
+Cont o 
+Also consider specific applications, like parsers
+
+Then you can try combinations of these basic patterns. 
+That is monad transformers.
 
 Just has 'presence', it holds something , so it is non-effectual
 
-<ski> and you can also consider specific applications, like parsers
-
-** Any deviation, in an action (a value of type `m a'), from "just 
+** Any deviation, in an action (a value of type m a), from "just 
 (deterministically) computing a single value of type 'a' 
 (independently of context)", is an effect. **
 
@@ -38,14 +54,14 @@ An m a (Nothing is not (m a) because there is no type contained therein) is by
 nature a deviation, an effect.
 
 <ski> if you have m a and then add another m layer, with 'pure' or 'return' 
-(either outside the existing `m' layer, or inside it), so that you get `m (m a)' 
-and you then use `join', to collapse those two layers, you get back the same 
-action of type `m a' that you started with. That is, introducing a "dummy" `m' 
+(either outside the existing 'm' layer, or inside it), so that you get m (m a) 
+and you then use 'join', to collapse those two layers, you get back the same 
+action of type 'm a' that you started with. That is, introducing a "dummy" 'm' 
 layer, that is non-effectful, and then combining ("smashing") it together with 
-the other `m' layer, using `join', gets you back where you started.
+the other 'm' layer, using 'join', gets you back where you started.
 
-<ski> "do X, then do nothing" is the same as just "do X"
-<ski> "do nothing, then do X" is also the same as just "do X"
+<ski> "do X, then do nothing" is the same as "do X"
+<ski> "do nothing, then do X" is also the same as "do X"
 
 > pure [0,1,2,3] :: [] ([] Integer)
 <lambdabot>  [[0,1,2,3]]
@@ -61,14 +77,14 @@ we're back where we started
 
 again, we're back where we started
 
-<ski> `join', for lists, is just concatenation of a list of lists.
+join   is just concatenation of a list of lists.
 
 <ski> putting a list as the single element of a wrapping list, and then 
 concatenating, gives back the original list. Also, wrapping each element 
 in a singleton list, and then concatenating, also gives back the 
 original list.
 So, in this sense, "singleton list" is "non-effectful"
-<ski> for `Maybe', `Just' is similarly non-effectful
+<ski> for Maybe, 'Just' is similarly non-effectful
 
 > join [[1],[2]]
 <lambdabot>  [1,2]
@@ -88,7 +104,7 @@ takes an `M a' and gives an `M b'
 But we can call `(=<<)' on `g', like so :
 
 <ski>   (g =<<) :: M b -> M c
-<ski> (`(g =<<)' is the same as `(=<<) g')
+<ski> (g =<<) is the same as (=<<) g)
 <ski> and now we can compose this with `f' as :
 <ski>   (g =<<) . f :: a -> M c
 <ski> (this is very closely related to what `(<=<)'/`(>=>)' does)
@@ -130,3 +146,5 @@ The list monad expresses nondeterminism.
 
 cross mx my = mx >>= \x -> my >>= \y -> return (x,y)
 
+STUDY:
+https://stackoverflow.com/questions/7460809/can-someone-explain-the-traverse-function-in-haskell#comment9028614_7461112
