@@ -1,6 +1,22 @@
-<ski> if you talk about e.g. `Maybe', then it's very simple.
+Wens 21 Oct 2020, ski
+
+
+To read a line in IO, and then to output that line, you can do 
+
+fmap putStrLn getLine 
+
+which has type IO (IO ()). but to get this into a single IO () 
+that will first input a line, then output it, you use 'join'
+
+The "first .., then .." is the (dynamic) sequencing here)
+<ski> `join' can be thought of as combining the effects described 
+by two m-layers, one nested inside the other. combining them into 
+a single m-layer, creates the effects of both the original layers.
+
+
+<ski> if you talk about e.g. Maybe, then it's very simple.
 The effect allows "absense of a value/result". non-effect in this 
-case is presence
+case is presence.
 
 <ski> With list `[]' (so lists), being effectful means having zero, 
 or more than one result, in the list. non-effect means having 
@@ -145,6 +161,13 @@ The list monad expresses nondeterminism.
 <ski> the point was to follow the type checking/inference of 
 
 cross mx my = mx >>= \x -> my >>= \y -> return (x,y)
+
+<ski> example:
+
+ghci> [0,1,2] >>= \x -> [x^2,-x^2] >>= \y -> []
+
+ghci> [join actionYieldingAction | actionYieldingAction <- [Nothing,Just Nothing,Just (Just 5)]]
+[Nothing,Nothing,Just 5]
 
 STUDY:
 https://stackoverflow.com/questions/7460809/can-someone-explain-the-traverse-function-in-haskell#comment9028614_7461112
