@@ -1,0 +1,3 @@
+https://stackoverflow.com/questions/33386622/what-exactly-does-effectful-mean
+
+https://stackoverflow.com/questions/7460809/can-someone-explain-the-traverse-function-in-haskell#comment9028614_7461112
