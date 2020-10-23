@@ -8,8 +8,8 @@ fmap putStrLn getLine
 which has type IO (IO ()). but to get this into a single IO () 
 that will first input a line, then output it, you use 'join'
 
-The "first .., then .." is the (dynamic) sequencing here)
-<ski> `join' can be thought of as combining the effects described 
+The "first .., then .." is the (dynamic) sequencing here).
+'join' can be thought of as combining the effects described 
 by two m-layers, one nested inside the other. combining them into 
 a single m-layer, creates the effects of both the original layers.
 

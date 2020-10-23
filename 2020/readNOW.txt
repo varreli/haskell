@@ -1,3 +1,48 @@
+> join (\x -> \y -> x + y) 8
+  16
+
+functions are monads too
+
+Also see this in-depth answer: https://stackoverflow.com/a/5316690
+
+An 'm a' is an effect; Nothing is not an 'm a'
+
+> Nothing :: Maybe Int
+Nothing
+
+> Nothing :: Maybe Bool
+Nothing
+
+it's just a class: Monad
+
+Did you remeber the Monad instance of Maybe?
+
+instance Monad Maybe where
+    join (Just x) = x
+    join Nothing  = Nothing
+
+NOT
+
+instance Monad Maybe a where
+
+And in the definition we know nothing about the value, 
+and just do stuff with constructors.
+So if you call constructors effects, then yeah, sure.
+
+
+
+https://stackoverflow.com/questions/5710078/in-haskell-performing-and-and-or-for-boolean-functions
+
 https://stackoverflow.com/questions/33386622/what-exactly-does-effectful-mean
 
 https://stackoverflow.com/questions/7460809/can-someone-explain-the-traverse-function-in-haskell#comment9028614_7461112
+
+
+
+
+Monad (->) r
+
+kmett (2nd upvoted answer):
+
+https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#line-979
+
