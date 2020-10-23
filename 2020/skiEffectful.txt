@@ -1,0 +1,150 @@
+<ski> if you talk about e.g. `Maybe', then it's very simple.
+The effect allows "absense of a value/result". non-effect in this 
+case is presence
+
+<ski> With list `[]' (so lists), being effectful means having zero, 
+or more than one result, in the list. non-effect means having 
+just one result.
+
+<ski> in the case of   State s   effectful means that the result may 
+depend on the input state, and/or the output state may change (be 
+different from the input state), or both. non-effect means that the 
+input state is the same as the output state, and the result doesn't 
+depend on the state.
+
+----------------------------------------------------------------------
+An effect is the structural information of a Functor, the part 
+that's not parametric. Does that mean a Nothing is effectual ?  
+
+-- yes
+
+Applicative is almost the same as monads, except that effects cannot 
+depend on previous results.
+----------------------------------------------------------------------
+
+<ski> to get a better understanding of the (elusive) thing we mean, 
+when we say "effect", and what sequencing in a monad (or in an idiom) 
+means, you should get quite familiar with basic examples like
+
+Maybe
+Either e
+[]
+Writer w
+Reader r
+State s 
+Cont o 
+Also consider specific applications, like parsers
+
+Then you can try combinations of these basic patterns. 
+That is monad transformers.
+
+Just has 'presence', it holds something , so it is non-effectual
+
+** Any deviation, in an action (a value of type m a), from "just 
+(deterministically) computing a single value of type 'a' 
+(independently of context)", is an effect. **
+
+<ski> note that, commonly, when we say "effectful", we really mean 
+"possibly effectful". so this sense of "effectful" contains 
+"non-effectful" as a special case. If you want to exclude it, you 
+could perhaps say "properly effectful". So in the list case, a 
+singleton list is not properly effectful.
+
+An m a (Nothing is not (m a) because there is no type contained therein) is by 
+nature a deviation, an effect.
+
+<ski> if you have m a and then add another m layer, with 'pure' or 'return' 
+(either outside the existing 'm' layer, or inside it), so that you get m (m a) 
+and you then use 'join', to collapse those two layers, you get back the same 
+action of type 'm a' that you started with. That is, introducing a "dummy" 'm' 
+layer, that is non-effectful, and then combining ("smashing") it together with 
+the other 'm' layer, using 'join', gets you back where you started.
+
+<ski> "do X, then do nothing" is the same as "do X"
+<ski> "do nothing, then do X" is also the same as "do X"
+
+> pure [0,1,2,3] :: [] ([] Integer)
+<lambdabot>  [[0,1,2,3]]
+> join (pure [0,1,2,3] :: [] ([] Integer))
+<lambdabot>  [0,1,2,3]
+
+we're back where we started
+
+> fmap pure [0,1,2,3] :: [] ([] Integer)
+<lambdabot>  [[0],[1],[2],[3]]
+> join (fmap pure [0,1,2,3] :: [] ([] Integer))
+<lambdabot>  [0,1,2,3]
+
+again, we're back where we started
+
+join   is just concatenation of a list of lists.
+
+<ski> putting a list as the single element of a wrapping list, and then 
+concatenating, gives back the original list. Also, wrapping each element 
+in a singleton list, and then concatenating, also gives back the 
+original list.
+So, in this sense, "singleton list" is "non-effectful"
+<ski> for Maybe, 'Just' is similarly non-effectful
+
+> join [[1],[2]]
+<lambdabot>  [1,2]
+
+<ski> @where AAM
+<lambdabot> http://www.haskell.org/haskellwiki/All_About_Monads
+<ski> could possibly also be useful
+
+<ski> sometimes it may be nicer to think of `(=<<)', rather than `(>>=)'
+<ski>   (=<<) :: (a -> M b) -> (M a -> M b)
+<ski> it converts a function from `a' to `M b', to one that 
+takes an `M a' and gives an `M b'
+
+<ski>   f :: a -> M b
+<ski>   g :: b -> M c
+<ski> we can't compose them as `g . f :: a -> M c' -- this is type incorrect
+But we can call `(=<<)' on `g', like so :
+
+<ski>   (g =<<) :: M b -> M c
+<ski> (g =<<) is the same as (=<<) g)
+<ski> and now we can compose this with `f' as :
+<ski>   (g =<<) . f :: a -> M c
+<ski> (this is very closely related to what `(<=<)'/`(>=>)' does)
+<ski> ">>= is essentially >=> with join extending it" -- not quite
+<ski> the relation between `>>=' and `>=>' is
+<ski>   (f >=> g) x = f x >>= g
+<ski> on the one hand, and
+<ski>   mx >>= f = (\() -> mx) >=> g
+<ski> on the other hand
+<ski> so, no extra `join' in here. apart from the one that could be said 
+to already be present, in `>>='/`>=>'. that is
+
+mx >>= f = join (fmap f mx)
+
+f >=> g = join . fmap g . f
+
+(f >=> g) x = join (fmap g (f x))  -- same thing, just expressed without 
+composition.
+
+<ski> To understand how monads work, I think it's good to not focus too 
+much on 'do' .
+
+Work out the types of this list monad example:
+
+cross mx my = mx >>= \x -> my >>= \y -> return (x,y)
+
+> let cross mx my = mx >>= \x -> my >>= \y -> return (x,y) in cross [0,1,2] [3,4]
+<lambdabot>  [(0,3),(0,4),(1,3),(1,4),(2,3),(2,4)]
+
+The list monad expresses nondeterminism.
+
+> @pl cross mx my = mx >>= \x -> my >>= \y -> return (x,y)
+<lambdabot> cross = liftM2 (,)
+
+>@undo do {x <- mx; y <- my; pure (x,y)}
+<lambdabot> mx >>= \ x -> my >>= \ y -> pure (x, y)
+
+<ski> the point was to follow the type checking/inference of 
+
+cross mx my = mx >>= \x -> my >>= \y -> return (x,y)
+
+STUDY:
+https://stackoverflow.com/questions/7460809/can-someone-explain-the-traverse-function-in-haskell#comment9028614_7461112
