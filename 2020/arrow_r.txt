@@ -1,0 +1,37 @@
+Functor (->) r
+
+(->) isn't a morphism between objects. A functor takes 
+a single object from the target category and returns 
+a single object in the destination category. (->) takes two 
+objects and returns a single object. We partially apply an 
+object to (->) to get a functor. Once we partially apply r, 
+we have a mapping from Haskell types to Haskell types: a 
+mapping on the objects in Hask: it associates 
+
+Int with r -> Int 
+String with r -> String, 
+a with r -> a 
+
+This is why ((->) r) is a functor, not (->).
+
+so fmap for      Functor (->) r      is composition:
+
+
+ar ab ra r = ab (ra r)
+
+ar  :: (a -> b) -> ((r -> a) -> (r -> b))
+
+(.) :: (b -> c) ->  (a -> b) -> (a -> c) 
+
+so:
+
+instance Functor (->) r where
+    fmap = (.)
+
+
+Look at the more general fmap:
+
+class Functor f where
+    fmap :: (a -> b) ->     f    a  ->    f    b
+
+    fmap :: (a -> b) ->  ((->) r a) -> ((->) r b)

@@ -17,7 +17,7 @@ a ~ b' -> c', b ~ a' -> b', and  b ~ a' -> c'
 -- The last two imply that:
 b' ~ c'
 
-We ultimately get a ~ b' -> b' and b ~ a' -> b'  : 
+-- We ultimately get a ~ b' -> b' and b ~ a' -> b'  : 
 foldr (.) :: (a' -> b') -> t (b' -> b') -> a' -> b'
 
 
