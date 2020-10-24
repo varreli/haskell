@@ -35,3 +35,7 @@ class Functor f where
     fmap :: (a -> b) ->     f    a  ->    f    b
 
     fmap :: (a -> b) ->  ((->) r a) -> ((->) r b)
+--------------------------------------------------------------
+read about (->) r
+
+http://learnyouahaskell.com/functors-applicative-functors-and-monoids
