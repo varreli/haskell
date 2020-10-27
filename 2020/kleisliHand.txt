@@ -7,23 +7,23 @@ g :: (b -> c)
 
 f . g :: (a -> c)
 
-Let's show the logic:
+Let's show the logic with function 'cp' :
 
-cp f g   = \a -> f (g a)
-
+cp f g   = \a -> f (g a)  -- lambda notation
+                          
 cp f g a = f (g a)
 
-cp f g a = (f . g) a   -- redundancy of 'a'
-                       -- leads to beta reduction:
+cp f g a = (f . g) a      -- redundancy of 'a'
+                          -- leads to beta reduction:
 cp f g   =  f . g   
 
-cp f g   = (.) f g   -- prefix notation shows
-                  -- redundancy of 'f' and 'g':
-cp    = (.)
+cp f g   = (.) f g        -- prefix notation shows
+                          -- redundancy of 'f' and 'g':
+cp       = (.)
 
 -- so f composed with g takes an 'a' and returns a 'c'
-------------------------------------------------------
--- Let's flip compose for a new komposition:
+--------------------------------------------------------
+-- Let's flip compose for a new kompose (|>) :
 
 f :: (a -> b)
 g :: (b -> c)
@@ -32,7 +32,7 @@ g :: (b -> c)
 (|>) = flip (.)
 
 f |> g :: (a -> c)
-------------------------------------------------------
+--------------------------------------------------------
 f :: a -> m b
 g :: b -> m c
 
@@ -42,8 +42,8 @@ f :: a -> m b
 g :: b -> m c
 
 f :: a -> m b
-g ::        b -> m c ------------------- fmap --------
---    but ^ stays so our result m (m c)  (after (>>=) 
+g ::        b -> m c -------------------- fmap ---------
+--    but ^ stays so our result m (m c)   -- after (>>=)  
 
 -- a becomes m b 
 -- b becomes m c
@@ -62,6 +62,5 @@ join ::       m (m c) -> m c
 -- computational context 'm'   --> (m a)
 
 
-
-
 -- https://www.schoolofhaskell.com/user/Lkey/kleisli
+
