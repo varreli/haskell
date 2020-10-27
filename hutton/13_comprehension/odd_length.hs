@@ -5,9 +5,16 @@
 
 -- weird example:
 
+comprehend =  [ 1 | _ <- [1,2,3] ]
+-- [1,1,1]
+
 length' = sum [ 1 | _ <- [1,2,3] ]
+-- 3
 
 -- this is the same as
 
 rep = replicate 3 1
+-- [1,1,1]
 
+summa = sum rep
+-- 3
