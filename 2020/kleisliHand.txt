@@ -1,0 +1,67 @@
+f :: (a -> b)
+g :: (b -> c)
+
+-- Compose f and g with (.) 
+
+(.) :: (b -> c) -> (a -> b) -> (a -> c)
+
+f . g :: (a -> c)
+
+Let's show the logic:
+
+cp f g   = \a -> f (g a)
+
+cp f g a = f (g a)
+
+cp f g a = (f . g) a   -- redundancy of 'a'
+                       -- leads to beta reduction:
+cp f g   =  f . g   
+
+cp f g   = (.) f g   -- prefix notation shows
+                  -- redundancy of 'f' and 'g':
+cp    = (.)
+
+-- so f composed with g takes an 'a' and returns a 'c'
+------------------------------------------------------
+-- Let's flip compose for a new komposition:
+
+f :: (a -> b)
+g :: (b -> c)
+
+(|>) :: (a -> b) -> (b -> c) -> (a -> c)
+(|>) = flip (.)
+
+f |> g :: (a -> c)
+------------------------------------------------------
+f :: a -> m b
+g :: b -> m c
+
+f !> g :: a -> m c -- (!>) Komposition of f and g
+                   --      requires fmap:
+f :: a -> m b
+g :: b -> m c
+
+f :: a -> m b
+g ::        b -> m c ------------------- fmap --------
+--    but ^ stays so our result m (m c)  (after (>>=) 
+
+-- a becomes m b 
+-- b becomes m c
+-- so the result becomes m (m c)
+
+-- We need to flatten    m (m c)   using join:
+
+f :: a -> m b
+g ::        b -> m c
+--            m (m c) -- as before
+join ::       m (m c) -> m c
+
+-- so kleisli composition, fmap and join are 
+-- the essence of what a monad is. pure 
+-- computations or values 'a' are in a 
+-- computational context 'm'   --> (m a)
+
+
+
+
+-- https://www.schoolofhaskell.com/user/Lkey/kleisli

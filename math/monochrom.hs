@@ -27,4 +27,5 @@ hick ([]) = 0
 hickk (x:xs) = x * hickk (xs)
 hickk [] = 1
 
--- The base case, [] = 1, is identity for (*).
+-- The correct hickk needs this base case: 
+-- [] = 1, which is identity for (*).

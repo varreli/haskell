@@ -1,3 +1,5 @@
+-- https://www.schoolofhaskell.com/user/Lkey/kleisli
+
 import Data.Char
 import Control.Monad
 
