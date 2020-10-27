@@ -6,4 +6,9 @@ instance Functor Tree where
     fmap f (Add x y) = Add (fmap f x) (fmap f y)
 
 
-https://blog.plover.com/prog/haskell/traversable.html
+-- https://blog.plover.com/prog/haskell/traversable.html
+
+
+-- future study of categories and traversable:
+-- https://duplode.github.io/posts/traversable-a-remix.html
+

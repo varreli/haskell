@@ -1,4 +1,0 @@
-f :: a -> m b
-g ::        b -> m c
---            m (m c) -- as before
-join ::       m (m c) -> m c
