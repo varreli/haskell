@@ -12,19 +12,28 @@ instance Foldable Tree where
 instance Traversable Tree where
     traverse fn (Con a)   = Con <$> (fn a)
     traverse fn (Add x y) = Add <$> (traverse fn x) <*> (traverse fn y)
+
+
+aa = foldr (*) 1 t2
+
+t2 = (Add (Add (Con 6) (Con 7)) (Con 10))
+
  
-aa x = if (x>0) then Just ((+) x 5) else (Just 0) 
+zero x = if (x > 0) then Just ((+) x 5) else (Just 0) 
 
 t1 = (Add (Add (Con 3) (Con 4)) (Con (-5)))
 
--- ghci> traverse aa t1
+bb = traverse zero t1
 -- Just Add (Add (Con 8) (Con 9)) (Con 0)
 
-bb x = if even x then Just (x `div` 2) else Nothing
+
+evens x = if even x then Just (x `div` 2) else Nothing
 
 list = [2,4,6,7]
--- ghci> traverse bb list 
+
+cc = traverse evens list 
 -- Nothing
+
 
 -------------------------------------------------------------------------
 
