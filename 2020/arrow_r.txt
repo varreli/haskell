@@ -2,13 +2,14 @@
 
 doesn't represent partial application of functions to values.
 
+((->) r) is a mapping from types to types, that's the first 
+condition for something to be in the Functor class in Haskell.
+
 ((->) r) is all functions which can accept an r
 This is why ((->) r) is a functor, not (->).
 
 data Foo f = Foo { bar :: f Int, baz :: f Bool } 
-type ReadFoo = Foo ((->) String)                     
-
--- ReadFoo ~= 
+type ReadFoo = Foo ((->) String)                        -- ReadFoo ~= 
 
 Foo {bar :: r -> Int, baz :: r -> Bool}. 
 ((->) String) is the functor for functions which can accept 
