@@ -15,7 +15,8 @@ Nothing
 
 it's just a class: Monad
 
-Did you remeber the Monad instance of Maybe?
+
+-- Remember the Monad instance of Maybe?
 
 instance Monad Maybe where
     join (Just x) = x
