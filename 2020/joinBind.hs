@@ -1,4 +1,4 @@
-Type unification for join:
+-- Type unification for join:
 
 join x = x >>= id
 join (m (m a)) = (m (m a)) >>= id
@@ -7,14 +7,14 @@ join (m (m a)) = (m (m a)) >>= id
 (>>=) :: Monad m => m b -> (b -> m c) -> m c
 
 
-pass in as left operand : m (m a)
+-- pass in as left operand : m (m a)
 
 (>>=) :: Monad m => m (m a) -> (m a -> m c) -> m c
                     m   b   -> (b   -> m c) -> m c
 
 
 
-pass in as right operand : id 
+-- pass in as right operand : id 
 
 (>>=) :: Monad m => m (m a) -> (m a -> m a) -> m a
                     m   b ->   (d   ->  d ) -> m c 
