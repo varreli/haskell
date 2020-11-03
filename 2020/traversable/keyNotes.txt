@@ -1,0 +1,22 @@
+-- Functor => is a superclass of: 
+-- Applicative => is a superclass of:
+-- Monad
+
+-- Foldable => is a superclass of:
+-- Traversable.
+-- 
+-- Removing a superclass destroys the relationship between the
+-- classes and their corresponding laws and operations. 
+-- 
+-- Eq => is a superclass of:
+-- Ord.
+
+-- There are laws dictating how the corresponding classes should 
+-- work.
+-- 
+-- It would seem remarkably backwards to finally unify all the 
+-- work on Applicative and Monad and simultaneously cleave apart 
+-- all the work on Foldable and Traversable creating a variant 
+-- on the ap vs. (<*>), fmap vs. liftM problem but now 
+-- spanning dozens of combinators.
+
