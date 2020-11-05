@@ -22,10 +22,12 @@ bb = traverse ff t1
 
 -- Evaluation:
 
--- 1 traverse ff (Add (Add (Con 3) (Con 4)) (Con (-2))) 
--- 2 Add <$> traverse ff (Add (Con 3) (Con 4)) <*> traverse ff (Con (-2))
--- 3 Add <$> (Add <$> traverse ff (Con 3) <*> traverse ff (Con 4) 
---   <*> (Con <$> ff (-2)) 
--- 4 Add <$> Just (Add (Add (Con 8) (Con 9))) <*> Just (Con 0)
+-- traverse ff (Add (Add (Con 3) (Con 4)) (Con (-5))) 
+-- Add <$> traverse ff (Add (Con 3) (Con 4)) <*> traverse ff (Con (-2))
+-- Add <$> (Add <$> traverse ff (Con 3) <*> traverse ff (Con 4)
+--     <*> (Con <$> (ff (-2))
+-- Add <$> (Add <$> Just (Con 8) <*> Just (Con 9) <*> Just (Con 0)
 
 -- Just Add (Add (Con 8) (Con 9)) (Con 0)
+
+-- https://paste.tomsmeding.com/7TIQdWo7   << Axman6
