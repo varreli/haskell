@@ -57,4 +57,3 @@ pure' = get >>= \n -> return (n+5)
 -- to 'pure' and 'fmap' is really:
 
 -- ' ap . pure ' 
-

@@ -1,7 +1,5 @@
 import Control.Monad
 
--- Many things in haskell are just complicated ways to talk about state:
-
 type State = Int
 newtype ST a = S (State -> (a, State)) 
                                        -- newtype requires 
@@ -14,7 +12,6 @@ instance Functor ST where
 --  fmap :: (a -> b) -> ST a -> ST b
   fmap g st = S (\s -> let (x,s') = app st s
                            in (g x, s'))
-
 
                        
 tick :: ST Int 

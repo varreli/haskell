@@ -8,9 +8,9 @@ liftA2  sequence sequenceA replicateM
 `app' is used to run a `ST'-action (being a value of type `ST T', 
 for some type `T'. being a "state transformer", on the state type 
 `State' (which is just `Int' here). note that such a value hasn't 
-been given an initial state yet, to work with), giving it its initial 
-state, so that it can compute a result (of type `T', say), and a 
-final state
+been given an initial state yet, to work with), giving it its 
+initial state, so that it can compute a result (of type `T', say), 
+and a final state
 
 tick == increment
 it's a counter
@@ -40,8 +40,8 @@ writing such a function, using `ST', is less tedious (and less errorprone),
 than writing it explicitly (not hiding the state passing plumbing, that the 
 operations at the link you provided performs)
 
-tick here would be an `ST'-action, and `fmap even tick' another 
-`ST'-action
+tick here would be an ST-action, and 'fmap even tick' another 
+ST-action
 fmap here takes a function (on action execution results), and an action, 
 and produces another action. when executed, the returned action will 
 first execute the input action. then, it will call the callback 

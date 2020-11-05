@@ -1,5 +1,7 @@
 module StateHutton where
 
+import Control.Monad
+
 type State = Int
 newtype ST a = S (State -> (a, State))    -- newtype requires 
                                           -- dummy constructor S
