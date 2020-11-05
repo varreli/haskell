@@ -1,0 +1,11 @@
+Rather than clone, download the file.
+
+Navigate to the file, click on Raw view to get this i.e.:
+
+https://raw.githubusercontent.com/varreli/haskell/master/hutton/85_chapt12/stateTree.hs
+
+then do:
+
+wget 
+
+with the raw domain.
