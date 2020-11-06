@@ -1,0 +1,142 @@
+ Cale  In order to be able to build up some abstraction 
+ we use a newtype:
+ Cale  newtype State s a = S (s -> (s,a))
+ Cale  and because of our choice of representation, the function 
+ to run such a thing on an initial state and get the final state 
+ and result will be super-easy:
+ 
+ Cale  runState :: State s a -> s -> (s,a)
+ Cale  runState (S f) s = f s
+ 
+ or simply:
+ 
+ runState (S f) = f
+ 
+ Cale  We can also build that into the definition of the type, by 
+ making use of the fact that if we use record syntax, we 
+ automatically get functions which extract the fields:
+ 
+ Cale  newtype State s a = S { runState :: s -> (s, a) }
+ Cale  This will automatically define the field extractor function, 
+ which will take a value of type State s a, and extract the field of 
+ type s -> (s,a) from it
+ 
+ Cale  i.e. runState :: State s a -> s -> (s,a) as before
+ Cale  Right, so that defines it as a record having one field called runState
+ and as such, you automatically get a function called 
+ runState which will extract the field from the record
+ 
+ Cale  Just as if you'd defined  
+ data Employee = Empl { name :: String, salary :: Int }
+ 
+ Cale  it'd automatically define  name :: Employee -> String
+ Cale  and  salary :: Employee -> Int
+ 
+ Cale  Our first goal will be to get away from having to use the S constructor 
+ by building up enough basic operations for reading and writing the state and 
+ chaining together actions of type State s a
+ Let's use get and put.
+
+ Cale  get :: State s s  will be a computation which won't affect the current 
+ state (i.e. its final state will be the initial state), but will have that 
+ state as its result as well
+ 
+ get = S (\n -> (n,n)) 
+ Cale  We don't have many ways yet to make values of type State s a 
+ apart from using S
+ 
+ Also its argument has type s -> (s,s), so it might as well be a lambda:
+ get = S (\s -> ...)
+ 
+ Cale  and then we have a value s :: s, and we want to produce a pair of type (s,s), 
+ so there's one obvious thing to do:
+ Cale  get = S (\s -> (s,s))
+ 
+ To go along with that, we need 
+
+ put :: s -> State s ()
+  
+ which, given a value of type s, will produce the State action that, 
+ no matter what value the initial state was, will set the current state to 
+ the given value (and produce an empty tuple).
+
+ and the goal is that after running  put v  the final state will 
+ be v, regardless of what the initial state was:
+ 
+ put val = S (\s -> (val, ()))
+ 
+ Cale  So, now, we also want a way to produce an action which 
+ "does nothing" except to have a given value as its result
+ 
+ return :: a -> State s a
+ 
+ will be the computation which does nothing to the current state 
+ (i.e. the final state will be the same as the initial state), but has 
+ the given value of type g as its result:
+
+ give g = S (\s -> (s,g))   
+
+ Cale  So, now we have the more interesting part:
+ Cale  The reason I used the name 'return' is that is actually the 
+ name we end up using. But if you want to define that, we write an 
+ instance of the Monad type class
+ 
+ instance Monad (State s) where
+ 
+ Cale    return v = ...
+ Cale    x >>= f = ...
+ Cale  We're about to do (>>=) now :)
+ Cale  (>>=) :: State s a -> (a -> State s b) -> State s b
+ 
+ Cale  The idea is that x >>= f will be the State s b action 
+ which, when run, will first run x on the initial state, producing 
+ some intermediate state, and then if the result of that is v
+ it will then run (f v) on the new intermediate state, producing 
+ some final state and result which will be its own final state and result
+
+ Cale  So, it's like we run x, and get to use its result somehow 
+ to decide what to do next
+ 
+ Cale  and f is the function which tells us what to do next based on the result of x
+ Cale  So, for example
+ 
+ Cale  get >>= \n -> put (n+1)
+ Cale  will be the action which increments the current state
+ 
+ 
+       x >>= f = S (\s -> let (s', v)  = runState x s 
+                              (s'', w) = runState (f v) s'     
+                          in  (s'', w))
+ 
+ Cale  I didn't like his names, so my explanation doesn't use 
+       them (especially "app")
+ 
+ 
+ evalState :: State s a -> s -> a
+ execState :: State s a -> s -> s
+ 
+ Cale  evalState and execState are just the two halves of runState
+       
+       runState produces a pair
+       runState :: State s a -> s -> (a,s)
+ 
+       evalState takes the 'a' part of the pair
+       execState gives you the 's' part of the pair
+       
+       These decompose State actions, while get, put and return 
+       either are or produce State actions
+
+
+ ChaiTRex on Cale's use of "record fields" :
+
+ Record fields: Records are just a way to name the parts of a piece of data.
+ Not referring to databases.
+ Like `data T = T Int` has an Int, but it's not given a name.
+ You can do something like `data T = T { countOfBats :: Int }` and now it's called `countOfBats`.
+ The field is given a name.
+ Field is just a name for data that's part of a bigger piece of data.
+ Like the information about a cup in a game might have its contents 
+ as one field, its location as another field.
+ So, the cup might be on the table (one field) halfway filled with coffee 
+ (another field).
+

@@ -9,7 +9,6 @@
 -- for example, TC 5 has the type: 
 -- T Int
 -- 
--- 
 -- Likewise:
 -- 
 -- type ST = Int

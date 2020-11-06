@@ -1,6 +1,6 @@
 type State = Int
 
-newtype ST a = S (State -> (a, State))
+newtype ST a = S (State -> (a, State))     -- ST == State Int
 
 apState :: ST a -> State -> (a, State)
 apState (S st) x = st x

@@ -5,23 +5,19 @@ map (app (fmap even tick)) [0 .. 9]
 app tick 0   vs.  app (liftA2 (,) tick tick) 0
 liftA2  sequence sequenceA replicateM 
 
-`app' is used to run a `ST'-action (being a value of type `ST T', 
-for some type `T'. being a "state transformer", on the state type 
-`State' (which is just `Int' here). note that such a value hasn't 
-been given an initial state yet, to work with), giving it its 
-initial state, so that it can compute a result (of type `T', say), 
-and a final state
+app is used to run an ST-action. 
+Note that we need an initial state to compute a result 
+of type `T' and a final state.
 
 tick == increment
-it's a counter
-(move the "clock" along one step. also giving back as result the 
-previous value of the state)
+it's a counter that moves the "clock" along one step; also 
+giving back as result the previous value of the state.
 
-it is allocating `Int's, and the state is the next unused `Int' that 
-hasn't been allocated yet
+it is allocating 'Int' values, and the state is the next 
+unused 'Int' that hasn't been allocated yet.
 
-if you start by calling `app' on an action, with initial state `0', 
-the first execution of `tick' will give back zero as first result. 
+if you start by calling 'app' on an action, with initial state 0, 
+the first execution of 'tick' will give back zero as first result. 
 next execution will give back one, and so on
 
 e.g. you might be generating assembler code to work on a stack machine, 
@@ -66,13 +62,13 @@ replicateM n act = sequenceA (replicate n act)
 ghci> replicate 4 tick
 [tick,tick,tick,tick]     -- type [ST Int]
 
-sequenceA has type `Applicative i => [i a] -> i [a]'. in this case, 
+sequenceA has type `Applicative i => [i a] -> i [a]'. In this case, 
 calling sequenceA on that list, the argument type [i a] would have to 
-be equal to `[ST Int]', so `i' would be `ST' and `a' would be `Int', 
-in this case
+be equal to '[ST Int]', so 'i' would be 'ST' and 'a' would be 'Int', 
+in this case.
 
-we know Applicative ST holds, because you made such an instance, so 
-we're allowed to call `sequenceA' in this case)
+We know Applicative ST holds, because you made such an instance, so 
+we're allowed to call 'sequenceA' in this case.
 
 the result of calling it would have type `i [a]', which here would then 
 be ST [Int]
