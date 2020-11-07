@@ -10,9 +10,10 @@ instance Applicative (S s)  where       -- |
     pure  = return
     (<*>) = ap
 
-data S s a = S { runS :: s -> (a,s) }
--- runS :: S s a -> s -> (a,s)      -- runS unwraps the 'S' 
-                                    -- data Constructor 
+data S s a = S { runS :: s -> (a,s) }  -- S s a == ST a
+
+-- runS :: S s a -> s -> (a,s)         -- runS unwraps the 'S' 
+                                       -- data Constructor 
 
 instance Monad (S s) where  -- partial application to (S s)
                             -- monad must have kind * -> *
