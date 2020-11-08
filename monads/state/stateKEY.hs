@@ -27,11 +27,11 @@
 -- runST :: ST a -> State -> (a,State) 
 
  
-newtype MyState a s = MyState { runSt :: (s -> (s,a)) }
+newtype MyState s a = MyState { runSt :: (s -> (a,s)) }
 -- ghci> :t MyState (\x -> ("pax", x))
 -- MyState s [Char]
  
-tt = runSt $ MyState (\x -> (x,"pax"))
+tt = runSt $ MyState (\x -> ("sea",x))
 -- ghci> tt 5
 -- ("pax",5)
 -- 

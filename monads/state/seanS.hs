@@ -12,8 +12,9 @@ instance Applicative (S s)  where       -- |
 
 data S s a = S { runS :: s -> (a,s) }  -- S s a == ST a
 
--- runS :: S s a -> s -> (a,s)         -- runS unwraps the 'S' 
-                                       -- data Constructor 
+-- runS :: S s a -> s -> (a,s)   -- runS unwraps the S constructor
+-- S :: (s -> (a,s)) -> S s a    -- refers to S constructor as function
+
 
 instance Monad (S s) where  -- partial application to (S s)
                             -- monad must have kind * -> *
