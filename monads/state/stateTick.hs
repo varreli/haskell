@@ -31,9 +31,10 @@ instance Applicative ST where
  -- pure :: a -> ST a
     pure x = S (\s -> (x,s))
  -- (<*>) :: ST (a -> b) -> ST a -> ST b
-    stf <*> stx = S (\s -> let (f,s') = app stf s 
-                               (x,s'') = app stx s' 
+    stf <*> stx = S (\s -> let (f,s')  = (app stf) s 
+                               (x,s'') = (app stx) s' 
                                in (f x, s''))
+
 
 appTick = Just evenTick <*> Just [0..3]
 -- Just [(True,1),(False,2),(True,3),(False,4)]
