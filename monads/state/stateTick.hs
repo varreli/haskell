@@ -5,38 +5,38 @@ newtype ST a = S (State -> (a, State))
                                        -- newtype requires 
                                        -- dummy constructor S
 
-app :: ST a -> State -> (a, State)
-app (S st) x = st x
+unwrap :: ST a -> State -> (a, State)
+unwrap (S st) x = st x
 
 instance Functor ST where
 --  fmap :: (a -> b) -> ST a -> ST b
-  fmap g st = S (\s -> let (x,s') = app st s
+  fmap g st = S (\s -> let (x,s') = unwrap st s
                            in (g x, s'))
 
                        
 tick :: ST Int 
 tick = S (\n -> (n,n+1))
--- ghci> app tick 5
+-- ghci> unwrap tick 5
 -- (5,6)
  
-ticker n = app (replicateM n tick) 
+ticker n = unwrap (replicateM n tick) 
 -- ghci> ticker 3 5
 -- ([5,6,7],8)
 
-evenTick = map (app (fmap even tick))          -- (fmap even
-                                               -- tick) is state
-----------------------------------------------------------------
+evenTick = map (unwrap (fmap even tick))       -- (fmap even tick)
+                                               -- is state
+------------------------------------------------------------------
 
 instance Applicative ST where
  -- pure :: a -> ST a
     pure x = S (\s -> (x,s))
  -- (<*>) :: ST (a -> b) -> ST a -> ST b
-    stf <*> stx = S (\s -> let (f,s')  = (app stf) s 
-                               (x,s'') = (app stx) s' 
+    stf <*> stx = S (\s -> let (f,s')  = (unwrap stf) s 
+                               (x,s'') = (unwrap stx) s' 
                                in (f x, s''))
 
 
-appTick = Just evenTick <*> Just [0..3]
+boolTick = Just evenTick <*> Just [0..3]
 -- Just [(True,1),(False,2),(True,3),(False,4)]
 
 -- with Applicatives, an action can't depend on a 
@@ -49,7 +49,7 @@ appTick = Just evenTick <*> Just [0..3]
  
 -- giving state to stf results in a tuple of a new state 
 -- called s' and a function called f. this is what the 
--- line        let (f,s') = app stf s        is doing.
+-- line        let (f,s') = unwrap stf s        is doing.
  
 -- that new state s' is then used to give state to stx, 
 -- giving another new state called s'' and a value 

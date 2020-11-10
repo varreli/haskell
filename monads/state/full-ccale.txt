@@ -1,0 +1,20 @@
+
+-- the functor definition only applies to the 'a' type of 
+-- 'State s a'
+
+-- so no functor methods can directly access the 's' type.
+
+-- the pure' equivalence emerges because 'return' is equivalent 
+-- to 'pure' and 'fmap' is really:
+
+-- ' ap . pure ' 
+
+-- ap can also be defined as:   (. ((. (return .)) . (>>=))) . (>>=)
+
+-- Applicative can be considered a generalization of the SKI calculus: 
+-- (<*>) = S 
+-- pure = K 
+-- I = S K K.
+
+
+-- Is ski on the channel named Rein Henrichs ?? 
