@@ -17,3 +17,5 @@ applly f g = f >>= \ff -> g >>= \gg -> return ff (gg)
 
 mm = liftM2 ((/) . realToFrac) sum genericLength [4,5,6]
 oo = liftM2 ((/) . realToFrac) (foldr (+) 0) genericLength
+
+-- https://stackoverflow.com/questions/33454650/understanding-ap-in-a-point-free-function-in-haskell
