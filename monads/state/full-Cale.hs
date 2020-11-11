@@ -21,12 +21,11 @@ put val = S (\s -> ((), val) )
 
 instance Monad (State s) where
 
+  return g = S (\s -> (g, s)) 
 -- (>>=) :: State s a -> (a -> State s b) -> State s b
   x >>= f = S (\s -> let (v, s') = runSt x s 
                          in runSt (f v) s')
 
-
-  return g = S (\s -> (g, s)) 
 
 
 tick = get >>= \n -> put (n+1)   

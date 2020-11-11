@@ -10,7 +10,7 @@ instance Applicative (S s)  where       -- |
     pure  = return
     (<*>) = ap
 
-data S s a = S { runS :: s -> (a,s) }  -- S s a == ST a
+data S s a = S { runS :: s -> (a,s) }  -- S s a == ST a  (hutton)
 
 -- runS :: S s a -> s -> (a,s)   -- runS unwraps the S constructor
 -- S :: (s -> (a,s)) -> S s a    -- refers to S constructor as function
@@ -22,15 +22,16 @@ instance Monad (S s) where  -- partial application to (S s)
   -- return :: a -> S s a
   return a = S $ \s -> (a,s)  -- wrapped function
   -- (>>=) :: S s a -> (a -> S s b) -> S s b
-  S f >>= k =
-    -- f :: s -> (a,s)
+  S st >>= k =
+    -- st :: s -> (a,s)
     -- k :: a -> S s b
-    S $ \s -> let (a, s') = f s
+    S $ \s -> let (a, s') = st s 
                 in runS (k a) s'
-    
+
     -- k a           :: S s b      apply k to a to get S s b
     -- runS (k a)    :: s -> (b,s)
     -- runS (k a) s' :: (b,s)
+
 
 read :: S s s
 read = S $ \s -> (s,s)

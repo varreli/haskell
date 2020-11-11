@@ -1,11 +1,11 @@
  Cale  In order to be able to build up some abstraction 
  we use a newtype:
- Cale  newtype State s a = S (s -> (s,a))
+ Cale  newtype State s a = S (s -> (a,s))
  Cale  and because of our choice of representation, the function 
  to run such a thing on an initial state and get the final state 
  and result will be super-easy:
  
- Cale  runState :: State s a -> s -> (s,a)
+ Cale  runState :: State s a -> s -> (a,s)
  Cale  runState (S f) s = f s
  
  or simply:
@@ -16,26 +16,27 @@
  making use of the fact that if we use record syntax, we 
  automatically get functions which extract the fields:
  
- Cale  newtype State s a = S { runState :: s -> (s, a) }
+ Cale  newtype State s a = S { runState :: s -> (a,s) }
  Cale  This will automatically define the field extractor function, 
  which will take a value of type State s a, and extract the field of 
- type s -> (s,a) from it
+ type s -> (a,s) from it
  
- Cale  i.e. runState :: State s a -> s -> (s,a) as before
- Cale  Right, so that defines it as a record having one field called runState
- and as such, you automatically get a function called 
- runState which will extract the field from the record
+ Cale  
+       runState :: State s a -> s -> (a,s) as before
+       That defines it as a record having one field called runState
+       and as such, you automatically get a function called 
+       runState which will extract the field from the record
  
  Cale  Just as if you'd defined  
- data Employee = Empl { name :: String, salary :: Int }
+       data Employee = Empl { name :: String, salary :: Int }
  
  Cale  it'd automatically define  name :: Employee -> String
- Cale  and  salary :: Employee -> Int
+       and                        salary :: Employee -> Int
  
- Cale  Our first goal will be to get away from having to use the S constructor 
- by building up enough basic operations for reading and writing the state and 
- chaining together actions of type State s a
- Let's use get and put.
+ Cale  Our first goal will be to get away from having to use 
+       the S constructor by building up enough basic operations 
+       for reading and writing the state and chaining together 
+       actions of type State s a       Let's use get and put.
 
  Cale  get :: State s s  will be a computation which won't affect the current 
  state (i.e. its final state will be the initial state), but will have that 
@@ -45,16 +46,16 @@
  Cale  We don't have many ways yet to make values of type State s a 
  apart from using S
  
- Also its argument has type s -> (s,s), so it might as well be a lambda:
+ Its argument has type s -> (s,s), so it might as well be a lambda:
  get = S (\s -> ...)
  
- Cale  and then we have a value s :: s, and we want to produce a pair of type (s,s), 
- so there's one obvious thing to do:
- Cale  get = S (\s -> (s,s))
+ So we have a value s :: s, and we want to produce a pair of type (s,s) : 
+
+       get = S (\s -> (s,s))
  
  To go along with that, we need 
 
- put :: s -> State s ()
+ put :: s -> State () s
   
  which, given a value of type s, will produce the State action that, 
  no matter what value the initial state was, will set the current state to 
@@ -63,14 +64,14 @@
  and the goal is that after running  put v  the final state will 
  be v, regardless of what the initial state was:
  
- put val = S (\s -> (val, ()))
+ put val = S (\s -> ((), s))
  
- Cale  So, now, we also want a way to produce an action which 
- "does nothing" except to have a given value as its result
+ Now we need a way to produce an action which "does nothing" except 
+ to have a given value as its result
  
  return :: a -> State s a
  
- will be the computation which does nothing to the current state 
+ This computation does nothing to the current state. 
  (i.e. the final state will be the same as the initial state), but has 
  the given value of type g as its result:
 
@@ -104,8 +105,8 @@
  Cale  will be the action which increments the current state
  
  
-       x >>= f = S (\s -> let (s', v)  = runState x s 
-                              (s'', w) = runState (f v) s'     
+       x >>= f = S (\s -> let (v, s')  = runState x s 
+                              (w, s'') = runState (f v) s'     
                           in  (s'', w))
  
  Cale  I didn't like his names, so my explanation doesn't use 
