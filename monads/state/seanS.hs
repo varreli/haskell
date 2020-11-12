@@ -32,19 +32,30 @@ instance Monad (S s) where  -- partial application to (S s)
     -- runS (k a)    :: s -> (b,s)
     -- runS (k a) s' :: (b,s)
 
-
 read :: S s s
 read = S $ \s -> (s,s)
 
 write :: s -> S s ()
 write s = S $ \_ -> ((),s)   -- \_ shows old state is discarded
-
+--------------------------------------------------------------------
 ff :: S Int Int
 ff = do x <- read
         write (x+1)
         x <- read
         return (x*10)
 
-test :: (Int, Int)
-test = runS ff 0   -- has type (Int,Int) since: runS :: s -> (a,s)
+ffTest :: (Int, Int)
+ffTest = runS ff 0   -- has type (Int,Int) since: runS :: s -> (a,s)
+--------------------------------------------------------------------
+nextletter :: Int -> Char
+nextletter iTc
+    | toEnum iTc == 90 = 'A'
+    | iTc < 65 || iTc > 90 = error "Not in the English alphabet"
+    | otherwise = toEnum (iTc + 1)
 
+gg :: S Int Char
+gg = do x <- read
+        return (nextletter x) 
+
+ggTest :: Int -> (Char,Int)
+ggTest = runS gg         
