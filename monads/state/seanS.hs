@@ -37,6 +37,7 @@ read = S $ \s -> (s,s)
 
 write :: s -> S s ()
 write s = S $ \_ -> ((),s)   -- \_ shows old state is discarded
+-- write s = S $ \s -> ((),s)  -- note what happens without wildcard
 --------------------------------------------------------------------
 ff :: S Int Int
 ff = do x <- read
@@ -45,7 +46,7 @@ ff = do x <- read
         return (x*10)
 
 ffTest :: (Int, Int)
-ffTest = runS ff 0   -- has type (Int,Int) since: runS :: s -> (a,s)
+ffTest = runS ff 4   -- has type (Int,Int) since: runS :: s -> (a,s)
 --------------------------------------------------------------------
 nextletter :: Int -> Char
 nextletter iTc
