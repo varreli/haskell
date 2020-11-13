@@ -36,7 +36,7 @@ read :: S s s
 read = S $ \s -> (s,s)
 
 write :: s -> S s ()
-write s = S $ \_ -> ((),s)   -- \_ shows old state is discarded
+write s = S $ \_ -> ((),s)     -- \_ shows old state is discarded
 -- write s = S $ \s -> ((),s)  -- note what happens without wildcard
 --------------------------------------------------------------------
 ff :: S Int Int
