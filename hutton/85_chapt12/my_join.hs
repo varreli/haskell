@@ -14,7 +14,13 @@ cat :: List a -> List a -> List a
 cat Nil ys = ys
 cat (Cons x xs) ys = Cons x (cat xs ys)
 
-l1 = Cons 1 (Cons 2 Nil)
-l2 = Cons 3 Nil
+list1 = Cons 5 (Cons 10 Nil)
+list2 = Cons 15 Nil
 
-main = print $ join $ Cons l1 (Cons l2 Nil)
+
+ee = join $ Cons (Cons 22 (Cons 34 Nil)) (Cons (Cons 44 Nil) Nil)
+-- Cons 22 (Cons 34 (Cons 44 Nil))
+
+
+
+-- main = print $ join $ Cons list1 (Cons list2 Nil)
