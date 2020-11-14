@@ -18,6 +18,9 @@ list1 = Cons 5 (Cons 10 Nil)
 list2 = Cons 15 Nil
 
 
+dd = cat (Cons (Cons 34 Nil) Nil) (Cons (Cons 44 Nil) Nil)
+-- Cons (Cons 34 Nil) (Cons (Cons 44 Nil) Nil)
+
 ee = join $ Cons (Cons 22 (Cons 34 Nil)) (Cons (Cons 44 Nil) Nil)
 -- Cons 22 (Cons 34 (Cons 44 Nil))
 
