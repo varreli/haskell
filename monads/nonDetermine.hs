@@ -1,3 +1,6 @@
+import Control.Applicative
+import Control.Monad
+
 qq = (+) <$> [1,2] <*> [4,5,6] 
 -- [5,6,7,6,7,8]
 
@@ -15,13 +18,14 @@ rr = (,) <$> [1,2] <*> [4,5,6]
 -- (+) is a non-product
 -- (,) is a product
 
+-- https://coderwall.com/p/tb-wtg/nondeterminism-in-haskell-with-concatmap
 ------------------------------------------------------
 
 -- f :: A -> [B]
 -- g :: B -> [C]
 -- h :: A -> [C]
 
-h x = concat [g y | y <- f x]
+-- h x = concat [g y | y <- f x]
 -- h x = f x >>= g
 -- h = f >=> g      -- note fish not beta.
 
