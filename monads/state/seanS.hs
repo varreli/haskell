@@ -1,7 +1,7 @@
 module S where
 import Prelude hiding (read)
 import Control.Applicative
-import Control.Monad (liftM, ap) 
+import Control.Monad (liftM, replicateM, ap) 
 
 instance Functor     (S s) where        -- |
     fmap = liftM                        -- |  minimal instance
@@ -32,6 +32,7 @@ instance Monad (S s) where  -- partial application to (S s)
     -- runS (k a)    :: s -> (b,s)
     -- runS (k a) s' :: (b,s)
 
+
 read :: S s s
 read = S $ \s -> (s,s)
 
@@ -60,3 +61,10 @@ gg = do x <- read
 
 ggTest :: Int -> (Char,Int)
 ggTest = runS gg         
+---------------------------------------------------------------------
+
+tick :: S Int Int
+tick = S $ \n -> (n,n+1)
+
+ticker n = runS (replicateM n tick)
+evenTick = map $ runS (fmap even tick)
