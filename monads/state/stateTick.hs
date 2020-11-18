@@ -14,6 +14,16 @@ instance Functor ST where
                            in (g x, s'))
 
                        
+
+instance Applicative ST where
+ -- pure :: a -> ST a
+    pure x = S (\s -> (x,s))
+ -- (<*>) :: ST (a -> b) -> ST a -> ST b
+    stf <*> stx = S (\s -> let (f,s')  = (unwrap stf) s 
+                               (x,s'') = (unwrap stx) s' 
+                               in (f x, s''))
+
+
 tick :: ST Int 
 tick = S (\n -> (n,n+1))
 -- ghci> unwrap tick 5
@@ -25,19 +35,16 @@ ticker n = unwrap (replicateM n tick)
 
 evenTick = map (unwrap (fmap even tick))       -- (fmap even tick)
                                                -- is state
-------------------------------------------------------------------
-
-instance Applicative ST where
- -- pure :: a -> ST a
-    pure x = S (\s -> (x,s))
- -- (<*>) :: ST (a -> b) -> ST a -> ST b
-    stf <*> stx = S (\s -> let (f,s')  = (unwrap stf) s 
-                               (x,s'') = (unwrap stx) s' 
-                               in (f x, s''))
-
 
 boolTick = Just evenTick <*> Just [0..3]
 -- Just [(True,1),(False,2),(True,3),(False,4)]
+
+instance Monad ST where
+  return x = S $ \s -> (x,s)
+  S state >>= f = 
+    S $ \s -> let (x,s') = state s
+                in unwrap (f x) s' 
+ 
 
 -- with Applicatives, an action can't depend on a 
 -- value from a previous action; in monad it can.
