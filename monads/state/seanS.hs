@@ -46,7 +46,6 @@ ff = do x <- read
         x <- read
         return (x*10)
 
-ffTest :: (Int, Int)
 ffTest = runS ff 4   -- has type (Int,Int) since: runS :: s -> (a,s)
 --------------------------------------------------------------------
 nextletter :: Int -> Char
@@ -59,7 +58,6 @@ gg :: S Int Char
 gg = do x <- read
         return (nextletter x) 
 
-ggTest :: Int -> (Char,Int)
 ggTest = runS gg         
 ---------------------------------------------------------------------
 

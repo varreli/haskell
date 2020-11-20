@@ -29,19 +29,30 @@ instance Monad ST where
     S $ \s -> let (x,s') = state s
                 in unwrap (f x) s' 
 
-read :: S s s
+read :: ST Int
 read = S $ \s -> (s,s)
 
-write :: s -> S s ()
-write = S $ \_ -> ((), s)
-
-gg :: S Int Char
+write :: State -> ST ()         -- compare to seanS:
+write s = S $ \_ -> ((),s)      -- write :: s -> S s ()
+--------------------------------------------------------------
+gg :: ST Int
 gg = do x <- read
-        write (x)
-        y <- read
-        return y
+        write (x+1)        
+        x <- read
+        return (x*10)
 
+ggTest = unwrap gg 6
+--------------------------------------------------------------
 
+safeDiv :: Int -> Int -> Either String Int
+safeDiv x 0 = Left "Division by Zero Error"
+safeDiv x y = Right (div x y)
 
+-- fails with state (-1) : 
 
+divvy :: ST (Either String Int) 
+divvy = do x <- read
+           write (x+1)
+           x <- read
+           return (safeDiv (x*2) x)
 
