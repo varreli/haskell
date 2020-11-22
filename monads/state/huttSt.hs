@@ -50,9 +50,13 @@ safeDiv x y = Right (div x y)
 
 -- fails with state (-1) : 
 
-divvy :: ST (Either String Int) 
-divvy = do x <- read
+divv :: ST (Either String Int) 
+divv = do  x <- read
            write (x+1)
            x <- read
            return (safeDiv (x*2) x)
 
+ee = unwrap divv 8
+
+divvy = read >>= \x -> write (x+1) >>= \_ -> return (safeDiv (x*2) x)
+ff = unwrap divvy 5
