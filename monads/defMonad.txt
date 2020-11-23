@@ -1,0 +1,9 @@
+Monads don’t manipulate values themselves — what does that are 
+functions you plumb together using the monad.
+
+Monads are a general model of computation that lets you 
+choose the environmental features that you want for your 
+computations.
+
+A monad is a type for which the >>= operation and unit (return) 
+is defined.
