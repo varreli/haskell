@@ -41,7 +41,7 @@ gg = do x <- read
         x <- read
         return (x*10)
 
-ggTest = unwrap gg 6
+ggTest = unwrap gg (3)
 --------------------------------------------------------------
 
 safeDiv :: Int -> Int -> Either String Int
@@ -53,10 +53,25 @@ safeDiv x y = Right (div x y)
 divv :: ST (Either String Int) 
 divv = do  x <- read
            write (x+1)
-           x <- read
+           x <- read           
            return (safeDiv (x*2) x)
 
-ee = unwrap divv 8
+bb = unwrap divv (-1)
 
-divvy = read >>= \x -> write (x+1) >>= \_ -> return (safeDiv (x*2) x)
-ff = unwrap divvy 5
+divvy :: ST (Either String Int)
+divvy = read >>= \x -> write (x+1) >>= \_ -> read >>= \x -> return (safeDiv (x*2) x)  
+
+ff = unwrap divvy (-1) 
+
+-- we bind the result of read to x; it's the a in the first place of the 
+-- tuple (a,s) . The a is what the Monad instance acts upon and >>= is 
+-- from Monad. read puts the same value into both sides of the tuple.
+
+-----------------
+-- do x
+--    y
+
+-- equivalent to:
+
+-- x >>= \_ -> y
+-----------------
