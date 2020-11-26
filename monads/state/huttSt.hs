@@ -33,7 +33,7 @@ instance Monad ST where
 read :: ST Int
 read = S $ \s -> (s,s)
 
-write :: State -> ST ()         -- compare to seanS:
+write :: Int -> ST ()         -- compare to seanS:
 write s = S $ \_ -> ((),s)      -- write :: s -> S s ()
 --------------------------------------------------------------
 gg :: ST Int
@@ -49,30 +49,3 @@ safeDiv :: Int -> Int -> Either String Int
 safeDiv x 0 = Left "Division by Zero Error"
 safeDiv x y = Right (div x y)
 
--- fails with state (-1) : 
-
-divv :: ST (Either String Int) 
-divv = do  x <- read
-           write (x+1)
-           x <- read           
-           return (safeDiv (x*2) x)
-
-bb = unwrap divv (-1)
-
-divvy :: ST (Either String Int)
-divvy = read >>= \x -> write (x+1) >>= \_ -> read >>= \x -> return (safeDiv (x*2) x)  
-
-ff = unwrap divvy (-1) 
-
--- we bind the result of read to x; it's the a in the first place of the 
--- tuple (a,s) . The a is what the Monad instance acts upon and >>= is 
--- from Monad. read puts the same value into both sides of the tuple.
-
------------------
--- do x
---    y
-
--- equivalent to:
-
--- x >>= \_ -> y
------------------
