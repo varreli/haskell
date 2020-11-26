@@ -1,3 +1,4 @@
+module HuttSt where
 import Control.Monad
 import Prelude hiding (read)
 
