@@ -33,7 +33,7 @@ instance Monad ST where
 read :: ST Int
 read = S $ \s -> (s,s)
 
-write :: Int -> ST ()         -- compare to seanS:
+write :: State -> ST ()         -- compare to seanS:
 write s = S $ \_ -> ((),s)      -- write :: s -> S s ()
 --------------------------------------------------------------
 gg :: ST Int
