@@ -36,3 +36,15 @@ three = pure g <*> item <*> item <*> item
 
 ii = parse three "wqxijk"
 ----------------------------------------------------------------
+
+instance Monad Parser where
+-- (>>=) :: Parser a -> (a -> Parser b) -> Parser b
+  p >>= ff = P (\inp -> case
+                          parse p inp of
+                          [] -> []
+                          [(v,out)] -> parse (ff v) out)
+
+three' = do x <- item 
+            item 
+            z <- item 
+            return (x,z) 
