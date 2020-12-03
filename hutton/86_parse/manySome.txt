@@ -1,0 +1,11 @@
+-- many and some are already defined in the Alternative class:
+
+-- class Applicative f => Alternative f where
+-- empty :: f a
+-- (<|>) :: f a -> f a -> f a
+-- 
+-- many  :: f a -> f [a]
+-- some  :: f a -> f [a]
+-- 
+-- many x = some x <|> pure x []
+-- some x = pure (:) <*> x <*> many x
