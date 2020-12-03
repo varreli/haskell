@@ -1,5 +1,5 @@
 import HuttParse
--- import Control.Applicative
+import Control.Applicative
 import Data.Char
 
 upp = parse (fmap toUpper item) "xyz"
@@ -14,7 +14,7 @@ three :: Parser (Char,Char)
 three = pure g <*> item <*> item <*> item 
     where g x y z = (x,z)
 
-three :: Parser (Char,Char) 
+three' :: Parser (Char,Char) 
 three' = do x <- item 
             item 
             z <- item 
