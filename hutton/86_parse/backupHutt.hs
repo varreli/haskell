@@ -1,6 +1,42 @@
-import HuttParse
+module HuttParse where
 import Control.Applicative
 import Data.Char
+
+newtype Parser a = P (String -> [(a,String)])  
+
+parse :: Parser a -> String -> [(a,String)]
+parse (P p) inp = p inp
+
+item :: Parser Char 
+item = P (\inp -> case inp of
+                    [] -> []
+                    (x:xs) -> [(x,xs)])
+---------------------------------------------------------------
+instance Functor Parser where
+-- fmap :: (a -> b) -> Parser a -> Parser b
+   fmap g p = P (\inp -> case
+                           parse p inp of
+                           [] -> []
+                           [(v,out)] -> [(g v, out)])
+
+---------------------------------------------------------------
+instance Applicative Parser where
+-- pure :: a -> Parser a
+  pure v = P (\inp -> [(v,inp)])
+  pg <*> px = P (\inp -> case
+                            parse pg inp of
+                            [] -> []
+                            [(g,out)] -> parse (fmap g px) out)
+
+----------------------------------------------------------------
+instance Monad Parser where
+-- (>>=) :: Parser a -> (a -> Parser b) -> Parser b
+  p >>= ff = P (\inp -> case
+                          parse p inp of
+                          [] -> []
+                          [(v,out)] -> parse (ff v) out)
+
+----------------------------------------------------------------
 
 instance Alternative Parser where
 -- empty = Nothing
@@ -47,6 +83,7 @@ identifier = do x <- lower
                 if (elem (x:xs) keywords) then  
                   error "cannot parse: haskell keyword" 
                 else return (x:xs)
+
 keywords =
   ["case","class","data","default","deriving","do","else","forall"
   ,"if","import","in","infix","infixl","infixr","instance","let","module"
@@ -61,4 +98,3 @@ space :: Parser ()
 space = do many (satisfy isSpace)
            return ()  
 
- 
