@@ -67,7 +67,7 @@ alphanum = satisfy isAlphaNum    -- or letter = satisfy isAlpha
 
 char :: Char -> Parser Char
 char x = satisfy (== x)    
--- > parse (char 't') "toy" => ('t',"oy")
+-- > parse (char 't') "toy" => ('t',"oy")  --------------------
 stringg :: String -> Parser String
 stringg [] = return []
 stringg (x:xs) = do char x
@@ -77,8 +77,8 @@ stringg (x:xs) = do char x
 full = parse (stringg "anti") "antitrust"
 missing = parse (stringg "abc") "ab123"    -- fails: missing 'c'
 
-identifier :: Parser String
-identifier = do x <- lower
+identify :: Parser String
+identify = do   x <- lower
                 xs <- many alphanum
                 if (elem (x:xs) keywords) then  
                   error "cannot parse: haskell keyword" 
@@ -97,4 +97,25 @@ nat = do xs <- some digit
 space :: Parser ()
 space = do many (satisfy isSpace)
            return ()  
+
+int :: Parser Int
+int = do char '-'
+         n <- nat
+         return (-n)
+         <|> nat
+
+token :: Parser a -> Parser a
+token p = do space
+             v <- p
+             space
+             return v
+
+identifier :: Parser String
+identifier = token identify
+
+natural :: Parser Int
+natural = token nat
+
+integer :: Parser Int
+integer = token int
 
