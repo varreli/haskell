@@ -23,6 +23,7 @@ instance Functor Parser where
 instance Applicative Parser where
 -- pure :: a -> Parser a
   pure v = P (\inp -> [(v,inp)])
+-- (<*>) :: Parser (a -> b) -> Parser a -> Parser b
   pg <*> px = P (\inp -> case
                             parse pg inp of
                             [] -> []
