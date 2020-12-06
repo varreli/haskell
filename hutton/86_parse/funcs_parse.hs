@@ -1,4 +1,4 @@
-import HuttParse
+import ParseFull
 import Control.Applicative
 import Data.Char
 

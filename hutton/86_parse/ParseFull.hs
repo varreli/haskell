@@ -1,4 +1,4 @@
-module HuttParse where
+module ParseFull where
 import Control.Applicative
 import Data.Char
 
@@ -67,15 +67,17 @@ alphanum = satisfy isAlphaNum    -- or letter = satisfy isAlpha
 
 char :: Char -> Parser Char
 char x = satisfy (== x)    
--- > parse (char 't') "toy" => ('t',"oy")  --------------------
-stringg :: String -> Parser String
-stringg [] = return []
-stringg (x:xs) = do char x
-                    stringg xs
+-- > parse (char 't') "toy" => ('t',"oy")
+-----------------------------------------------------------------
+
+string :: String -> Parser String
+string [] = return []
+string (x:xs) = do  char x
+                    string xs
                     return (x:xs)
 
-full = parse (stringg "anti") "antitrust"
-missing = parse (stringg "abc") "ab123"    -- fails: missing 'c'
+full = parse (string "anti") "antitrust"
+missing = parse (string "abc") "ab123"    -- fails: missing 'c'
 
 identify :: Parser String
 identify = do   x <- lower
@@ -83,12 +85,6 @@ identify = do   x <- lower
                 if (elem (x:xs) keywords) then  
                   error "cannot parse: haskell keyword" 
                 else return (x:xs)
-
-keywords =
-  ["case","class","data","default","deriving","do","else","forall"
-  ,"if","import","in","infix","infixl","infixr","instance","let","module"
-  ,"newtype","of","qualified","then","type","where","_"
-  ,"foreign","ccall","as","safe","unsafe"]
 
 nat :: Parser Int
 nat = do xs <- some digit
@@ -112,10 +108,35 @@ token p = do space
 
 identifier :: Parser String
 identifier = token identify
+-------------------------------------------------------------------------
+toke :: Parser a -> Parser a
+toke parrser = space >>= \_ -> parrser >>= \v -> space >>= \_ -> return v
 
+identifier' :: Parser String
+identifier' = toke identify
+-------------------------------------------------------------------------
 natural :: Parser Int
 natural = token nat
 
 integer :: Parser Int
 integer = token int
+
+symbol :: String -> Parser String
+symbol xs = token (string xs)
+
+nats :: Parser [Int]
+nats = do symbol "["
+          n <- natural
+          ns <- many $ do 
+            symbol ","  
+            natural
+          symbol "]"
+          return (n:ns)
+
+
+keywords =
+  ["case","class","data","default","deriving","do","else","forall"
+  ,"if","import","in","infix","infixl","infixr","instance","let","module"
+  ,"newtype","of","qualified","then","type","where","_"
+  ,"foreign","ccall","as","safe","unsafe"]
 
