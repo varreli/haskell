@@ -144,17 +144,18 @@ expr = do t <- term
 
 term :: Parser Int
 term = do f <- factor
-          do
+          do     
             symbol "*"
             t <- term
             return (f * t) <|> return f
 
 factor :: Parser Int
-factor = do
-  symbol "("
-  e <- expr
-  symbol ")"
-  return e <|> natural 
+factor = parens <|> natural
+  where parens = do 
+           symbol "("
+           e <- expr 
+           symbol ")"
+           return e  
                              --   factor :: Parser Int 
                              --   factor = do symbol "("
                              --               *> expr 
