@@ -149,11 +149,17 @@ term = do f <- factor
             t <- term
             return (f * t) <|> return f
 
-factor :: Parser Int 
-factor = do symbol "("
-            *> expr 
-            <* symbol ")"
-            <|> natural
+factor :: Parser Int
+factor = do
+  symbol "("
+  e <- expr
+  symbol ")"
+  return e <|> natural 
+                             --   factor :: Parser Int 
+                             --   factor = do symbol "("
+                             --               *> expr 
+                             --               <* symbol ")"
+                             --               <|> natural
 
 eval :: String -> Int
 eval xs = case (parse expr xs) of
