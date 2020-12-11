@@ -1,0 +1,11 @@
+--2020-12-10 19:00:48--  https://github.com/tsoding/haskell-json/commit/bafd97d96b792edd3e170525a7944b9f01de7e34?branch=bafd97d96b792edd3e170525a7944b9f01de7e34
+Resolving github.com (github.com)... 192.30.255.113
+Connecting to github.com (github.com)|192.30.255.113|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘bafd97d96b792edd3e170525a7944b9f01de7e34?branch=bafd97d96b792edd3e170525a7944b9f01de7e34’
+
+          bafd97d96     [<=>                 ]       0  --.-KB/s               bafd97d96b792edd3e1     [ <=>                ] 150.81K  --.-KB/s    in 0.07s   
+
+2020-12-10 19:00:49 (2.18 MB/s) - ‘bafd97d96b792edd3e170525a7944b9f01de7e34?branch=bafd97d96b792edd3e170525a7944b9f01de7e34’ saved [154428]
+

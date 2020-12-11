@@ -28,10 +28,10 @@ term = do
 
 factor :: Parser Int
 factor = do
-  symbol "("
-  e <- expr
-  symbol ")"
-  return e <|> natural
+           "(" <* expr *> ")"           --  symbol "("
+                                        --  e <- expr
+                                        --  symbol ")"
+           return expr <|> natural
 
 eval :: String -> Int
 eval xs = case (parse expr xs) of
