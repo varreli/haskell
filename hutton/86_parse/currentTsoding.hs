@@ -21,17 +21,17 @@ newtype Parser a = Parser
                  }
 jsonNull :: Parser JsonValue
 jsonNull = undefined
- 
+------------------------------------------------------------------------------------------------- 
 charP :: Char -> Parser Char       -- helper function to parse a single char, (parameter Char ->)
-charP c = Parser $ \input ->       -- and supplies a Parser to parse that char
-          case input of        
-            y:ys 
-              | y == c -> Just (c, ys)
-            _  -> Nothing                   -- wildcard generalizes the case and indicates 
-                                            -- anything where y /== c, or []  
+charP c = Parser f       -- and supplies a Parser to parse that char
+            where 
+              f (y:ys) 
+                | y == c = Just (c, ys)
+                | otherwise = Nothing  
+                                      
 
--- The above is a parser capable of parsing a single char ---------------------------------------
--- use the hole this way: 
+-- The above is a parser capable of parsing a single char, therefore a sequence of chars --------
+
 jsonValue :: Parser JsonValue
 jsonValue = undefined
  
