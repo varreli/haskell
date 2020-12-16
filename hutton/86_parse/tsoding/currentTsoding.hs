@@ -52,7 +52,7 @@ charP c = Parser f                 -- and supplies a Parser to parse that char
               f [] = Nothing                  -- see tsoding 27:45 re: print/show error
 
 -- stringP :: String -> Parser String
--- stringP = input = sequenceA $ map charP input
+-- stringP input = sequenceA $ map charP input
                        
 
 -- The above is a parser capable of parsing a single char, therefore a sequence of chars --------
@@ -63,9 +63,6 @@ jsonValue = undefined
 -- 'a' is what makes the parsers composable.
 -- a parser that is capable of parsing a (in this case each JsonValue)
 
-
-
-               
 
 
 
