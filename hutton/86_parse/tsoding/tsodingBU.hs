@@ -20,10 +20,8 @@ newtype Parser a = Parser
 instance Functor Parser where
   fmap f (Parser p) =
     Parser $ \input -> do
-      case
-      [] -> []
       (x, input') <- p input
-      Just (f x,input')
+      Just (f x, input')
 
 instance Applicative Parser where
   pure x = Parser $ \input -> Just (x, input)

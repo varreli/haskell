@@ -1,3 +1,4 @@
+-- minute 1:00hr
 module Main where
 import Data.Char
 import Control.Applicative
@@ -25,7 +26,7 @@ instance Functor Parser where
     fmap f (Parser p) = 
       Parser $ \input -> do         -- p is the func that consumes input
         (x, input') <- p input      -- this proves Parser is a functor
-        Just (f x, input)           -- (also we can use do since its a Monad)
+        Just (f x, input')           -- (also we can use do since its a Monad)
 
 -- ghci> runParser (fmap ord $ charP 'n') "nice"
 -- Just (110, "ice")
@@ -34,14 +35,26 @@ instance Functor Parser where
 
 instance Applicative Parser where
     pure x = Parser $ \input -> Just (x, input)
-    (<*>) (Parser p1) (Parser p2) = 
+    (Parser p1) <*> (Parser p2) = 
       Parser $ \input -> do
       (f, input') <- p1 input
-      (x, input'') <- p2 input
-      Just (f x, input'')
- 
+      (a, input'') <- p2 input'
+      Just (f a, input'')
+
+instance Alternative Parser where
+  empty = Parser $ \_ -> Nothing
+  (Parser p1) <|> (Parser p2) =
+    Parser $ \input -> p1 input <|> p2 input
+   
 jsonNull :: Parser JsonValue
-jsonNull = undefined
+jsonNull = (\_ -> JsonNull) <$> stringP "null"
+
+jsonBool :: Parser JsonValue
+jsonBool = f <$> (stringP "true" <|> stringP "false")
+    where
+      f "true" = JsonBool True
+      f "false" = JsonBool False 
+      f _ = undefined
 ------------------------------------------------------------------------------------------------- 
 charP :: Char -> Parser Char       -- helper function to parse a single char, (parameter Char ->)
 charP c = Parser f                 -- and supplies a Parser to parse that char
@@ -51,14 +64,17 @@ charP c = Parser f                 -- and supplies a Parser to parse that char
                 | otherwise = Nothing  
               f [] = Nothing                  -- see tsoding 27:45 re: print/show error
 
--- stringP :: String -> Parser String
--- stringP input = sequenceA $ map charP input
-                       
-
 -- The above is a parser capable of parsing a single char, therefore a sequence of chars --------
+stringP :: String -> Parser String
+-- stringP input = sequenceA $ map charP input
+stringP          = sequenceA . map charP           -- eta reduced
+
+-- [Parser Char] -> Parser [Char]
+-- sequenceA :: Applicative f => t (f a) -> f (t a) -- traverse of appl. to appl. of traverse!                      
+
 
 jsonValue :: Parser JsonValue
-jsonValue = undefined
+jsonValue = jsonNull <|> jsonBool 
  
 -- 'a' is what makes the parsers composable.
 -- a parser that is capable of parsing a (in this case each JsonValue)
