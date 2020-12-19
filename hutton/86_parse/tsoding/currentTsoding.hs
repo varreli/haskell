@@ -19,8 +19,8 @@ data JsonValue = JsonNull
 
 
 newtype Parser a = Parser 
-                 { runParser :: String -> Maybe (a, String) 
-                 }
+                 { runParser :: String -> Maybe (a, String)
+                 } 
 
 instance Functor Parser where
     fmap f (Parser p) = 
@@ -55,6 +55,37 @@ jsonBool = f <$> (stringP "true" <|> stringP "false")
       f "true" = JsonBool True
       f "false" = JsonBool False 
       f _ = undefined
+
+spanP :: (Char -> Bool) -> Parser String
+spanP f =
+  Parser $ \input ->
+    let (token,rest) = span f input
+     in Just (token,rest)
+
+notNull :: Parser [a] -> Parser [a]
+notNull (Parser p) =
+  Parser $ \input -> do
+    (input', xs) <- p input
+    if null xs
+      then Nothing
+      else Just (input', xs)
+
+jsonNumber :: Parser JsonValue
+jsonNumber = f <$> notNull (spanP isDigit)
+    where f ds = JsonNumber $ read ds
+
+-- no escape support:
+stringLiteral :: Parser String
+stringLiteral = (charP '"' *> spanP (/= '"') <* charP '"') 
+
+jsonString :: Parser JsonValue 
+jsonString = JsonString <$> stringLiteral 
+ 
+ws :: Parser String
+ws = spanP isSpace
+
+sepBy :: Parser a -> Parser b -> Parser [b]
+sepBy sep element = (:) <$> element <*> many (sep *> element) <|> pure []
 ------------------------------------------------------------------------------------------------- 
 charP :: Char -> Parser Char       -- helper function to parse a single char, (parameter Char ->)
 charP c = Parser f                 -- and supplies a Parser to parse that char
