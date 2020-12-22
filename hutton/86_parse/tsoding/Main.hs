@@ -1,6 +1,7 @@
 module Main where
 import Data.Char
 import Control.Applicative
+import Helper
 -- definition of the AST:
 
 data JsonValue = JsonNull
@@ -57,15 +58,15 @@ jsonBool = f <$> (stringP "true" <|> stringP "false")
 
 -- note ghc function    span :: (a -> Bool) -> [a] -> ([a],[a]) :
 
-spanP :: (Char -> Bool) -> Parser String
-spanP pred = 
-  Parser $ \input -> 
-    let (token,rest) = span pred input
-      in Just (token,rest)
+-- spanP :: (Char -> Bool) -> Parser String
+-- spanP f =
+--   Parser $ \input ->
+--     let (rest,token) = span f input
+--      in Just (token,rest)
 
 spanner = (spanP isDigit) -- we constructed the full Parser (spanP isDigit)  
 -- ghci> runParser spanner "345abc"
----------------------------------------------------------------------------
+
 notNull :: Parser [a] -> Parser [a]
 notNull (Parser p) =
   Parser $ \input -> do
@@ -77,7 +78,7 @@ notNull (Parser p) =
 jsonNumber :: Parser JsonValue
 jsonNumber = f <$> notNull (spanP isDigit)
     where f ds = JsonNumber $ read ds
----------------------------------------------------------------------------
+
 -- no escape support:
 stringLiteral :: Parser String
 stringLiteral = (charP '"' *> spanP (/= '"') <* charP '"') 
@@ -100,17 +101,16 @@ charP c = Parser f                 -- and supplies a Parser to parse that char
               f [] = Nothing                  -- see tsoding 27:45 re: print/show error
 
 -- The above is a parser capable of parsing a single char, therefore a sequence of chars --------
-
 stringP :: String -> Parser String
--- stringP input = sequenceA $ fmap charP input
-stringP          = sequenceA . fmap charP           -- eta reduced
+-- stringP input = sequenceA $ map charP input
+stringP          = sequenceA . map charP           -- eta reduced
 
 -- [Parser Char] -> Parser [Char]
 -- sequenceA :: Applicative f => t (f a) -> f (t a) -- traverse of appl. to appl. of traverse!                      
--------------------------------------------------------------------------------------------------
+
 
 jsonValue :: Parser JsonValue
-jsonValue = jsonNull <|> jsonBool <|> jsonNumber <|> jsonString
+jsonValue = jsonNull <|> jsonBool 
  
 -- 'a' is what makes the parsers composable.
 -- a parser that is capable of parsing a (in this case each JsonValue)
