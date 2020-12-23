@@ -1,0 +1,19 @@
+https://subscription.packtpub.com/book/application_development/9781786464217/1/ch01lvl1sec08/meeting-lazy-evaluation
+
+Prelude
+λ> let nums = enumFromTo 0 20 :: [Double]
+Prelude
+λ> nums
+[0.0,1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0,17.0,18.0,19.0,20.0]
+Prelude
+λ> :sprint nums
+nums = _
+Prelude
+λ> nums !! 8
+8.0
+Prelude
+λ> :sprint nums
+nums = 0.0 : 1.0 : 2.0 : 3.0 : 4.0 : 5.0 : 6.0 : 7.0 : 8.0 : _
+Prelude
+λ> head nums
+0.0
