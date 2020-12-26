@@ -67,8 +67,8 @@ spanner = (spanP isDigit) -- we constructed the full Parser (spanP isDigit)
 -- ghci> runParser spanner "345abc"
 ---------------------------------------------------------------------------
 notNull :: Parser [a] -> Parser [a]
-notNull (Parser p) =
-  Parser $ \input -> do
+notNull (Parser p) =                -- parser p is wrapped in another
+  Parser $ \input -> do             -- parser: (Parser p) 
     (input', xs) <- p input
     if null xs
       then Nothing
@@ -83,13 +83,17 @@ stringLiteral :: Parser String
 stringLiteral = (charP '"' *> spanP (/= '"') <* charP '"') 
 
 jsonString :: Parser JsonValue 
-jsonString = JsonString <$> stringLiteral 
- 
+jsonString = JsonString <$> stringLiteral  -- the type of stringLiteral is  
+                                           -- type of Parser JsonValue (any of them)
 ws :: Parser String
 ws = spanP isSpace
 
 sepBy :: Parser a -> Parser b -> Parser [b]
-sepBy sep element = (:) <$> element <*> many (sep *> element) <|> pure []
+sepBy sep element = (:) <$> element <*> many (sep *> element) <|> pure []  
+-- note:
+-- Maybe supports many interfaces including <* , *>
+-- x <* y = x   -- these are not applicative, so
+-- x *> y = y   -- why appllicative ?
 ------------------------------------------------------------------------------------------------- 
 charP :: Char -> Parser Char       -- helper function to parse a single char, (parameter Char ->)
 charP c = Parser f                 -- and supplies a Parser to parse that char
