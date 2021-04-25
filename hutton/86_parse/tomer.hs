@@ -148,3 +148,6 @@ eval xs = case (parse expr xs) of
             [(_, out)] -> error ("Unused input " ++ out)
             [] -> error "Invalid input"
 
+main :: IO ()
+main = undefined
+
