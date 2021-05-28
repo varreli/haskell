@@ -34,17 +34,11 @@ qq = (/2) . (*100)
 uu = (flip (.)) (/2) (*100) 
 
 
--- note average is (a -> b) ------------------------------
-average :: [Double] -> Double
-
-average n = sum n / fromIntegral (length n)
-
+-----------------------------------------------------------
 
 -- note section on haskell (f# question) :
 -- https://stackoverflow.com/questions/30110964/what-f-sorcery-is-this 
 
--- review now! :
+-- review :
 -- https://www.schoolofhaskell.com/user/Lkey/kleisli
 
--- solutions to category theory for the programmer:
--- http://danshiebler.com/2018-11-10-category-solutions/
