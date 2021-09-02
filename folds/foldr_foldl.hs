@@ -16,6 +16,10 @@ length1 = foldrr (\_ seed -> seed + 1) 0        -- newElement, seed
 length2 :: [a] -> Int
 length2 = foldl (\seed -> \_ -> seed + 1) 0     -- seed, newElement
 
+mullti :: [a] -> Int
+mullti = foldl (\seed -> \_ -> seed * 2) 1     -- seed, newElement
+
+
 
 -- folds are called catamorphisms.
 
