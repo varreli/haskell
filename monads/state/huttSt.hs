@@ -36,13 +36,13 @@ read = S $ \s -> (s,s)
 write :: State -> ST ()         -- compare to seanS:
 write s = S $ \_ -> ((),s)      -- write :: s -> S s ()
 --------------------------------------------------------------
-gg :: ST Int
-gg = do x <- read
+ff :: ST Int
+ff = do x <- read
         write (x+1)        
         x <- read
         return (x*10)
 
-ggTest = unwrap gg (3)
+ffTest = unwrap ff (3)
 --------------------------------------------------------------
 
 safeDiv :: Int -> Int -> Either String Int
