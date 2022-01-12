@@ -36,3 +36,6 @@ binderr =
 --              ;       action2
 --              ; x3 <- action3
 --              ; mk_action4 x1 x3 }
+
+f = unwrap binder 4
+g = unwrap binderr 17
