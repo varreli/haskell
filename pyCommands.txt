@@ -1,0 +1,11 @@
+$ pip3 install [package]
+
+$ ls -ls /usr/bin/python*     # checks all python versions installed
+
+$ python2
+$ python3
+
+$ python2 --version
+$ python3 --version
+
+$ jupyter lab                 # start lab
