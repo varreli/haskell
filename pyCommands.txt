@@ -1,6 +1,8 @@
 $ pip3 install [package]
 
-$ ls -ls /usr/bin/python*     # checks all python versions installed
+$ ls -ls /usr/bin/python*          # checks all python versions installed
+
+$ python3 -m pip list [options]    #  lists all packages installed
 
 $ python2
 $ python3
@@ -8,7 +10,14 @@ $ python3
 $ python2 --version
 $ python3 --version
 
-$ jupyter lab                 # start lab
+$ jupyter lab                      # start lab
+
+
+# In jupyter env, use ! to run shell commands:
+
+!pip3 install tqdm
+!ls
+
+
 
 # installed: pandas matplotlib numpy
-
