@@ -9,3 +9,6 @@ $ python2 --version
 $ python3 --version
 
 $ jupyter lab                 # start lab
+
+# installed: pandas matplotlib numpy
+
