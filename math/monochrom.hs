@@ -29,3 +29,5 @@ hickk [] = 1
 
 -- The correct hickk needs this base case: 
 -- [] = 1, which is identity for (*).
+
+-- excellent
