@@ -8,4 +8,3 @@ a*x + b*y
 where x,y are real coefficients. For euclid's proof consider 
 only integer coefficients. Experiment with it.
 
-https://paste.pics/e5fc086cdfae868f4816fb37ed1df2d6

@@ -20,12 +20,4 @@ mullti :: [a] -> Int
 mullti = foldl (\seed -> \_ -> seed * 2) 1     -- seed, newElement
 
 
-
 -- folds are called catamorphisms.
-
-
-
-
--- https://wiki.haskell.org/wikiupload/5/5a/Left-fold-transformation.png 
-
--- https://wiki.haskell.org/wikiupload/3/3e/Right-fold-transformation.png
