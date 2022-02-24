@@ -1,0 +1,25 @@
+$ cabal update
+Downloading the latest package list from hackage.haskell.org
+To revert to previous state run:
+    cabal update --index-state='2020-06-30T22:08:34Z'
+    [~]
+     $ cabal install pointful
+     Resolving dependencies...
+     Configuring haskell-src-exts-1.21.1...
+     Failed to install haskell-src-exts-1.21.1
+     Build log ( /home/john/.cabal/logs/ghc-8.4.4/haskell-src-exts-1.21.1-9MkSb5gagdpL2AAzqhT7Iz.log ):
+     cabal: Entering directory '/tmp/cabal-tmp-18629/haskell-src-exts-1.21.1'
+     Configuring haskell-src-exts-1.21.1...
+     cabal: The program 'happy' version >=1.19 is required but it could not be
+     found.
+
+     cabal: Leaving directory '/tmp/cabal-tmp-18629/haskell-src-exts-1.21.1'
+     cabal: Error: some packages failed to install:
+     haskell-src-exts-1.21.1-9MkSb5gagdpL2AAzqhT7Iz failed during the configure
+     step. The exception was:
+     ExitFailure 1
+     haskell-src-exts-simple-1.21.1.0-IDyIMXDggzJ8uPzvtx3JyD depends on
+     haskell-src-exts-simple-1.21.1.0 which failed to install.
+     pointful-1.1.0.0-9G8vCYnEIOKw9VTuncHny depends on pointful-1.1.0.0 which
+     failed to install.
+
