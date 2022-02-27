@@ -28,6 +28,12 @@ instance Applicative Maybe2 where
 
 -- ghci> (*) <$> (Just 10) <*> (Just 3) 
 
+-- ghci> ff = (flip (-)) <$> (Just2 5)
+-- ghci> (<*>) ff (Just2 10)
+-- Just2 (-5)
 
---  $ is "the function application operator" 
+-- ee = (*) <$> (Just2 100)
+-- ee <*> (Just2 3)
+-- Just2 300
+--  <$> is "the function application operator" 
 --  <*> is "the appicative function application operator"

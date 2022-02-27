@@ -11,7 +11,8 @@ instance Applicative Maybe2 where
 
 instance Monad Maybe2 where
     Nothing2 >>= f = Nothing2
-    Just2 val >>= f = f val -- half val --> Just2 val
+    Just2 val >>= f = f val    -- ghci> half val 
+                               -- Just2 val
 
 
 bigger5 x = if x > 5
