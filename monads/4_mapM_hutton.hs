@@ -7,6 +7,9 @@ mapMM f (x:xs) = do y <- f x
                     ys <- mapMM f xs 
                     return (y:ys)
 
+-- ghci> :t mapM return "monad"
+-- mapM return "monad" :: (Monad m) => m [Char]
+
 ee :: Num a => a -> [a]
 ee = ( \x -> [x + 2,x,x-1] )
 
