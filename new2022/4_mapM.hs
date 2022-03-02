@@ -11,10 +11,10 @@ mapMM f (x:xs) = do y <- f x
 -- mapM return "monad" :: (Monad m) => m [Char]
 
 ee :: Num a => a -> [a]
-ee = ( \x -> [x + 2,x,x-1] )
+ee = ( \x -> [x, (x + 2), (x - 1)] )
 
 ff :: Num a => a -> [a] 
-ff = ( \x -> [x,x-1,x * 10] )
+ff = ( \x -> [x, (x - 1), (x * 10)] )
 
 -- Note the return type m [b] 
 -- This will return a nested list:  [] : [b]  --> [[b]]
@@ -29,7 +29,14 @@ conv c | isDigit c = Just (digitToInt c)
 -- ghci> mapMM conv "12a"
 -- Nothing
 
------------------------------------------------
+
+-- mapM f = sequence . map f 
+
+-- so you can think of it as 
+-- turning a list of values into a list of actions, and 
+-- then running the actions one after another, collecting 
+-- the results in a list.
+---------------------------------------------------------
 
 filterMM :: Monad m => (a -> m Bool) -> [a] -> m [a]
 filterMM p [] = return []
