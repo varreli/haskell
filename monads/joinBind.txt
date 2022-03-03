@@ -1,12 +1,19 @@
+ghci> :t join
+join :: Monad m => m (m a) -> m a
+
+ghci> :t (>>=)
+(>>=) :: Monad m => m b -> (b -> m c) -> m c
+
+ghci> :t id
+id :: a -> a
+
+---------------------------------------------------------------
 Type unification for (>>= id) 
-(note this is identical to join) :
+This is identical to join :
+
 
 join x = x >>= id
 join (m (m a)) = (m (m a)) >>= id
-
-
-(>>=) :: Monad m => m b -> (b -> m c) -> m c
-
 
 pass in as left operand : m (m a)
 
