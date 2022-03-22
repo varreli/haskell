@@ -1,0 +1,15 @@
+( -> ) e
+
+https://stackoverflow.com/questions/63215654/why-define-a-functor-instance-for-a-nameless-type-like-e
+
+--------------------------------------------------------------------------------------
+
+tilde 
+
+https://stackoverflow.com/questions/27667628/the-meaning-of-tilde-in-haskell-types-type-equality
+
+-------------------------------------------------------------------------------------
+
+the type of join
+
+https://stackoverflow.com/questions/48308850/haskell-the-type-of-join-function

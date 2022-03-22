@@ -23,19 +23,21 @@ rearrange to:
 
 join :: (e -> (e -> a)) -> (e -> a)
 
+-----------------------------------------------------------------------------------------
 rearrange to:
-
 join :: (e -> e -> a) -> e -> a
 
 then plug (,) into the first operand of join:
 
 (,) :: x -> y -> (x, y)
 
-x ~ e
+x ~ e      -- these 3 type equalities cancel out the left operand of join (e -> e -> a) .
 y ~ e
 a = (e, e)
 
-join :: e -> (e, e)
+-- resolving to:
+join :: e -> (e, e) 
+-----------------------------------------------------------------------------------------
 
 ghci> join (,) 8
 (8,8)
