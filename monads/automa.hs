@@ -21,4 +21,10 @@ class Functor w => Comonad w where
     cojoin   :: w a -> w (w a)
     x =>> f = fmap f (cojoin x)
 
+instance Comonad U where
+   cojoin a = U (tail $ iterate left a) a (tail $ iterate right a)
+   coreturn (U _ b _) = b
+
 -- http://blog.sigfpe.com/2006/12/evaluating-cellular-automata-is.html
+
+
