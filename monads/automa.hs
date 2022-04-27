@@ -5,7 +5,7 @@ data U x = U [x] x [x]
 right (U a b (c:cs)) = U (b:a) c cs
 left  (U (a:as) b c) = U as a (b:c)
 
-gg = U [-2,-3..(-8)] (-1) [0,1..8]
+gg = U [-2,-3..(-5)] (-1) [0,1..5]
 
 -- We represent a 'universe' as a centre point, a list of all elements 
 -- to the left of that centre point and a list of all elements to the 
@@ -27,4 +27,4 @@ instance Comonad U where
 
 -- http://blog.sigfpe.com/2006/12/evaluating-cellular-automata-is.html
 
-
+rule (U (a:_) b (c:_)) = not (a && b && not c || (a==b))
