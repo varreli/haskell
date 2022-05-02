@@ -1,0 +1,5 @@
+-- to change identity on irrsi:
+
+To change globally, execute the command /set nick nitstorm, and then /save to permanently modify your configuration file. The same way, you can change real_name and user_name with the command /set :
+/Set real_name Nate Kannon -->
+/save 
