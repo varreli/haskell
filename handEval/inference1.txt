@@ -1,0 +1,23 @@
+f = reverse . sort
+
+reverse :: [a] -> [a]
+
+sort :: Ord e => [e] -> [e]
+
+(.) :: (c -> d) -> (b -> c) -> (b -> d)
+
+typeInference:
+ 
+b = [e], c = [e], c = [a], d = [a]
+
+therefore a == e
+
+so look at remaining (b -> d)
+b == a
+d == a
+
+so the remaining function is:
+f :: Ord a => [a] -> [a] 
+
+
+

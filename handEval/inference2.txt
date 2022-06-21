@@ -1,0 +1,35 @@
+add x y z = (x + y) : z 
+
+1 - Assign every variable a unique type variable.
+2 - Assign every function its type with new unique type variables.
+3 - For each subexpression of the expression generate equations of types.
+4 - Resolve the equations until no further simplifications can be done.
+
+x ~ a
+y ~ b
+z ~ c
+
+from (x + y) derive a == d and b == d
+x ~ d
+y ~ d
+
+from the full expression (x + y) : z 
+derive [e] ~ c and d ~ e
+and d ~ e , so z ~ [e] so also z ~ [d]      -- key point
+
+The last function/constructor called is (:)
+(:) :: e -> [e] -> [e]
+And since [e] ~ [d] we have :
+
+add :: Num d => d -> d -> [d] -> [d]
+-----------------------------------------------------------------------
+*This fails*
+
+f x = x : x
+Assign both parts of the expression, x and (:) , unique variables:
+x ~ a
+(:) :: b -> [b] -> [b]
+
+from (x : x) 
+we derive a ~ b and a ~ [b] -- Type error!
+(this is an "occurs check" infinite type) 
