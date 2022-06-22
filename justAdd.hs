@@ -1,4 +1,5 @@
 import System.IO
+import Control.Monad
 
 maybeAdd :: Num b => Maybe b -> Maybe b -> Maybe b 
 maybeAdd mx my = mx >>= (\x -> my >>= (\y -> Just $ x+y))
