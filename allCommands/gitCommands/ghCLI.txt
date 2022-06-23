@@ -1,0 +1,6 @@
+https://cli.github.com/manual/
+
+https://cli.github.com/manual/gh_auth_login
+
+$ gh auth login          # etc
+
