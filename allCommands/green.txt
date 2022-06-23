@@ -1,0 +1,6 @@
+./BlockstreamGreen-x86_64.AppImage
+
+command for green
+rolled solano numerics + nought
+(phil's deb only)
+
