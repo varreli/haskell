@@ -1,0 +1,7 @@
+# to search current directory for word or string:
+
+$ grep -r -F "string to search" .
+
+# or use path:
+
+$ grep -r -F "string to search" /path/to/dir
