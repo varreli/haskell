@@ -8,10 +8,11 @@ g a = a id
 
 -- continuations related to tail recursion.
 
------------------------------------------------------------------------------------------------------
 
--- fooo :: Double a => (a -> a) -> a -> a
--- fooo f x = f x
+-- *
+
+-- foo :: Double a => (a -> a) -> a -> a
+-- foo f x = f x
 
 foo :: (forall a. Num a => (a -> a)) -> Double -> Double 
 bar :: (forall a. Num a => (a -> a -> a)) -> Int -> Int -> Int
