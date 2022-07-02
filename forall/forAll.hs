@@ -1,7 +1,9 @@
 {-# LANGUAGE RankNTypes #-}
+-- fooo :: Double a => (a -> a) -> a -> a
+-- fooo f x = f x
 
 foo :: (forall a. Num a => (a -> a)) -> Double -> Double 
-bar :: (forall a. Num a => (a -> a)) -> Int -> Int
+bar :: (forall a. Num a => (a -> a -> a)) -> Int -> Int -> Int
 
 gad :: (forall a. Num a => (a -> a)) -> (Int, Double) -> (Int, Double) -- change first double to Int !
 
@@ -9,7 +11,7 @@ gad :: (forall a. Num a => (a -> a)) -> (Int, Double) -> (Int, Double) -- change
 -- Int and a Double without breaking any rules
 
 foo f x = f x
-bar g x = g x 
+bar g x y = g x y 
 
 gad h (x, y) = (h x, h y)
 -- ghci> gad (*10) (5, 6)
