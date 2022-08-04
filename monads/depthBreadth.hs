@@ -9,3 +9,4 @@ testSucc 4 = [11,12,13]
 testSucc 8 = [14,15]
 testSucc _ = []
 
+-- https://qmaurmann.wordpress.com/2014/06/28/haskell-one-liners-for-search/
