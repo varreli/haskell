@@ -10,9 +10,12 @@ remove :: (a -> Bool) -> [a] -> [a]
 remove _ [] = []
 remove p (x:xs) = if p x
   then remove p xs
-  else
+  else 
     let remainder = remove p xs
     in x : remainder
 
-tt = forbid (> 1100) [4,5,6,7,800,1100]
+tt = forbid (>= 1101) [4,5,6,7,800,1100]
+uu = remove (> 30) [2,3,4,55]
 
+-- study guard implementation of filter:
+-- https://stackoverflow.com/questions/3011302/improve-my-haskell-implementation-of-filter
