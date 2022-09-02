@@ -14,8 +14,9 @@ remove p (x:xs) = if p x
     let remainder = remove p xs
     in x : remainder
 
-tt = forbid (>= 1101) [4,5,6,7,800,1100]
-uu = remove (> 30) [2,3,4,55]
+f = forbid (>= 1101) [4,5,6,7,800,1100,1200]
+r = remove (> 30) [2,3,4,55]
+filt = filter (> 30) [2,3,4,55]
 
 -- study guard implementation of filter:
 -- https://stackoverflow.com/questions/3011302/improve-my-haskell-implementation-of-filter

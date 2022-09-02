@@ -6,7 +6,7 @@
 -- main = print $ max $ filter (primeCheck) $ factors (600851475143 :: Int)
 
 main = putStrLn (show ans)
-ans = largestPrimeFactor (600851475143 :: Integer)
+ans = largestPrimeFactor (600851475143 : Integer)
 
 largestPrimeFactor n =
     let
