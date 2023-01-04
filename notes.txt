@@ -1,2 +1,0 @@
-# ~/.pyenv/versions/3.10.5/bin/python
-# this is setting for New Environment, using 3.10.5
